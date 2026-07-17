@@ -1,9 +1,4 @@
 {
-  "test": "line1",
-  "nested": {
-    "a": 1
-  }
-}{
   "restaurante": {
     "nome": "BODEGA MOOCA BELLO",
     "slogan": "Comida • Bebida • Amigos",
