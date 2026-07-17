@@ -181,7 +181,7 @@
       "nome": "Frango à Passarinho (500g)",
       "desc": "",
       "preco": 49.9,
-      "foto": "https://images.unsplash.com/photo-1626082927389-6cd097cee6a6?auto=format&fit=crop&w=400&q=60"
+      "foto": "https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=400&q=60"
     },
     {
       "cat": "porcoes",
@@ -244,7 +244,7 @@
       "nome": "Caipirinha",
       "desc": "Cachaça, limão, açúcar e gelo",
       "preco": 16.9,
-      "foto": "https://images.unsplash.com/photo-1541976076758-347942db1970?auto=format&fit=crop&w=400&q=60"
+      "foto": "https://images.unsplash.com/photo-1551538827-9c037cb4f32a?auto=format&fit=crop&w=400&q=60"
     },
     {
       "cat": "drinks",
@@ -440,7 +440,7 @@
       "nome": "Opcional Premium - Frango à Parmegiana",
       "desc": "Acréscimo no prato",
       "preco": 15,
-      "foto": "https://images.unsplash.com/photo-1626082927389-6cd097cee6a6?auto=format&fit=crop&w=400&q=60"
+      "foto": "https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=400&q=60"
     },
     {
       "cat": "extras",
