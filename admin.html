@@ -22,9 +22,11 @@
   .thumb{width:72px;height:72px;border-radius:10px;object-fit:cover;background:#2a2118;flex:0 0 auto;}
   .thumb.empty{display:flex;align-items:center;justify-content:center;font-size:26px;color:#6b5c44;}
   .info{flex:1;min-width:0;}
-  .info h3{font-size:15px;line-height:1.2;margin-bottom:3px;}
-  .info .preco{color:var(--ouro);font-weight:700;font-size:14px;}
-  .info .catlabel{font-size:11px;color:#8a7c64;margin-top:2px;}
+  .info h3{font-size:15px;line-height:1.2;margin-bottom:5px;}
+  .info .catlabel{font-size:11px;color:#8a7c64;margin-top:5px;}
+  .preco-row{display:flex;align-items:center;gap:6px;}
+  .preco-row .rs{color:var(--ouro);font-weight:700;font-size:15px;}
+  .preco-row input{width:90px;padding:7px 8px;border-radius:8px;border:1px solid #3a2d1c;background:#1a140e;color:var(--ouro);font-size:15px;font-weight:700;}
   .acts{display:flex;flex-direction:column;gap:6px;flex:0 0 auto;}
   .btn{border:none;border-radius:9px;padding:8px 10px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;}
   .btn-foto{background:var(--ouro);color:#1b1409;}
@@ -47,7 +49,7 @@
 <body>
 <header>
   <h1>⚙️ Painel Gerencial</h1>
-  <p id="sub">Bodega Mooca Bello — trocar fotos e gerar arquivo</p>
+  <p id="sub">Bodega Mooca Bello — fotos e preços</p>
 </header>
 
 <div class="cats" id="cats"></div>
@@ -61,7 +63,7 @@
 <div class="modal" id="modal">
   <div class="modal-box">
     <h2>📄 dados.json atualizado</h2>
-    <p class="hint">Foto(s) alterada(s)! Agora escolha uma opção:<br>1️⃣ <b>Baixar</b> o arquivo e me enviar aqui no chat pra eu subir no GitHub. <br>2️⃣ Ou <b>Copiar</b> e colar direto no GitHub.</p>
+    <p class="hint">Alteração(ões) feita(s)! Agora escolha uma opção:<br>1️⃣ <b>Baixar</b> o arquivo e me enviar aqui no chat pra eu subir no GitHub. <br>2️⃣ Ou <b>Copiar</b> e colar direto no GitHub.</p>
     <textarea id="saida" readonly></textarea>
     <div class="modal-actions">
       <button class="btn btn-gerar" onclick="baixar()">⬇️ Baixar arquivo</button>
@@ -109,12 +111,21 @@ function render(){
   lista.innerHTML = items.map(p=>{
     const tem = p.foto && p.foto.length>4;
     const thumb = tem ? '<img class="thumb" src="'+p.foto+'">' : '<div class="thumb empty">🍽️</div>';
+    const precoStr = p.preco.toFixed(2).replace(".",",");
     return '<div class="item">'+thumb+
-      '<div class="info"><h3>'+p.nome+'</h3><div class="preco">R$ '+p.preco.toFixed(2).replace(".",",")+'</div><div class="catlabel">'+catNome(p.cat)+'</div></div>'+
+      '<div class="info"><h3>'+p.nome+'</h3>'+
+        '<div class="preco-row"><span class="rs">R$</span><input type="text" inputmode="decimal" value="'+precoStr+'" onchange="mudarPreco('+p.__i+',this.value)"></div>'+
+        '<div class="catlabel">'+catNome(p.cat)+'</div></div>'+
       '<div class="acts"><button class="btn btn-foto" onclick="trocarFoto('+p.__i+')">📷 Trocar foto</button>'+
       (tem?'<button class="btn btn-rem" onclick="removerFoto('+p.__i+')">Remover foto</button>':'')+
       '</div></div>';
   }).join('');
+}
+
+function mudarPreco(i,val){
+  let n = parseFloat(String(val).replace(',','.'));
+  if(isNaN(n)||n<0){alert('Preço inválido. Use por exemplo: 12,90');render();return;}
+  DADOS.produtos[i].preco = Math.round(n*100)/100;
 }
 
 const fileInput = document.getElementById('fileInput');
