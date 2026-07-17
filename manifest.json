@@ -1,0 +1,16 @@
+{
+  "name": "Bodega Mooca Bello",
+  "short_name": "Mooca Bello",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#141210",
+  "theme_color": "#c8962a",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
