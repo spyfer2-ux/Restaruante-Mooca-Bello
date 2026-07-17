@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Painel Gerencial - Bodega Mooca Bello</title>
+<link rel="icon" href="logo.png">
 <style>
   :root{ --ouro:#c8962a; --preto:#141210; --card:#1f1b17; --linha:#3a332b; --branco:#f5efe4; }
   *{ box-sizing:border-box; margin:0; padding:0; }
@@ -19,6 +20,10 @@
   .card input, .card textarea{ width:100%; padding:10px; font-size:1rem; border-radius:8px; border:1px solid var(--linha); background:#241f19; color:var(--branco); margin-top:2px; }
   .card .top{ display:flex; justify-content:space-between; align-items:center; gap:8px; }
   .del{ background:#5a2222; color:#fff; border:none; border-radius:8px; padding:8px 12px; font-weight:700; }
+  .foto-area{ display:flex; gap:10px; align-items:center; margin-top:8px; }
+  .foto-prev{ width:70px; height:70px; border-radius:10px; background:#241f19 center/cover no-repeat; border:1px solid var(--linha); flex:0 0 auto; display:flex; align-items:center; justify-content:center; font-size:1.6rem; }
+  .btn-foto{ flex:1; background:var(--ouro); color:#111; border:none; border-radius:10px; padding:12px; font-weight:800; font-size:.95rem; }
+  .btn-limpar{ background:transparent; color:#c9bfa8; border:1px solid var(--linha); border-radius:10px; padding:12px; font-weight:700; font-size:.8rem; }
   .add-item{ background:var(--card); border:2px dashed var(--ouro); color:var(--ouro); border-radius:14px; margin:8px 12px; padding:14px; width:calc(100% - 24px); font-size:1rem; font-weight:700; }
   .barra{ position:fixed; bottom:0; left:0; right:0; background:#1c1712; border-top:2px solid var(--ouro); padding:12px; display:flex; gap:8px; }
   .barra button{ flex:1; padding:16px; border:none; border-radius:12px; font-size:1rem; font-weight:800; }
@@ -28,7 +33,7 @@
   .modal.on{ display:block; }
   .modal h2{ color:var(--ouro); margin-bottom:8px; }
   .modal p{ font-size:.85rem; color:#c9bfa8; margin-bottom:8px; }
-  #jsonOut{ width:100%; height:50vh; background:#241f19; color:#9ecb6a; border:1px solid var(--linha); border-radius:10px; padding:10px; font-family:monospace; font-size:.75rem; }
+  #jsonOut{ width:100%; height:40vh; background:#241f19; color:#9ecb6a; border:1px solid var(--linha); border-radius:10px; padding:10px; font-family:monospace; font-size:.7rem; }
 </style>
 </head>
 <body>
@@ -38,7 +43,7 @@
 </header>
 
 <div class="aviso">
-  <b>Como funciona:</b> edite preços, nomes e descrições aqui. Ao terminar, toque em <b>"Gerar arquivo"</b> — o sistema cria o novo <b>dados.json</b>. Você pode copiar/baixar e substituir no GitHub, OU simplesmente pedir ao Claude no celular: <i>"atualize o preço de X para Y no dados.json"</i>.
+  <b>Fotos:</b> toque em <b>"📷 Trocar foto"</b> em qualquer item para tirar/escolher uma foto do celular (ela é reduzida automaticamente). Depois toque em <b>"💾 Gerar arquivo"</b> lá embaixo, <b>copie</b> ou <b>baixe</b> o dados.json e substitua no GitHub — ou me mande aqui pelo Claude que eu salvo pra você.
 </div>
 
 <div id="app"></div>
@@ -49,9 +54,11 @@
   <button class="btn-ouro" onclick="gerar()">💾 Gerar arquivo</button>
 </div>
 
+<input type="file" id="fileInput" accept="image/*" style="display:none">
+
 <div class="modal" id="modalJson">
   <h2>📄 Novo dados.json</h2>
-  <p>Copie este conteúdo e substitua o arquivo <b>dados.json</b> no GitHub (ou baixe abaixo).</p>
+  <p>Copie este conteúdo e substitua o arquivo <b>dados.json</b> no GitHub (ou baixe abaixo). Se tiver fotos novas, o arquivo pode ficar grande — o botão Baixar é o mais fácil nesse caso.</p>
   <textarea id="jsonOut" readonly></textarea>
   <div class="barra" style="position:static;margin-top:10px;background:none;border:none;padding:0">
     <button class="btn-linha" onclick="document.getElementById('modalJson').classList.remove('on')">Fechar</button>
@@ -61,7 +68,7 @@
 </div>
 
 <script>
-let DADOS=null;
+let DADOS=null, alvoFoto=-1;
 
 async function carregar(){
   const r = await fetch('dados.json?v='+Date.now());
@@ -75,12 +82,18 @@ function render(){
     h+='<div class="cat-titulo">'+cat.icone+' '+cat.nome+'</div>';
     DADOS.produtos.forEach((p,i)=>{
       if(p.cat!==cat.id) return;
+      const prev = p.foto ? 'style="background-image:url(\''+p.foto+'\')"' : '';
+      const emoji = p.foto ? '' : '📷';
       h+='<div class="card">'+
         '<div class="top"><b>Item #'+(i+1)+'</b><button class="del" onclick="remover('+i+')">🗑 Remover</button></div>'+
+        '<div class="foto-area">'+
+          '<div class="foto-prev" id="prev'+i+'" '+prev+'>'+emoji+'</div>'+
+          '<button class="btn-foto" onclick="escolherFoto('+i+')">📷 Trocar foto</button>'+
+          (p.foto ? '<button class="btn-limpar" onclick="limparFoto('+i+')">Remover foto</button>' : '')+
+        '</div>'+
         '<label>Nome</label><input value="'+esc(p.nome)+'" onchange="set('+i+',\'nome\',this.value)">'+
         '<label>Descrição</label><input value="'+esc(p.desc||'')+'" onchange="set('+i+',\'desc\',this.value)">'+
         '<label>Preço (R$)</label><input type="number" step="0.01" value="'+p.preco+'" onchange="set('+i+',\'preco\',parseFloat(this.value))">'+
-        '<label>URL da foto (opcional)</label><input value="'+esc(p.foto||'')+'" onchange="set('+i+',\'foto\',this.value)">'+
         '</div>';
     });
   });
@@ -96,6 +109,38 @@ function novoItem(){
   render();
   window.scrollTo(0,document.body.scrollHeight);
 }
+function limparFoto(i){ DADOS.produtos[i].foto=''; render(); }
+
+function escolherFoto(i){ alvoFoto=i; document.getElementById('fileInput').click(); }
+
+document.getElementById('fileInput').addEventListener('change', function(e){
+  const file = e.target.files[0];
+  if(!file || alvoFoto<0) return;
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    const im = new Image();
+    im.onload = function(){
+      // Redimensiona mantendo proporção (máx 500px) e comprime
+      const max = 500;
+      let w = im.width, hh = im.height;
+      if(w>hh){ if(w>max){ hh=hh*max/w; w=max; } }
+      else { if(hh>max){ w=w*max/hh; hh=max; } }
+      const cv = document.createElement('canvas');
+      cv.width=w; cv.height=hh;
+      cv.getContext('2d').drawImage(im,0,0,w,hh);
+      const dataUrl = cv.toDataURL('image/jpeg', 0.72);
+      DADOS.produtos[alvoFoto].foto = dataUrl;
+      const prev = document.getElementById('prev'+alvoFoto);
+      if(prev){ prev.style.backgroundImage='url('+dataUrl+')'; prev.textContent=''; }
+      render();
+      alvoFoto=-1;
+      document.getElementById('fileInput').value='';
+    };
+    im.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
 function gerar(){
   document.getElementById('jsonOut').value = JSON.stringify(DADOS,null,2);
   document.getElementById('modalJson').classList.add('on');
