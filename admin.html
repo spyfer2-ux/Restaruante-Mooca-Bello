@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Gerencial - Bodega Mooca Bello</title>
+<style>
+  :root{ --ouro:#c8962a; --preto:#141210; --card:#1f1b17; --linha:#3a332b; --branco:#f5efe4; }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{ font-family:'Segoe UI',system-ui,Arial,sans-serif; background:var(--preto); color:var(--branco); padding-bottom:120px; }
+  header{ background:#1c1712; padding:14px; text-align:center; border-bottom:2px solid var(--ouro); position:sticky; top:0; z-index:20; }
+  header h1{ color:var(--ouro); font-size:1.2rem; }
+  header a{ color:#c9bfa8; font-size:.8rem; }
+  .aviso{ background:#241f19; margin:12px; padding:12px; border-radius:12px; border:1px solid var(--linha); font-size:.85rem; color:#c9bfa8; }
+  .aviso b{ color:var(--ouro); }
+  .cat-titulo{ color:var(--ouro); font-size:1.1rem; padding:16px 14px 6px; font-weight:800; }
+  .card{ background:var(--card); border:1px solid var(--linha); border-radius:14px; margin:8px 12px; padding:12px; }
+  .card label{ font-size:.7rem; color:#a99e88; display:block; margin-top:6px; }
+  .card input, .card textarea{ width:100%; padding:10px; font-size:1rem; border-radius:8px; border:1px solid var(--linha); background:#241f19; color:var(--branco); margin-top:2px; }
+  .card .top{ display:flex; justify-content:space-between; align-items:center; gap:8px; }
+  .del{ background:#5a2222; color:#fff; border:none; border-radius:8px; padding:8px 12px; font-weight:700; }
+  .add-item{ background:var(--card); border:2px dashed var(--ouro); color:var(--ouro); border-radius:14px; margin:8px 12px; padding:14px; width:calc(100% - 24px); font-size:1rem; font-weight:700; }
+  .barra{ position:fixed; bottom:0; left:0; right:0; background:#1c1712; border-top:2px solid var(--ouro); padding:12px; display:flex; gap:8px; }
+  .barra button{ flex:1; padding:16px; border:none; border-radius:12px; font-size:1rem; font-weight:800; }
+  .btn-ouro{ background:var(--ouro); color:#111; }
+  .btn-linha{ background:transparent; color:var(--branco); border:2px solid var(--linha) !important; }
+  .modal{ position:fixed; inset:0; background:rgba(0,0,0,.85); z-index:100; display:none; padding:16px; overflow:auto; }
+  .modal.on{ display:block; }
+  .modal h2{ color:var(--ouro); margin-bottom:8px; }
+  .modal p{ font-size:.85rem; color:#c9bfa8; margin-bottom:8px; }
+  #jsonOut{ width:100%; height:50vh; background:#241f19; color:#9ecb6a; border:1px solid var(--linha); border-radius:10px; padding:10px; font-family:monospace; font-size:.75rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>⚙️ Painel Gerencial — Bodega Mooca Bello</h1>
+  <a href="index.html">← Ver cardápio do cliente</a>
+</header>
+
+<div class="aviso">
+  <b>Como funciona:</b> edite preços, nomes e descrições aqui. Ao terminar, toque em <b>"Gerar arquivo"</b> — o sistema cria o novo <b>dados.json</b>. Você pode copiar/baixar e substituir no GitHub, OU simplesmente pedir ao Claude no celular: <i>"atualize o preço de X para Y no dados.json"</i>.
+</div>
+
+<div id="app"></div>
+<button class="add-item" onclick="novoItem()">+ Adicionar novo item</button>
+
+<div class="barra">
+  <button class="btn-linha" onclick="location.reload()">↺ Recarregar</button>
+  <button class="btn-ouro" onclick="gerar()">💾 Gerar arquivo</button>
+</div>
+
+<div class="modal" id="modalJson">
+  <h2>📄 Novo dados.json</h2>
+  <p>Copie este conteúdo e substitua o arquivo <b>dados.json</b> no GitHub (ou baixe abaixo).</p>
+  <textarea id="jsonOut" readonly></textarea>
+  <div class="barra" style="position:static;margin-top:10px;background:none;border:none;padding:0">
+    <button class="btn-linha" onclick="document.getElementById('modalJson').classList.remove('on')">Fechar</button>
+    <button class="btn-linha" onclick="copiar()">📋 Copiar</button>
+    <button class="btn-ouro" onclick="baixar()">⬇️ Baixar</button>
+  </div>
+</div>
+
+<script>
+let DADOS=null;
+
+async function carregar(){
+  const r = await fetch('dados.json?v='+Date.now());
+  DADOS = await r.json();
+  render();
+}
+
+function render(){
+  let h='';
+  DADOS.categorias.forEach(cat=>{
+    h+='<div class="cat-titulo">'+cat.icone+' '+cat.nome+'</div>';
+    DADOS.produtos.forEach((p,i)=>{
+      if(p.cat!==cat.id) return;
+      h+='<div class="card">'+
+        '<div class="top"><b>Item #'+(i+1)+'</b><button class="del" onclick="remover('+i+')">🗑 Remover</button></div>'+
+        '<label>Nome</label><input value="'+esc(p.nome)+'" onchange="set('+i+',\'nome\',this.value)">'+
+        '<label>Descrição</label><input value="'+esc(p.desc||'')+'" onchange="set('+i+',\'desc\',this.value)">'+
+        '<label>Preço (R$)</label><input type="number" step="0.01" value="'+p.preco+'" onchange="set('+i+',\'preco\',parseFloat(this.value))">'+
+        '<label>URL da foto (opcional)</label><input value="'+esc(p.foto||'')+'" onchange="set('+i+',\'foto\',this.value)">'+
+        '</div>';
+    });
+  });
+  document.getElementById('app').innerHTML=h;
+}
+function esc(s){ return (s||'').replace(/"/g,'&quot;'); }
+function set(i,campo,val){ DADOS.produtos[i][campo]=val; }
+function remover(i){ if(confirm('Remover este item?')){ DADOS.produtos.splice(i,1); render(); } }
+function novoItem(){
+  const cat = prompt('Categoria (cafe, semanal, porcoes, drinks, cervejas, refri, extras):','porcoes');
+  if(!cat) return;
+  DADOS.produtos.push({cat:cat, nome:'Novo item', desc:'', preco:0, foto:''});
+  render();
+  window.scrollTo(0,document.body.scrollHeight);
+}
+function gerar(){
+  document.getElementById('jsonOut').value = JSON.stringify(DADOS,null,2);
+  document.getElementById('modalJson').classList.add('on');
+}
+function copiar(){ const t=document.getElementById('jsonOut'); t.select(); document.execCommand('copy'); alert('Copiado! Cole no arquivo dados.json do GitHub.'); }
+function baixar(){
+  const blob=new Blob([document.getElementById('jsonOut').value],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='dados.json'; a.click();
+}
+carregar();
+</script>
+</body>
+</html>
