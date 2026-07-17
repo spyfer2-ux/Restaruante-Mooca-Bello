@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comanda do Garçom - Bodega Mooca Bello</title>
+<style>
+  :root{--ouro:#c8962a;--preto:#141210;}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  body{font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#0d0b09;color:#f5efe2;padding-bottom:150px;}
+  header{background:var(--preto);padding:14px;text-align:center;border-bottom:3px solid var(--ouro);position:sticky;top:0;z-index:20;}
+  header h1{color:var(--ouro);font-size:18px;letter-spacing:1px;}
+  header p{font-size:12px;color:#b9b0a0;margin-top:3px;}
+  .secao-tit{padding:12px 12px 4px;font-size:13px;color:#8a7c64;text-transform:uppercase;letter-spacing:1px;}
+  .mesas{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:8px 12px;}
+  .mesa-btn{background:#221a12;color:#e9dcc4;border:1px solid #3a2d1c;padding:16px 0;border-radius:12px;font-size:18px;font-weight:700;cursor:pointer;transition:.15s;}
+  .mesa-btn.active{background:var(--ouro);color:#1b1409;border-color:var(--ouro);}
+  .mesa-btn .ped{display:block;font-size:10px;font-weight:600;margin-top:3px;color:#c98;}
+  .mesa-btn.active .ped{color:#5a3a12;}
+  .cats{display:flex;gap:8px;overflow-x:auto;padding:10px 12px;background:#17130f;border-bottom:1px solid #2a2118;scrollbar-width:none;}
+  .cats::-webkit-scrollbar{display:none;}
+  .cat-btn{flex:0 0 auto;background:#221a12;color:#e9dcc4;border:1px solid #3a2d1c;padding:9px 13px;border-radius:20px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;}
+  .cat-btn.active{background:var(--ouro);color:#1b1409;border-color:var(--ouro);}
+  .search{padding:10px 12px;}
+  .search input{width:100%;padding:11px 14px;border-radius:12px;border:1px solid #3a2d1c;background:#1a140e;color:#fff;font-size:15px;}
+  .lista{padding:4px 12px;}
+  .prod{display:flex;gap:10px;align-items:center;background:#17130f;border:1px solid #2a2118;border-radius:12px;padding:9px;margin-bottom:8px;}
+  .prod .info{flex:1;min-width:0;}
+  .prod h3{font-size:14px;line-height:1.2;}
+  .prod .preco{color:var(--ouro);font-weight:700;font-size:13px;margin-top:2px;}
+  .add{background:var(--ouro);color:#1b1409;border:none;border-radius:10px;width:42px;height:42px;font-size:22px;font-weight:700;cursor:pointer;flex:0 0 auto;}
+  .aviso{padding:20px;text-align:center;color:#8a7c64;}
+  /* comanda */
+  .comanda{position:fixed;bottom:0;left:0;right:0;background:var(--preto);border-top:2px solid var(--ouro);z-index:40;max-height:78vh;display:flex;flex-direction:column;}
+  .comanda-head{padding:12px 14px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;}
+  .comanda-head .t{font-weight:700;color:var(--ouro);}
+  .comanda-head .tot{font-size:16px;font-weight:700;}
+  .comanda-body{overflow:auto;padding:0 12px;display:none;}
+  .comanda.aberta .comanda-body{display:block;}
+  .citem{background:#17130f;border:1px solid #2a2118;border-radius:10px;padding:10px;margin-bottom:8px;}
+  .citem .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+  .citem .nome{font-size:14px;font-weight:600;flex:1;}
+  .citem .rem{background:#3a2118;color:#e79c9c;border:none;border-radius:8px;padding:5px 9px;font-size:12px;cursor:pointer;}
+  .qtd{display:flex;align-items:center;gap:10px;margin-top:8px;}
+  .qtd button{width:34px;height:34px;border-radius:8px;border:1px solid #3a2d1c;background:#221a12;color:#fff;font-size:18px;font-weight:700;cursor:pointer;}
+  .qtd .n{font-size:16px;font-weight:700;min-width:22px;text-align:center;}
+  .qtd .sub{margin-left:auto;color:var(--ouro);font-weight:700;}
+  .obs{width:100%;margin-top:8px;padding:9px;border-radius:8px;border:1px solid #3a2d1c;background:#1a140e;color:#fff;font-size:13px;}
+  .obs::placeholder{color:#6b5c44;}
+  .comanda-foot{padding:12px;display:flex;gap:8px;border-top:1px solid #2a2118;}
+  .btn{border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;flex:1;}
+  .btn-enviar{background:var(--ouro);color:#1b1409;}
+  .btn-limpar{background:#2a2118;color:#e9dcc4;flex:0 0 auto;padding:14px 16px;}
+  .status-tag{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;margin-left:8px;}
+  .st-aberta{background:#3a2d1c;color:#e9dcc4;}
+  .st-enviada{background:#1e4d2b;color:#a7e7b8;}
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;z-index:60;padding:16px;}
+  .modal.open{display:flex;}
+  .modal-box{background:#17130f;border:1px solid var(--ouro);border-radius:14px;padding:18px;max-width:480px;width:100%;max-height:85vh;overflow:auto;}
+  .modal-box h2{color:var(--ouro);font-size:17px;margin-bottom:6px;}
+  .resumo{background:#0d0b09;border:1px solid #2a2118;border-radius:10px;padding:12px;font-size:14px;line-height:1.7;white-space:pre-wrap;margin:10px 0;}
+  .modal-box .btn{width:100%;margin-top:8px;}
+  .btn-fechar{background:#2a2118;color:#e9dcc4;}
+  .vazio-com{padding:16px;text-align:center;color:#6b5c44;font-size:13px;}
+</style>
+</head>
+<body>
+<header>
+  <h1>🧾 Comanda do Garçom</h1>
+  <p>Bodega Mooca Bello</p>
+</header>
+
+<div class="secao-tit">Mesa</div>
+<div class="mesas" id="mesas"></div>
+
+<div class="cats" id="cats"></div>
+<div class="search"><input id="busca" type="text" placeholder="🔎 Buscar item..."></div>
+<div class="lista" id="lista"></div>
+
+<div class="comanda" id="comanda">
+  <div class="comanda-head" onclick="toggleComanda()">
+    <div><span class="t">Comanda</span> <span id="mesaTag"></span></div>
+    <div class="tot" id="totHead">R$ 0,00 ▲</div>
+  </div>
+  <div class="comanda-body" id="comandaBody"></div>
+  <div class="comanda-foot">
+    <button class="btn btn-limpar" onclick="limparComanda()">🗑️</button>
+    <button class="btn btn-enviar" onclick="enviarCozinha()">📤 Enviar pra cozinha</button>
+  </div>
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <h2>✅ Pedido enviado!</h2>
+    <p style="font-size:13px;color:#b9b0a0">Mesa marcada como <b>enviada pra cozinha</b>. Resumo do pedido:</p>
+    <div class="resumo" id="resumo"></div>
+    <button class="btn btn-enviar" onclick="copiarResumo()">📋 Copiar resumo</button>
+    <button class="btn btn-fechar" onclick="fecharModal()">Fechar</button>
+  </div>
+</div>
+
+<script>
+let DADOS=null, catAtual='todas', busca='', mesaAtual=1;
+let comandas={}; // {mesa: {itens:[{nome,preco,qtd,obs}], status:'aberta'|'enviada'}}
+
+function keyLS(){return 'comandas_bmb';}
+function salvar(){localStorage.setItem(keyLS(), JSON.stringify(comandas));}
+function carregarLS(){try{comandas=JSON.parse(localStorage.getItem(keyLS()))||{};}catch(e){comandas={};}}
+
+async function init(){
+  carregarLS();
+  const r = await fetch('./dados.json?v='+Date.now());
+  DADOS = await r.json();
+  renderMesas(); renderCats(); render(); renderComanda();
+}
+
+function getComanda(m){if(!comandas[m])comandas[m]={itens:[],status:'aberta'};return comandas[m];}
+
+function renderMesas(){
+  let h='';
+  for(let i=1;i<=8;i++){
+    const c=comandas[i];
+    let ped='';
+    if(c&&c.itens.length){ped='<span class="ped">'+(c.status==='enviada'?'✅ enviada':c.itens.length+' item(s)')+'</span>';}
+    h+='<button class="mesa-btn '+(mesaAtual===i?'active':'')+'" onclick="setMesa('+i+')">'+i+ped+'</button>';
+  }
+  document.getElementById('mesas').innerHTML=h;
+}
+function setMesa(m){mesaAtual=m;renderMesas();renderComanda();}
+
+function renderCats(){
+  let h='<button class="cat-btn '+(catAtual==='todas'?'active':'')+'" onclick="setCat(\'todas\')">📋 Todas</button>';
+  DADOS.categorias.forEach(cat=>{h+='<button class="cat-btn '+(catAtual===cat.id?'active':'')+'" onclick="setCat(\''+cat.id+'\')">'+cat.icone+' '+cat.nome+'</button>';});
+  document.getElementById('cats').innerHTML=h;
+}
+function setCat(id){catAtual=id;renderCats();render();}
+
+document.getElementById('busca').addEventListener('input',e=>{busca=e.target.value.toLowerCase();render();});
+
+function render(){
+  let items=DADOS.produtos.filter(p=>(catAtual==='todas'||p.cat===catAtual)&&(!busca||p.nome.toLowerCase().includes(busca)));
+  const lista=document.getElementById('lista');
+  if(!items.length){lista.innerHTML='<div class="aviso">Nenhum item.</div>';return;}
+  lista.innerHTML=items.map(p=>{
+    const idx=DADOS.produtos.indexOf(p);
+    return '<div class="prod"><div class="info"><h3>'+p.nome+'</h3><div class="preco">R$ '+p.preco.toFixed(2).replace(".",",")+'</div></div><button class="add" onclick="addItem('+idx+')">+</button></div>';
+  }).join('');
+}
+
+function addItem(idx){
+  const p=DADOS.produtos[idx];
+  const c=getComanda(mesaAtual);
+  if(c.status==='enviada'){c.status='aberta';} // reabre se adicionar depois de enviado
+  const ex=c.itens.find(i=>i.nome===p.nome && !i.obs);
+  if(ex){ex.qtd++;}else{c.itens.push({nome:p.nome,preco:p.preco,qtd:1,obs:''});}
+  salvar();renderMesas();renderComanda();abrirComanda();
+}
+
+function renderComanda(){
+  const c=getComanda(mesaAtual);
+  document.getElementById('mesaTag').innerHTML='Mesa '+mesaAtual+' <span class="status-tag '+(c.status==='enviada'?'st-enviada':'st-aberta')+'">'+(c.status==='enviada'?'✅ Enviada':'Aberta')+'</span>';
+  let total=0;
+  const body=document.getElementById('comandaBody');
+  if(!c.itens.length){body.innerHTML='<div class="vazio-com">Nenhum item nesta mesa ainda.<br>Toque no + dos produtos acima.</div>';}
+  else{
+    body.innerHTML=c.itens.map((it,i)=>{
+      const sub=it.preco*it.qtd;total+=sub;
+      return '<div class="citem"><div class="top"><div class="nome">'+it.nome+'</div><button class="rem" onclick="remItem('+i+')">remover</button></div>'+
+        '<div class="qtd"><button onclick="mudarQtd('+i+',-1)">−</button><span class="n">'+it.qtd+'</span><button onclick="mudarQtd('+i+',1)">+</button><span class="sub">R$ '+sub.toFixed(2).replace(".",",")+'</span></div>'+
+        '<input class="obs" type="text" placeholder="Obs. p/ cozinha (ex: bem passado, mais escuro)" value="'+(it.obs||'').replace(/"/g,'&quot;')+'" onchange="mudarObs('+i+',this.value)"></div>';
+    }).join('');
+  }
+  document.getElementById('totHead').innerHTML='R$ '+total.toFixed(2).replace(".",",")+' '+(document.getElementById('comanda').classList.contains('aberta')?'▼':'▲');
+}
+
+function mudarQtd(i,d){const c=getComanda(mesaAtual);c.itens[i].qtd+=d;if(c.itens[i].qtd<1)c.itens.splice(i,1);if(c.status==='enviada')c.status='aberta';salvar();renderMesas();renderComanda();}
+function remItem(i){const c=getComanda(mesaAtual);c.itens.splice(i,1);if(c.status==='enviada')c.status='aberta';salvar();renderMesas();renderComanda();}
+function mudarObs(i,v){const c=getComanda(mesaAtual);c.itens[i].obs=v;if(c.status==='enviada')c.status='aberta';salvar();renderMesas();}
+
+function toggleComanda(){document.getElementById('comanda').classList.toggle('aberta');renderComanda();}
+function abrirComanda(){document.getElementById('comanda').classList.add('aberta');renderComanda();}
+
+function limparComanda(){if(!confirm('Limpar a comanda da Mesa '+mesaAtual+'?'))return;comandas[mesaAtual]={itens:[],status:'aberta'};salvar();renderMesas();renderComanda();}
+
+function enviarCozinha(){
+  const c=getComanda(mesaAtual);
+  if(!c.itens.length){alert('Adicione itens antes de enviar.');return;}
+  c.status='enviada';salvar();renderMesas();renderComanda();
+  let total=0,txt='MESA '+mesaAtual+'\n----------------\n';
+  c.itens.forEach(it=>{total+=it.preco*it.qtd;txt+=it.qtd+'x '+it.nome+'\n';if(it.obs)txt+='   >> '+it.obs+'\n';});
+  txt+='----------------\nTOTAL: R$ '+total.toFixed(2).replace(".",",");
+  document.getElementById('resumo').textContent=txt;
+  document.getElementById('modal').classList.add('open');
+}
+function copiarResumo(){const t=document.getElementById('resumo').textContent;navigator.clipboard&&navigator.clipboard.writeText(t);alert('Resumo copiado!');}
+function fecharModal(){document.getElementById('modal').classList.remove('open');}
+
+init();
+</script>
+</body>
+</html>
