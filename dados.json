@@ -52,9 +52,9 @@
     },
     {
       "cat": "cafe",
-      "nome": "Pão na Chapa",
+      "nome": "Pão com Manteiga na Chapa",
       "desc": "Pão francês na chapa com manteiga",
-      "preco": 9.9,
+      "preco": 7.9,
       "foto": "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=400&q=60"
     },
     {
@@ -332,23 +332,23 @@
     },
     {
       "cat": "cervejas",
-      "nome": "Demais Cervejas 290ml",
+      "nome": "Demais Cervejas 350ml",
       "desc": "Heineken, Budweiser, Amstel, Stella e outras",
-      "preco": 9.9,
+      "preco": 7.9,
       "foto": "https://images.unsplash.com/photo-1618183479302-1e0aa382c36b?auto=format&fit=crop&w=400&q=60"
     },
     {
       "cat": "refri",
       "nome": "Refri 200ml",
       "desc": "Coca-Cola, Coca Zero ou Guaraná Antarctica",
-      "preco": 4.9,
+      "preco": 3.5,
       "foto": "https://images.unsplash.com/photo-1554866585-cd94860890b7?auto=format&fit=crop&w=400&q=60"
     },
     {
       "cat": "refri",
       "nome": "Refri Lata 350ml",
       "desc": "Coca, Coca Zero, Guaraná, Guaraná Zero, Pepsi, Pepsi Black, Fanta Laranja, Fanta Uva, Sprite, Schweppes",
-      "preco": 9.9,
+      "preco": 7.9,
       "foto": "https://images.unsplash.com/photo-1554866585-cd94860890b7?auto=format&fit=crop&w=400&q=60"
     },
     {
@@ -369,7 +369,7 @@
       "cat": "refri",
       "nome": "Suco Del Valle 290ml",
       "desc": "Uva, Maracujá ou Pêssego",
-      "preco": 9.9,
+      "preco": 8.5,
       "foto": "https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=400&q=60"
     },
     {
@@ -397,7 +397,7 @@
       "cat": "refri",
       "nome": "Água Crystal 500ml sem gás",
       "desc": "",
-      "preco": 4.9,
+      "preco": 4.5,
       "foto": "https://images.unsplash.com/photo-1553456558-aff63285bdd1?auto=format&fit=crop&w=400&q=60"
     },
     {
@@ -497,6 +497,55 @@
       "desc": "",
       "preco": 14.9,
       "foto": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=60"
+    },
+    {
+      "cat": "cafe",
+      "nome": "Café Pequeno",
+      "desc": "Café coado tamanho pequeno.",
+      "preco": 6,
+      "foto": ""
+    },
+    {
+      "cat": "cafe",
+      "nome": "Café Grande",
+      "desc": "Café coado tamanho grande.",
+      "preco": 12,
+      "foto": ""
+    },
+    {
+      "cat": "cafe",
+      "nome": "Chocolate Quente",
+      "desc": "Chocolate quente cremoso.",
+      "preco": 13,
+      "foto": ""
+    },
+    {
+      "cat": "cafe",
+      "nome": "Mini Pão de Queijo (unidade)",
+      "desc": "Mini pão de queijo, por unidade.",
+      "preco": 1,
+      "foto": ""
+    },
+    {
+      "cat": "refri",
+      "nome": "Energético Red Bull (lata)",
+      "desc": "Lata de Red Bull.",
+      "preco": 14.9,
+      "foto": ""
+    },
+    {
+      "cat": "refri",
+      "nome": "H2OH! Limoneto",
+      "desc": "H2OH! sabor limoneto.",
+      "preco": 9.9,
+      "foto": ""
+    },
+    {
+      "cat": "refri",
+      "nome": "H2OH! Limão",
+      "desc": "H2OH! sabor limão.",
+      "preco": 9.9,
+      "foto": ""
     }
   ]
 }
