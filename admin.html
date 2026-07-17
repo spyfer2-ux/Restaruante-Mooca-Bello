@@ -4,152 +4,153 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Painel Gerencial - Bodega Mooca Bello</title>
-<link rel="icon" href="logo.png">
 <style>
-  :root{ --ouro:#c8962a; --preto:#141210; --card:#1f1b17; --linha:#3a332b; --branco:#f5efe4; }
-  *{ box-sizing:border-box; margin:0; padding:0; }
-  body{ font-family:'Segoe UI',system-ui,Arial,sans-serif; background:var(--preto); color:var(--branco); padding-bottom:120px; }
-  header{ background:#1c1712; padding:14px; text-align:center; border-bottom:2px solid var(--ouro); position:sticky; top:0; z-index:20; }
-  header h1{ color:var(--ouro); font-size:1.2rem; }
-  header a{ color:#c9bfa8; font-size:.8rem; }
-  .aviso{ background:#241f19; margin:12px; padding:12px; border-radius:12px; border:1px solid var(--linha); font-size:.85rem; color:#c9bfa8; }
-  .aviso b{ color:var(--ouro); }
-  .cat-titulo{ color:var(--ouro); font-size:1.1rem; padding:16px 14px 6px; font-weight:800; }
-  .card{ background:var(--card); border:1px solid var(--linha); border-radius:14px; margin:8px 12px; padding:12px; }
-  .card label{ font-size:.7rem; color:#a99e88; display:block; margin-top:6px; }
-  .card input, .card textarea{ width:100%; padding:10px; font-size:1rem; border-radius:8px; border:1px solid var(--linha); background:#241f19; color:var(--branco); margin-top:2px; }
-  .card .top{ display:flex; justify-content:space-between; align-items:center; gap:8px; }
-  .del{ background:#5a2222; color:#fff; border:none; border-radius:8px; padding:8px 12px; font-weight:700; }
-  .foto-area{ display:flex; gap:10px; align-items:center; margin-top:8px; }
-  .foto-prev{ width:70px; height:70px; border-radius:10px; background:#241f19 center/cover no-repeat; border:1px solid var(--linha); flex:0 0 auto; display:flex; align-items:center; justify-content:center; font-size:1.6rem; }
-  .btn-foto{ flex:1; background:var(--ouro); color:#111; border:none; border-radius:10px; padding:12px; font-weight:800; font-size:.95rem; }
-  .btn-limpar{ background:transparent; color:#c9bfa8; border:1px solid var(--linha); border-radius:10px; padding:12px; font-weight:700; font-size:.8rem; }
-  .add-item{ background:var(--card); border:2px dashed var(--ouro); color:var(--ouro); border-radius:14px; margin:8px 12px; padding:14px; width:calc(100% - 24px); font-size:1rem; font-weight:700; }
-  .barra{ position:fixed; bottom:0; left:0; right:0; background:#1c1712; border-top:2px solid var(--ouro); padding:12px; display:flex; gap:8px; }
-  .barra button{ flex:1; padding:16px; border:none; border-radius:12px; font-size:1rem; font-weight:800; }
-  .btn-ouro{ background:var(--ouro); color:#111; }
-  .btn-linha{ background:transparent; color:var(--branco); border:2px solid var(--linha) !important; }
-  .modal{ position:fixed; inset:0; background:rgba(0,0,0,.85); z-index:100; display:none; padding:16px; overflow:auto; }
-  .modal.on{ display:block; }
-  .modal h2{ color:var(--ouro); margin-bottom:8px; }
-  .modal p{ font-size:.85rem; color:#c9bfa8; margin-bottom:8px; }
-  #jsonOut{ width:100%; height:40vh; background:#241f19; color:#9ecb6a; border:1px solid var(--linha); border-radius:10px; padding:10px; font-family:monospace; font-size:.7rem; }
+  :root{--ouro:#c8962a;--preto:#141210;}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  body{font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#0d0b09;color:#f5efe2;padding-bottom:90px;}
+  header{background:var(--preto);padding:16px;text-align:center;border-bottom:3px solid var(--ouro);position:sticky;top:0;z-index:20;}
+  header h1{color:var(--ouro);font-size:20px;letter-spacing:1px;}
+  header p{font-size:12px;color:#b9b0a0;margin-top:4px;}
+  .cats{display:flex;gap:8px;overflow-x:auto;padding:12px;background:#17130f;position:sticky;top:70px;z-index:19;border-bottom:1px solid #2a2118;scrollbar-width:none;}
+  .cats::-webkit-scrollbar{display:none;}
+  .cat-btn{flex:0 0 auto;background:#221a12;color:#e9dcc4;border:1px solid #3a2d1c;padding:10px 14px;border-radius:22px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;transition:.15s;}
+  .cat-btn.active{background:var(--ouro);color:#1b1409;border-color:var(--ouro);}
+  .search{padding:12px;position:sticky;top:132px;z-index:18;background:#0d0b09;}
+  .search input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #3a2d1c;background:#1a140e;color:#fff;font-size:15px;}
+  .lista{padding:8px 12px;}
+  .item{display:flex;gap:12px;align-items:center;background:#17130f;border:1px solid #2a2118;border-radius:14px;padding:10px;margin-bottom:10px;}
+  .thumb{width:72px;height:72px;border-radius:10px;object-fit:cover;background:#2a2118;flex:0 0 auto;}
+  .thumb.empty{display:flex;align-items:center;justify-content:center;font-size:26px;color:#6b5c44;}
+  .info{flex:1;min-width:0;}
+  .info h3{font-size:15px;line-height:1.2;margin-bottom:3px;}
+  .info .preco{color:var(--ouro);font-weight:700;font-size:14px;}
+  .info .catlabel{font-size:11px;color:#8a7c64;margin-top:2px;}
+  .acts{display:flex;flex-direction:column;gap:6px;flex:0 0 auto;}
+  .btn{border:none;border-radius:9px;padding:8px 10px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;}
+  .btn-foto{background:var(--ouro);color:#1b1409;}
+  .btn-rem{background:#3a2118;color:#e79c9c;}
+  .vazio{text-align:center;color:#8a7c64;padding:40px 20px;}
+  .footer-bar{position:fixed;bottom:0;left:0;right:0;background:var(--preto);border-top:2px solid var(--ouro);padding:12px;display:flex;gap:10px;z-index:30;}
+  .footer-bar .btn{flex:1;padding:14px;font-size:15px;}
+  .btn-gerar{background:var(--ouro);color:#1b1409;}
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:50;padding:16px;}
+  .modal.open{display:flex;}
+  .modal-box{background:#17130f;border:1px solid var(--ouro);border-radius:14px;padding:18px;max-width:520px;width:100%;max-height:85vh;overflow:auto;}
+  .modal-box h2{color:var(--ouro);font-size:16px;margin-bottom:10px;}
+  .modal-box textarea{width:100%;height:200px;background:#0d0b09;color:#cfc6b3;border:1px solid #3a2d1c;border-radius:8px;padding:10px;font-size:11px;font-family:monospace;}
+  .modal-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+  .modal-actions .btn{flex:1;padding:12px;}
+  .btn-fechar{background:#2a2118;color:#e9dcc4;}
+  .hint{font-size:12px;color:#b9b0a0;line-height:1.5;margin:8px 0;}
 </style>
 </head>
 <body>
 <header>
-  <h1>⚙️ Painel Gerencial — Bodega Mooca Bello</h1>
-  <a href="index.html">← Ver cardápio do cliente</a>
+  <h1>⚙️ Painel Gerencial</h1>
+  <p id="sub">Bodega Mooca Bello — trocar fotos e gerar arquivo</p>
 </header>
 
-<div class="aviso">
-  <b>Fotos:</b> toque em <b>"📷 Trocar foto"</b> em qualquer item para tirar/escolher uma foto do celular (ela é reduzida automaticamente). Depois toque em <b>"💾 Gerar arquivo"</b> lá embaixo, <b>copie</b> ou <b>baixe</b> o dados.json e substitua no GitHub — ou me mande aqui pelo Claude que eu salvo pra você.
+<div class="cats" id="cats"></div>
+<div class="search"><input id="busca" type="text" placeholder="🔎 Buscar item pelo nome..."></div>
+<div class="lista" id="lista"></div>
+
+<div class="footer-bar">
+  <button class="btn btn-gerar" onclick="gerar()">💾 Gerar arquivo (dados.json)</button>
 </div>
 
-<div id="app"></div>
-<button class="add-item" onclick="novoItem()">+ Adicionar novo item</button>
-
-<div class="barra">
-  <button class="btn-linha" onclick="location.reload()">↺ Recarregar</button>
-  <button class="btn-ouro" onclick="gerar()">💾 Gerar arquivo</button>
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <h2>📄 dados.json atualizado</h2>
+    <p class="hint">Foto(s) alterada(s)! Agora escolha uma opção:<br>1️⃣ <b>Baixar</b> o arquivo e me enviar aqui no chat pra eu subir no GitHub. <br>2️⃣ Ou <b>Copiar</b> e colar direto no GitHub.</p>
+    <textarea id="saida" readonly></textarea>
+    <div class="modal-actions">
+      <button class="btn btn-gerar" onclick="baixar()">⬇️ Baixar arquivo</button>
+      <button class="btn btn-foto" onclick="copiar()">📋 Copiar</button>
+      <button class="btn btn-fechar" onclick="fecharModal()">Fechar</button>
+    </div>
+  </div>
 </div>
 
 <input type="file" id="fileInput" accept="image/*" style="display:none">
 
-<div class="modal" id="modalJson">
-  <h2>📄 Novo dados.json</h2>
-  <p>Copie este conteúdo e substitua o arquivo <b>dados.json</b> no GitHub (ou baixe abaixo). Se tiver fotos novas, o arquivo pode ficar grande — o botão Baixar é o mais fácil nesse caso.</p>
-  <textarea id="jsonOut" readonly></textarea>
-  <div class="barra" style="position:static;margin-top:10px;background:none;border:none;padding:0">
-    <button class="btn-linha" onclick="document.getElementById('modalJson').classList.remove('on')">Fechar</button>
-    <button class="btn-linha" onclick="copiar()">📋 Copiar</button>
-    <button class="btn-ouro" onclick="baixar()">⬇️ Baixar</button>
-  </div>
-</div>
-
 <script>
-let DADOS=null, alvoFoto=-1;
+let DADOS=null, catAtual='todas', busca='', itemEditando=null;
 
 async function carregar(){
-  const r = await fetch('dados.json?v='+Date.now());
+  const r = await fetch('./dados.json?v='+Date.now());
   DADOS = await r.json();
+  DADOS.produtos.forEach((p,i)=>p.__i=i);
+  renderCats();
   render();
 }
+
+function renderCats(){
+  const c = document.getElementById('cats');
+  let h = '<button class="cat-btn '+(catAtual==='todas'?'active':'')+'" onclick="setCat(\'todas\')">📋 Todas</button>';
+  DADOS.categorias.forEach(cat=>{
+    h += '<button class="cat-btn '+(catAtual===cat.id?'active':'')+'" onclick="setCat(\''+cat.id+'\')">'+cat.icone+' '+cat.nome+'</button>';
+  });
+  c.innerHTML = h;
+}
+function setCat(id){catAtual=id;renderCats();render();window.scrollTo(0,0);}
+
+document.getElementById('busca').addEventListener('input',e=>{busca=e.target.value.toLowerCase();render();});
+
+function catNome(id){const c=DADOS.categorias.find(x=>x.id===id);return c?c.icone+' '+c.nome:id;}
 
 function render(){
-  let h='';
-  DADOS.categorias.forEach(cat=>{
-    h+='<div class="cat-titulo">'+cat.icone+' '+cat.nome+'</div>';
-    DADOS.produtos.forEach((p,i)=>{
-      if(p.cat!==cat.id) return;
-      const prev = p.foto ? 'style="background-image:url(\''+p.foto+'\')"' : '';
-      const emoji = p.foto ? '' : '📷';
-      h+='<div class="card">'+
-        '<div class="top"><b>Item #'+(i+1)+'</b><button class="del" onclick="remover('+i+')">🗑 Remover</button></div>'+
-        '<div class="foto-area">'+
-          '<div class="foto-prev" id="prev'+i+'" '+prev+'>'+emoji+'</div>'+
-          '<button class="btn-foto" onclick="escolherFoto('+i+')">📷 Trocar foto</button>'+
-          (p.foto ? '<button class="btn-limpar" onclick="limparFoto('+i+')">Remover foto</button>' : '')+
-        '</div>'+
-        '<label>Nome</label><input value="'+esc(p.nome)+'" onchange="set('+i+',\'nome\',this.value)">'+
-        '<label>Descrição</label><input value="'+esc(p.desc||'')+'" onchange="set('+i+',\'desc\',this.value)">'+
-        '<label>Preço (R$)</label><input type="number" step="0.01" value="'+p.preco+'" onchange="set('+i+',\'preco\',parseFloat(this.value))">'+
-        '</div>';
-    });
+  const lista = document.getElementById('lista');
+  let items = DADOS.produtos.filter(p=>{
+    const okCat = catAtual==='todas' || p.cat===catAtual;
+    const okBusca = !busca || p.nome.toLowerCase().includes(busca);
+    return okCat && okBusca;
   });
-  document.getElementById('app').innerHTML=h;
+  if(!items.length){lista.innerHTML='<div class="vazio">Nenhum item encontrado.</div>';return;}
+  lista.innerHTML = items.map(p=>{
+    const tem = p.foto && p.foto.length>4;
+    const thumb = tem ? '<img class="thumb" src="'+p.foto+'">' : '<div class="thumb empty">🍽️</div>';
+    return '<div class="item">'+thumb+
+      '<div class="info"><h3>'+p.nome+'</h3><div class="preco">R$ '+p.preco.toFixed(2).replace(".",",")+'</div><div class="catlabel">'+catNome(p.cat)+'</div></div>'+
+      '<div class="acts"><button class="btn btn-foto" onclick="trocarFoto('+p.__i+')">📷 Trocar foto</button>'+
+      (tem?'<button class="btn btn-rem" onclick="removerFoto('+p.__i+')">Remover foto</button>':'')+
+      '</div></div>';
+  }).join('');
 }
-function esc(s){ return (s||'').replace(/"/g,'&quot;'); }
-function set(i,campo,val){ DADOS.produtos[i][campo]=val; }
-function remover(i){ if(confirm('Remover este item?')){ DADOS.produtos.splice(i,1); render(); } }
-function novoItem(){
-  const cat = prompt('Categoria (cafe, semanal, porcoes, drinks, cervejas, refri, extras):','porcoes');
-  if(!cat) return;
-  DADOS.produtos.push({cat:cat, nome:'Novo item', desc:'', preco:0, foto:''});
-  render();
-  window.scrollTo(0,document.body.scrollHeight);
-}
-function limparFoto(i){ DADOS.produtos[i].foto=''; render(); }
 
-function escolherFoto(i){ alvoFoto=i; document.getElementById('fileInput').click(); }
-
-document.getElementById('fileInput').addEventListener('change', function(e){
-  const file = e.target.files[0];
-  if(!file || alvoFoto<0) return;
+const fileInput = document.getElementById('fileInput');
+function trocarFoto(i){itemEditando=i;fileInput.value='';fileInput.click();}
+fileInput.addEventListener('change',e=>{
+  const f = e.target.files[0]; if(!f||itemEditando===null) return;
   const reader = new FileReader();
-  reader.onload = function(ev){
-    const im = new Image();
-    im.onload = function(){
-      // Redimensiona mantendo proporção (máx 500px) e comprime
-      const max = 500;
-      let w = im.width, hh = im.height;
-      if(w>hh){ if(w>max){ hh=hh*max/w; w=max; } }
-      else { if(hh>max){ w=w*max/hh; hh=max; } }
-      const cv = document.createElement('canvas');
-      cv.width=w; cv.height=hh;
-      cv.getContext('2d').drawImage(im,0,0,w,hh);
-      const dataUrl = cv.toDataURL('image/jpeg', 0.72);
-      DADOS.produtos[alvoFoto].foto = dataUrl;
-      const prev = document.getElementById('prev'+alvoFoto);
-      if(prev){ prev.style.backgroundImage='url('+dataUrl+')'; prev.textContent=''; }
-      render();
-      alvoFoto=-1;
-      document.getElementById('fileInput').value='';
+  reader.onload = ev=>{
+    const img = new Image();
+    img.onload = ()=>{
+      const max=500; let w=img.width, h=img.height;
+      if(w>h){if(w>max){h=h*max/w;w=max;}} else {if(h>max){w=w*max/h;h=max;}}
+      const cv=document.createElement('canvas');cv.width=w;cv.height=h;
+      cv.getContext('2d').drawImage(img,0,0,w,h);
+      DADOS.produtos[itemEditando].foto = cv.toDataURL('image/jpeg',0.72);
+      itemEditando=null; render();
     };
-    im.src = ev.target.result;
+    img.src = ev.target.result;
   };
-  reader.readAsDataURL(file);
+  reader.readAsDataURL(f);
 });
+function removerFoto(i){DADOS.produtos[i].foto='';render();}
 
 function gerar(){
-  document.getElementById('jsonOut').value = JSON.stringify(DADOS,null,2);
-  document.getElementById('modalJson').classList.add('on');
+  const out = JSON.parse(JSON.stringify(DADOS));
+  out.produtos.forEach(p=>delete p.__i);
+  document.getElementById('saida').value = JSON.stringify(out,null,2);
+  document.getElementById('modal').classList.add('open');
 }
-function copiar(){ const t=document.getElementById('jsonOut'); t.select(); document.execCommand('copy'); alert('Copiado! Cole no arquivo dados.json do GitHub.'); }
+function fecharModal(){document.getElementById('modal').classList.remove('open');}
+function copiar(){const t=document.getElementById('saida');t.select();document.execCommand('copy');alert('Copiado! Cole no arquivo dados.json do GitHub.');}
 function baixar(){
-  const blob=new Blob([document.getElementById('jsonOut').value],{type:'application/json'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='dados.json'; a.click();
+  const blob = new Blob([document.getElementById('saida').value],{type:'application/json'});
+  const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='dados.json'; a.click();
 }
+
 carregar();
 </script>
 </body>
