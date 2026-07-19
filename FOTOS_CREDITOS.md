@@ -21,7 +21,6 @@ Imagens obtidas do Wikimedia Commons (licenças livres). Fontes:
 - fotos/mandioca_frita.jpg — [File:Mandioca frita en restaurante de Argentina.jpg](https://commons.wikimedia.org/wiki/File%3AMandioca_frita_en_restaurante_de_Argentina.jpg)
 - fotos/moscow_mule.jpg — [File:Moscow mule Cocktail im Kupferbecher.jpg](https://commons.wikimedia.org/wiki/File%3AMoscow_mule_Cocktail_im_Kupferbecher.jpg)
 - fotos/ovo_frito.jpg — [File:Ovo frito da Padaria Nova Arcoverde em Pinheiros, São Paulo, Brasil.jpg](https://commons.wikimedia.org/wiki/File%3AOvo_frito_da_Padaria_Nova_Arcoverde_em_Pinheiros%2C_S%C3%A3o_Paulo%2C_Brasil.jpg)
-- fotos/pao_queijo.jpg — [File:Pao de queijo brasil.jpg](https://commons.wikimedia.org/wiki/File%3APao_de_queijo_brasil.jpg)
 - fotos/parmegiana.jpg — [File:Frango à parmegiana.jpg](https://commons.wikimedia.org/wiki/File%3AFrango_%C3%A0_parmegiana.jpg)
 - fotos/peixe_empanado.jpg — [File:Peixinho da horta.jpg](https://commons.wikimedia.org/wiki/File%3APeixinho_da_horta.jpg)
 - fotos/polenta_frita.jpg — [File:Polenta com Linguiça.jpg](https://commons.wikimedia.org/wiki/File%3APolenta_com_Lingui%C3%A7a.jpg)
