@@ -503,14 +503,16 @@
    "nome": "Café Pequeno",
    "desc": "Café coado tamanho pequeno.",
    "preco": 6,
-   "foto": "fotos/cafe_pequeno.jpg"
+   "foto": "fotos/cafe_pequeno.jpg",
+   "ativo": false
   },
   {
    "cat": "cafe",
    "nome": "Café Grande",
    "desc": "Café coado tamanho grande.",
    "preco": 12,
-   "foto": "fotos/cafe_grande.jpg"
+   "foto": "fotos/cafe_grande.jpg",
+   "ativo": false
   },
   {
    "cat": "cafe",

@@ -89,7 +89,7 @@ async function carregar(){
   try{
     const r = await fetch('dados.json?v='+Date.now());
     const d = await r.json();
-    PRODUTOS = d.produtos.map((p,i)=>({...p, id:i}));
+    PRODUTOS = d.produtos.map((p,i)=>({...p, id:i})).filter(p=>p.ativo!==false);
     CATS = d.categorias;
     if(d.restaurante){ document.querySelector('header h1').textContent=d.restaurante.nome; if(d.restaurante.slogan) document.querySelector('header p').textContent=d.restaurante.slogan; }
     renderCats(); render();

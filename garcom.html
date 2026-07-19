@@ -184,7 +184,7 @@ function setCat(id){catAtual=id;renderCats();render();}
 document.getElementById('busca').addEventListener('input',e=>{busca=e.target.value.toLowerCase();render();});
 
 function render(){
-  let items=DADOS.produtos.filter(p=>(catAtual==='todas'||p.cat===catAtual)&&(!busca||p.nome.toLowerCase().includes(busca)));
+  let items=DADOS.produtos.filter(p=>p.ativo!==false&&(catAtual==='todas'||p.cat===catAtual)&&(!busca||p.nome.toLowerCase().includes(busca)));
   const lista=document.getElementById('lista');
   if(!items.length){lista.innerHTML='<div class="aviso">Nenhum item.</div>';return;}
   lista.innerHTML=items.map(p=>{const idx=DADOS.produtos.indexOf(p);
