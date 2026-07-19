@@ -22,7 +22,6 @@ Imagens obtidas do Wikimedia Commons (licenças livres). Fontes:
 - fotos/misto_quente.jpg — [File:Sanduíche de salame e queijo no Bairro dos Franças, Ortigueira, Paraná.1.jpg](https://commons.wikimedia.org/wiki/File%3ASandu%C3%ADche_de_salame_e_queijo_no_Bairro_dos_Fran%C3%A7as%2C_Ortigueira%2C_Paran%C3%A1.1.jpg)
 - fotos/moscow_mule.jpg — [File:Moscow mule Cocktail im Kupferbecher.jpg](https://commons.wikimedia.org/wiki/File%3AMoscow_mule_Cocktail_im_Kupferbecher.jpg)
 - fotos/ovo_frito.jpg — [File:Ovo frito da Padaria Nova Arcoverde em Pinheiros, São Paulo, Brasil.jpg](https://commons.wikimedia.org/wiki/File%3AOvo_frito_da_Padaria_Nova_Arcoverde_em_Pinheiros%2C_S%C3%A3o_Paulo%2C_Brasil.jpg)
-- fotos/pao_manteiga.jpg — [File:Pão na chapa.jpg](https://commons.wikimedia.org/wiki/File%3AP%C3%A3o_na_chapa.jpg)
 - fotos/pao_ovo_mucarela.jpg — [File:Egg and cheese breakfast sandwich.jpg](https://commons.wikimedia.org/wiki/File%3AEgg_and_cheese_breakfast_sandwich.jpg)
 - fotos/pao_queijo.jpg — [File:Pao de queijo brasil.jpg](https://commons.wikimedia.org/wiki/File%3APao_de_queijo_brasil.jpg)
 - fotos/pao_requeijao.jpg — [File:NCI cream cheese bagel.jpg](https://commons.wikimedia.org/wiki/File%3ANCI_cream_cheese_bagel.jpg)
