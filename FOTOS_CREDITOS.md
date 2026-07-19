@@ -19,7 +19,6 @@ Imagens obtidas do Wikimedia Commons (licenças livres). Fontes:
 - fotos/isca_contrafile.jpg — [File:干煸牛肉丝 Crispy Beef Strips - Sung's Kitchen (3042618951).jpg](https://commons.wikimedia.org/wiki/File%3A%E5%B9%B2%E7%85%B8%E7%89%9B%E8%82%89%E4%B8%9D_Crispy_Beef_Strips_-_Sung%27s_Kitchen_%283042618951%29.jpg)
 - fotos/jack_daniels.jpg — [File:Jack Daniel's (25042777196).jpg](https://commons.wikimedia.org/wiki/File%3AJack_Daniel%27s_%2825042777196%29.jpg)
 - fotos/mandioca_frita.jpg — [File:Mandioca frita en restaurante de Argentina.jpg](https://commons.wikimedia.org/wiki/File%3AMandioca_frita_en_restaurante_de_Argentina.jpg)
-- fotos/misto_quente.jpg — [File:Sanduíche de salame e queijo no Bairro dos Franças, Ortigueira, Paraná.1.jpg](https://commons.wikimedia.org/wiki/File%3ASandu%C3%ADche_de_salame_e_queijo_no_Bairro_dos_Fran%C3%A7as%2C_Ortigueira%2C_Paran%C3%A1.1.jpg)
 - fotos/moscow_mule.jpg — [File:Moscow mule Cocktail im Kupferbecher.jpg](https://commons.wikimedia.org/wiki/File%3AMoscow_mule_Cocktail_im_Kupferbecher.jpg)
 - fotos/ovo_frito.jpg — [File:Ovo frito da Padaria Nova Arcoverde em Pinheiros, São Paulo, Brasil.jpg](https://commons.wikimedia.org/wiki/File%3AOvo_frito_da_Padaria_Nova_Arcoverde_em_Pinheiros%2C_S%C3%A3o_Paulo%2C_Brasil.jpg)
 - fotos/pao_queijo.jpg — [File:Pao de queijo brasil.jpg](https://commons.wikimedia.org/wiki/File%3APao_de_queijo_brasil.jpg)
