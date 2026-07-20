@@ -34,3 +34,5 @@ Imagens obtidas do Wikimedia Commons (licenças livres). Fontes:
 - fotos/vinagrete.jpg — [File:Vinagrete brasileiro.jpg](https://commons.wikimedia.org/wiki/File%3AVinagrete_brasileiro.jpg)
 - fotos/virada_paulista.jpg — [File:Virado a paulista.jpg](https://commons.wikimedia.org/wiki/File%3AVirado_a_paulista.jpg)
 - fotos/whisky.jpg — [File:Neat pastis in a whisky glass.jpg](https://commons.wikimedia.org/wiki/File%3ANeat_pastis_in_a_whisky_glass.jpg)
+- fotos/copao_gin.jpg — [File:Gin and Tonic with ingredients.jpg](https://commons.wikimedia.org/wiki/File%3AGin_and_Tonic_with_ingredients.jpg)
+- fotos/copao_askov.jpg — [File:Screw Driver Cocktail.jpg](https://commons.wikimedia.org/wiki/File%3AScrew_Driver_Cocktail.jpg)

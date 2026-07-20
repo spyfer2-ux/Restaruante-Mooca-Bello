@@ -310,6 +310,20 @@
    "foto": "fotos/sex_on_beach.jpg"
   },
   {
+   "cat": "drinks",
+   "nome": "Copão de Gin",
+   "desc": "Gin com tônica no copão, limão e gelo",
+   "preco": 16.99,
+   "foto": "fotos/copao_gin.jpg"
+  },
+  {
+   "cat": "drinks",
+   "nome": "Copão de Askov",
+   "desc": "Vodka Askov no copão com gelo",
+   "preco": 11.99,
+   "foto": "fotos/copao_askov.jpg"
+  },
+  {
    "cat": "cervejas",
    "nome": "Itaipava 350ml",
    "desc": "Lata",
