@@ -129,16 +129,23 @@
   },
   {
    "cat": "semanal",
+   "nome": "Quarta - Feijoada (Pequena)",
+   "desc": "Arroz, couve, farofa, torresmo, laranja, vinagrete",
+   "preco": 48.0,
+   "foto": "fotos/feijoada.jpg"
+  },
+  {
+   "cat": "semanal",
    "nome": "Quarta - Feijoada (Média)",
    "desc": "Arroz, couve, farofa, torresmo, laranja, vinagrete",
-   "preco": 39.9,
+   "preco": 59.9,
    "foto": "fotos/feijoada.jpg"
   },
   {
    "cat": "semanal",
    "nome": "Quarta - Feijoada (Grande)",
    "desc": "Arroz, couve, farofa, torresmo, laranja, vinagrete",
-   "preco": 54.9,
+   "preco": 68.9,
    "foto": "fotos/feijoada.jpg"
   },
   {
@@ -164,16 +171,23 @@
   },
   {
    "cat": "semanal",
+   "nome": "Sábado - Feijoada (Pequena)",
+   "desc": "Arroz, couve, farofa, torresmo, laranja, vinagrete",
+   "preco": 48.0,
+   "foto": "fotos/feijoada.jpg"
+  },
+  {
+   "cat": "semanal",
    "nome": "Sábado - Feijoada (Média)",
    "desc": "Arroz, couve, farofa, torresmo, laranja, vinagrete",
-   "preco": 39.9,
+   "preco": 59.9,
    "foto": "fotos/feijoada.jpg"
   },
   {
    "cat": "semanal",
    "nome": "Sábado - Feijoada (Grande)",
    "desc": "Arroz, couve, farofa, torresmo, laranja, vinagrete",
-   "preco": 54.9,
+   "preco": 68.9,
    "foto": "fotos/feijoada.jpg"
   },
   {
