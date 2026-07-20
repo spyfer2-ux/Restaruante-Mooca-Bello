@@ -368,7 +368,7 @@
   {
    "cat": "cervejas",
    "nome": "Draft 600ml",
-   "desc": "Cerveja garrafa 600ml",
+   "desc": "Cerveja de garrafa (vidro) 600ml",
    "preco": 17.9,
    "foto": "fotos/draft600.jpg"
   },
@@ -398,7 +398,8 @@
    "nome": "Refri 1 Litro (pet)",
    "desc": "Coca-Cola, Coca Zero ou Guaraná",
    "preco": 16.9,
-   "foto": "fotos/refri_1l.jpg"
+   "foto": "fotos/refri_1l.jpg",
+   "ativo": false
   },
   {
    "cat": "refri",
