@@ -36,3 +36,12 @@ Imagens obtidas do Wikimedia Commons (licenças livres). Fontes:
 - fotos/whisky.jpg — [File:Neat pastis in a whisky glass.jpg](https://commons.wikimedia.org/wiki/File%3ANeat_pastis_in_a_whisky_glass.jpg)
 - fotos/copao_gin.jpg — [File:Gin and Tonic with ingredients.jpg](https://commons.wikimedia.org/wiki/File%3AGin_and_Tonic_with_ingredients.jpg)
 - fotos/copao_askov.jpg — [File:Screw Driver Cocktail.jpg](https://commons.wikimedia.org/wiki/File%3AScrew_Driver_Cocktail.jpg)
+
+## Fotos do banner (Openverse/Flickr)
+
+- pro_virada: "Virado a paulista #foodporn #viradoapaulista #bardadonaonça #bardadonaonca #donaonça #donaonca" por brunobucci — licença BY-NC-ND — https://www.flickr.com/photos/32394656@N00/29635495845
+- pro_carne: "Carne de panela, arroz e salada de almeirão" por Maria Re — licença BY-NC-SA — https://www.flickr.com/photos/39322523@N00/3994118130
+- pro_feijoada: "Feijoada - Typical Brazilian Dish" por carlaarena — licença BY-NC — https://www.flickr.com/photos/43674804@N00/3227880572
+- pro_massas: "Spaghetti Bolognese - Michaelangelo, Aspendale Gardens" por avlxyz — licença BY-SA — https://www.flickr.com/photos/10559879@N00/2145112149
+- pro_frango: "Mmm... grilled chicken breasts" por jeffreyw — licença BY — https://www.flickr.com/photos/7927684@N03/7279703368
+- pro_picadinho: "Sieu Sieu BBQ - Beef Stew Rice" por mmmyoso — licença BY-NC-ND — https://www.flickr.com/photos/32400437@N07/7927279378
