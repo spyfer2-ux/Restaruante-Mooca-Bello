@@ -352,6 +352,27 @@
    "foto": "fotos/cerveja.jpg"
   },
   {
+   "cat": "cervejas",
+   "nome": "Stella Artois Long Neck 330ml",
+   "desc": "",
+   "preco": 12.9,
+   "foto": "fotos/stella.jpg"
+  },
+  {
+   "cat": "cervejas",
+   "nome": "Heineken Long Neck 330ml",
+   "desc": "",
+   "preco": 12.9,
+   "foto": "fotos/heineken.jpg"
+  },
+  {
+   "cat": "cervejas",
+   "nome": "Draft 600ml",
+   "desc": "Cerveja garrafa 600ml",
+   "preco": 17.9,
+   "foto": "fotos/draft600.jpg"
+  },
+  {
    "cat": "refri",
    "nome": "Refri 200ml",
    "desc": "Coca-Cola, Coca Zero ou Guaraná Antarctica",

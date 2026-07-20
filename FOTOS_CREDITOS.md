@@ -43,3 +43,6 @@ Imagens obtidas do Wikimedia Commons (licenças livres). Fontes:
 - massas: "Spaghetti Bolognese - Michaelangelo, Aspendale Gardens" por avlxyz — licença BY-SA — https://www.flickr.com/photos/10559879@N00/2145112149
 - frango: "Mmm... grilled chicken breasts" por jeffreyw — licença BY — https://www.flickr.com/photos/7927684@N03/7279703368
 - picadinho: "Picadinho" por Claudia_midori — licença BY — https://www.flickr.com/photos/8220615@N05/3347428114
+- fotos/stella.jpg — [File:Stella Artois bottle.jpg](https://commons.wikimedia.org/wiki/File%3AStella_Artois_bottle.jpg)
+- fotos/heineken.jpg — [File:Heineken Bottle. James Bond Edition.jpg](https://commons.wikimedia.org/wiki/File%3AHeineken_Bottle._James_Bond_Edition.jpg)
+- fotos/draft600.jpg — mesma fonte de fotos/cerveja.jpg (Wikimedia Commons)
