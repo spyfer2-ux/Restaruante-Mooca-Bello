@@ -81,7 +81,7 @@
   {
    "cat": "cafe",
    "nome": "Misto Quente",
-   "desc": "Pão de forma com presunto e muçarela, grelhado",
+   "desc": "Pão francês com presunto e muçarela, grelhado",
    "preco": 14.9,
    "foto": "fotos/misto_quente.jpg"
   },
@@ -122,9 +122,9 @@
   },
   {
    "cat": "semanal",
-   "nome": "Quarta - Feijoada (Pequena)",
+   "nome": "Quarta - Feijoada (Prato Feito)",
    "desc": "Arroz, couve, farofa, torresmo, laranja, vinagrete",
-   "preco": 29.9,
+   "preco": 29.99,
    "foto": "fotos/feijoada.jpg"
   },
   {
@@ -157,9 +157,9 @@
   },
   {
    "cat": "semanal",
-   "nome": "Sábado - Feijoada (Pequena)",
+   "nome": "Sábado - Feijoada (Prato Feito)",
    "desc": "Arroz, couve, farofa, torresmo, laranja, vinagrete",
-   "preco": 29.9,
+   "preco": 29.99,
    "foto": "fotos/feijoada.jpg"
   },
   {
@@ -178,56 +178,56 @@
   },
   {
    "cat": "porcoes",
-   "nome": "Frango à Passarinho (500g)",
+   "nome": "Frango à Passarinho",
    "desc": "",
    "preco": 49.9,
    "foto": "fotos/frango_passarinho.jpg"
   },
   {
    "cat": "porcoes",
-   "nome": "Isca de Contrafilé (400g)",
+   "nome": "Isca de Contrafilé",
    "desc": "",
    "preco": 69.9,
    "foto": "fotos/isca_contrafile.jpg"
   },
   {
    "cat": "porcoes",
-   "nome": "Calabresa Acebolada (400g)",
+   "nome": "Calabresa Acebolada",
    "desc": "",
    "preco": 44.9,
    "foto": "fotos/calabresa.jpg"
   },
   {
    "cat": "porcoes",
-   "nome": "Batata Frita (500g)",
+   "nome": "Batata Frita",
    "desc": "",
    "preco": 39.9,
    "foto": "fotos/batata_frita.jpg"
   },
   {
    "cat": "porcoes",
-   "nome": "Fritas com Cheddar, Bacon e Calabresa (500g)",
+   "nome": "Fritas com Cheddar, Bacon e Calabresa",
    "desc": "",
    "preco": 54.9,
    "foto": "fotos/fritas_cheddar.jpg"
   },
   {
    "cat": "porcoes",
-   "nome": "Mandioca Frita (500g)",
+   "nome": "Mandioca Frita",
    "desc": "",
    "preco": 44.9,
    "foto": "fotos/mandioca_frita.jpg"
   },
   {
    "cat": "porcoes",
-   "nome": "Porção de Peixe (500g)",
+   "nome": "Porção de Peixe",
    "desc": "",
    "preco": 59.9,
    "foto": "fotos/porcao_peixe.jpg"
   },
   {
    "cat": "porcoes",
-   "nome": "Polenta Frita (500g)",
+   "nome": "Polenta Frita",
    "desc": "",
    "preco": 39.9,
    "foto": "fotos/polenta_frita.jpg"
