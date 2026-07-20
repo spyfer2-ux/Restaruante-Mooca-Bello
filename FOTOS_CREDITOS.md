@@ -45,4 +45,4 @@ Imagens obtidas do Wikimedia Commons (licenças livres). Fontes:
 - picadinho: "Picadinho" por Claudia_midori — licença BY — https://www.flickr.com/photos/8220615@N05/3347428114
 - fotos/stella.jpg — [File:Stella Artois bottle.jpg](https://commons.wikimedia.org/wiki/File%3AStella_Artois_bottle.jpg)
 - fotos/heineken.jpg — [File:Heineken Bottle.jpg](https://commons.wikimedia.org/wiki/File%3AHeineken_Bottle.jpg)
-- fotos/draft600.jpg — mesma fonte de fotos/original.jpg (Wikimedia Commons)
+- fotos/draft600.jpg — foto do produto enviada pelo restaurante

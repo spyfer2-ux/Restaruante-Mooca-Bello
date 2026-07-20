@@ -250,7 +250,7 @@
    "cat": "porcoes",
    "nome": "Porçãozinha de Mini Pastéis (6 un)",
    "desc": "",
-   "preco": 39.9,
+   "preco": 29.9,
    "foto": "fotos/pasteis.jpg"
   },
   {
@@ -382,7 +382,7 @@
   {
    "cat": "cervejas",
    "nome": "Draft 600ml",
-   "desc": "Cerveja de garrafa (vidro) 600ml",
+   "desc": "Draft Grape — cocktail alcoólico gaseificado de uva, garrafa 600ml",
    "preco": 17.9,
    "foto": "fotos/draft600.jpg"
   },
