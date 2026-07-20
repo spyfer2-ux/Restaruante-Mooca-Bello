@@ -80,6 +80,7 @@
   <button class="cx-btn" onclick="abrirCaixa()">💰 Caixa</button>
 </header>
 
+<div style="text-align:center;font-size:11px;padding:4px 0;background:#0d0b09" id="nuvem">☁️</div>
 <div class="secao-tit">Mesa</div>
 <div class="mesas" id="mesas"></div>
 
@@ -149,7 +150,39 @@ let DADOS=null, catAtual='todas', busca='', mesaAtual=1;
 let comandas={}, caixa=null, pgSel=null;
 
 const LS_COM='comandas_bmb', LS_CX='caixa_bmb', LS_HIST='historico_bmb';
-let historico=[];
+const API_URL='https://pdv-vendas.spyfer2.workers.dev';
+const LS_PIN='pin_bmb', LS_FILA='fila_bmb';
+let historico=[], fila={vendas:[],pagamentos:[]};
+function getPin(){
+  let pin=localStorage.getItem(LS_PIN);
+  if(!pin){pin=prompt('PIN do banco de vendas (uma vez só neste aparelho):')||'';if(pin)localStorage.setItem(LS_PIN,pin.trim());}
+  return (pin||'').trim();
+}
+function salvarFila(){localStorage.setItem(LS_FILA,JSON.stringify(fila));atualizarNuvem();}
+function atualizarNuvem(){
+  const el=document.getElementById('nuvem');if(!el)return;
+  const pend=fila.vendas.length+fila.pagamentos.length;
+  el.textContent=pend?('☁️ '+pend+' p/ enviar'):'☁️ ok';
+  el.style.color=pend?'#e7b95c':'#8fc98f';
+}
+let sincronizando=false;
+async function sincronizar(){
+  if(sincronizando)return;
+  const pend=fila.vendas.length+fila.pagamentos.length;
+  if(!pend||!navigator.onLine)return;
+  const pin=getPin();if(!pin)return;
+  sincronizando=true;
+  try{
+    const r=await fetch(API_URL+'/api/registros',{method:'POST',
+      headers:{'Content-Type':'application/json','X-PIN':pin},
+      body:JSON.stringify(fila)});
+    if(r.status===401){localStorage.removeItem(LS_PIN);alert('PIN do banco de vendas incorreto. Tente de novo no próximo pedido.');}
+    else if(r.ok){fila={vendas:[],pagamentos:[]};localStorage.setItem(LS_FILA,JSON.stringify(fila));}
+  }catch(e){/* offline — fica na fila */}
+  sincronizando=false;atualizarNuvem();
+}
+window.addEventListener('online',sincronizar);
+setInterval(sincronizar,60000);
 function hoje(){return new Date().toISOString().slice(0,10);}
 function agora(){return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
 function salvarCom(){localStorage.setItem(LS_COM,JSON.stringify(comandas));}
@@ -160,9 +193,12 @@ function registrarVenda(c,origem){
   const novos=[];
   c.itens.forEach(it=>{const env=it.env||0; if(it.qtd>env){novos.push({nome:it.nome,qtd:it.qtd-env,preco:it.preco}); it.env=it.qtd;}});
   if(novos.length){
-    historico.push({tipo:'venda',origem:origem,data:hoje(),hora:agora(),mesa:mesaAtual,itens:novos,
-      total:Math.round(novos.reduce((s,i)=>s+i.preco*i.qtd,0)*100)/100});
-    salvarHist();
+    const reg={tipo:'venda',origem:origem,data:hoje(),hora:agora(),mesa:mesaAtual,itens:novos,
+      total:Math.round(novos.reduce((s,i)=>s+i.preco*i.qtd,0)*100)/100};
+    historico.push(reg);salvarHist();
+    fila.vendas.push({id:(crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random()),ts:Date.now(),
+      data:reg.data,hora:reg.hora,mesa:reg.mesa,origem:origem,itens:novos});
+    salvarFila();sincronizar();
   }
   return novos.length;
 }
@@ -172,6 +208,8 @@ async function init(){
   try{comandas=JSON.parse(localStorage.getItem(LS_COM))||{};}catch(e){comandas={};}
   try{caixa=JSON.parse(localStorage.getItem(LS_CX));}catch(e){caixa=null;}
   try{historico=JSON.parse(localStorage.getItem(LS_HIST))||[];}catch(e){historico=[];}
+  try{fila=JSON.parse(localStorage.getItem(LS_FILA))||{vendas:[],pagamentos:[]};}catch(e){fila={vendas:[],pagamentos:[]};}
+  atualizarNuvem();setTimeout(sincronizar,1500);
   if(!caixa || caixa.dia!==hoje()){caixa={dia:hoje(),vendas:[]};salvarCx();}
   const r=await fetch('./dados.json?v='+Date.now());DADOS=await r.json();
   renderMesas();renderCats();render();renderComanda();
@@ -271,6 +309,9 @@ function confirmarFechamento(){
   registrarVenda(c,'fechamento'); // garante que item não enviado à cozinha também conte no faturamento
   historico.push({tipo:'pagamento',data:hoje(),hora:agora(),mesa:mesaAtual,total:t,pgto:pgSel,pessoas:n});
   salvarHist();
+  fila.pagamentos.push({id:(crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random()),ts:Date.now(),
+    data:hoje(),hora:agora(),mesa:mesaAtual,total:t,pgto:pgSel,pessoas:n});
+  salvarFila();sincronizar();
   caixa.vendas.push({mesa:mesaAtual,total:t,pgto:pgSel,pessoas:n,hora:agora()});
   salvarCx();
   comandas[mesaAtual]={itens:[],status:'aberta'};salvarCom();
