@@ -76,6 +76,7 @@
 <body>
 <header>
   <h1>🧾 Comanda do Garçom</h1>
+  <button class="cx-btn" style="right:auto;left:12px" onclick="location.href='relatorio.html'">📊 Relatório</button>
   <button class="cx-btn" onclick="abrirCaixa()">💰 Caixa</button>
 </header>
 
@@ -147,15 +148,30 @@
 let DADOS=null, catAtual='todas', busca='', mesaAtual=1;
 let comandas={}, caixa=null, pgSel=null;
 
-const LS_COM='comandas_bmb', LS_CX='caixa_bmb';
+const LS_COM='comandas_bmb', LS_CX='caixa_bmb', LS_HIST='historico_bmb';
+let historico=[];
 function hoje(){return new Date().toISOString().slice(0,10);}
+function agora(){return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
 function salvarCom(){localStorage.setItem(LS_COM,JSON.stringify(comandas));}
 function salvarCx(){localStorage.setItem(LS_CX,JSON.stringify(caixa));}
+function salvarHist(){localStorage.setItem(LS_HIST,JSON.stringify(historico));}
+function registrarVenda(c,origem){
+  // computa no faturamento tudo que ainda não foi registrado (qtd além do já enviado)
+  const novos=[];
+  c.itens.forEach(it=>{const env=it.env||0; if(it.qtd>env){novos.push({nome:it.nome,qtd:it.qtd-env,preco:it.preco}); it.env=it.qtd;}});
+  if(novos.length){
+    historico.push({tipo:'venda',origem:origem,data:hoje(),hora:agora(),mesa:mesaAtual,itens:novos,
+      total:Math.round(novos.reduce((s,i)=>s+i.preco*i.qtd,0)*100)/100});
+    salvarHist();
+  }
+  return novos.length;
+}
 function money(v){return 'R$ '+v.toFixed(2).replace('.',',');}
 
 async function init(){
   try{comandas=JSON.parse(localStorage.getItem(LS_COM))||{};}catch(e){comandas={};}
   try{caixa=JSON.parse(localStorage.getItem(LS_CX));}catch(e){caixa=null;}
+  try{historico=JSON.parse(localStorage.getItem(LS_HIST))||[];}catch(e){historico=[];}
   if(!caixa || caixa.dia!==hoje()){caixa={dia:hoje(),vendas:[]};salvarCx();}
   const r=await fetch('./dados.json?v='+Date.now());DADOS=await r.json();
   renderMesas();renderCats();render();renderComanda();
@@ -220,6 +236,7 @@ function limparComanda(){if(!confirm('Limpar a comanda da Mesa '+mesaAtual+'?'))
 
 function enviarCozinha(){
   const c=getComanda(mesaAtual);if(!c.itens.length){alert('Adicione itens antes de enviar.');return;}
+  registrarVenda(c,'cozinha');
   c.status='enviada';salvarCom();renderMesas();renderComanda();
   let txt='MESA '+mesaAtual+'\n----------------\n';
   c.itens.forEach(it=>{txt+=it.qtd+'x '+it.nome+'\n';if(it.obs)txt+='   >> '+it.obs+'\n';});
@@ -251,7 +268,10 @@ function selPg(p){pgSel=p;document.querySelectorAll('.pg-btn').forEach(b=>b.clas
 function confirmarFechamento(){
   if(!pgSel){alert('Escolha a forma de pagamento.');return;}
   const c=getComanda(mesaAtual);const t=totalComanda(c);const n=parseInt(document.getElementById('numPessoas').value)||1;
-  caixa.vendas.push({mesa:mesaAtual,total:t,pgto:pgSel,pessoas:n,hora:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})});
+  registrarVenda(c,'fechamento'); // garante que item não enviado à cozinha também conte no faturamento
+  historico.push({tipo:'pagamento',data:hoje(),hora:agora(),mesa:mesaAtual,total:t,pgto:pgSel,pessoas:n});
+  salvarHist();
+  caixa.vendas.push({mesa:mesaAtual,total:t,pgto:pgSel,pessoas:n,hora:agora()});
   salvarCx();
   comandas[mesaAtual]={itens:[],status:'aberta'};salvarCom();
   fechar('modalFech');renderMesas();renderComanda();

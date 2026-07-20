@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relatório de Vendas - Bodega Mooca Bello</title>
+<style>
+  :root{--ouro:#c8962a;--preto:#141210;}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  body{font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#0d0b09;color:#f5efe2;padding-bottom:40px;}
+  header{background:var(--preto);padding:14px;text-align:center;border-bottom:3px solid var(--ouro);position:sticky;top:0;z-index:20;}
+  header h1{color:var(--ouro);font-size:17px;letter-spacing:1px;}
+  .voltar{position:absolute;left:12px;top:12px;background:#221a12;border:1px solid #3a2d1c;color:#e9dcc4;border-radius:20px;padding:8px 12px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;}
+  .periodos{display:flex;gap:8px;overflow-x:auto;padding:12px;scrollbar-width:none;}
+  .periodos::-webkit-scrollbar{display:none;}
+  .p-btn{flex:0 0 auto;background:#221a12;color:#e9dcc4;border:1px solid #3a2d1c;padding:9px 14px;border-radius:20px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;}
+  .p-btn.active{background:var(--ouro);color:#1b1409;border-color:var(--ouro);}
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 12px;}
+  .card{background:#17130f;border:1px solid #2a2118;border-radius:14px;padding:14px;}
+  .card .lbl{font-size:12px;color:#8a7c64;text-transform:uppercase;letter-spacing:1px;}
+  .card .val{font-size:22px;font-weight:800;color:var(--ouro);margin-top:4px;}
+  .card.full{grid-column:1/-1;}
+  .sec{padding:16px 12px 4px;font-size:13px;color:#8a7c64;text-transform:uppercase;letter-spacing:1px;}
+  .linha{display:flex;justify-content:space-between;gap:8px;background:#17130f;border:1px solid #2a2118;border-radius:10px;padding:11px 12px;margin:0 12px 8px;font-size:14px;align-items:center;}
+  .linha .q{color:#8a7c64;font-size:12px;}
+  .linha b{color:var(--ouro);white-space:nowrap;}
+  .vazio{padding:30px;text-align:center;color:#6b5c44;}
+  .btn-csv{display:block;margin:16px 12px 0;width:calc(100% - 24px);background:#2a4d1e;color:#c6f0a8;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;}
+  .aviso-disp{margin:10px 12px 0;font-size:12px;color:#6b5c44;text-align:center;}
+</style>
+</head>
+<body>
+<header>
+  <a class="voltar" href="garcom.html">← Voltar</a>
+  <h1>📊 Relatório de Vendas</h1>
+</header>
+
+<div class="periodos" id="periodos"></div>
+<div class="cards" id="cards"></div>
+<div id="conteudo"></div>
+<button class="btn-csv" onclick="exportarCSV()">⬇️ Exportar planilha (CSV)</button>
+<p class="aviso-disp">Os dados ficam salvos neste aparelho (o mesmo usado na comanda do garçom).</p>
+
+<script>
+let HIST=[], periodo='hoje';
+function money(v){return 'R$ '+v.toFixed(2).replace('.',',');}
+function hoje(){return new Date().toISOString().slice(0,10);}
+function diasAtras(n){const d=new Date();d.setDate(d.getDate()-n);return d.toISOString().slice(0,10);}
+function fmtData(iso){return iso.split('-').reverse().join('/');}
+
+const PERIODOS=[
+  {id:'hoje', nome:'Hoje',      de:()=>hoje()},
+  {id:'ontem',nome:'Ontem',     de:()=>diasAtras(1), ate:()=>diasAtras(1)},
+  {id:'7',    nome:'7 dias',    de:()=>diasAtras(6)},
+  {id:'30',   nome:'30 dias',   de:()=>diasAtras(29)},
+  {id:'mes',  nome:'Este mês',  de:()=>hoje().slice(0,8)+'01'},
+  {id:'tudo', nome:'Tudo',      de:()=>'2000-01-01'},
+];
+
+function init(){
+  try{HIST=JSON.parse(localStorage.getItem('historico_bmb'))||[];}catch(e){HIST=[];}
+  renderPeriodos();render();
+}
+function renderPeriodos(){
+  document.getElementById('periodos').innerHTML=PERIODOS.map(p=>
+    '<button class="p-btn '+(periodo===p.id?'active':'')+'" onclick="setPeriodo(\''+p.id+'\')">'+p.nome+'</button>').join('');
+}
+function setPeriodo(id){periodo=id;renderPeriodos();render();}
+
+function filtrar(){
+  const p=PERIODOS.find(x=>x.id===periodo);
+  const de=p.de(), ate=p.ate?p.ate():hoje();
+  return HIST.filter(r=>r.data>=de&&r.data<=ate);
+}
+
+function render(){
+  const regs=filtrar();
+  const vendas=regs.filter(r=>r.tipo==='venda');
+  const pgtos=regs.filter(r=>r.tipo==='pagamento');
+  const fat=vendas.reduce((s,v)=>s+v.total,0);
+  const nItens=vendas.reduce((s,v)=>s+v.itens.reduce((a,i)=>a+i.qtd,0),0);
+
+  let cards='<div class="card full"><div class="lbl">💰 Faturamento (enviado à cozinha)</div><div class="val">'+money(fat)+'</div></div>';
+  cards+='<div class="card"><div class="lbl">Pedidos</div><div class="val">'+vendas.length+'</div></div>';
+  cards+='<div class="card"><div class="lbl">Itens vendidos</div><div class="val">'+nItens+'</div></div>';
+  const porForma={};pgtos.forEach(x=>porForma[x.pgto]=(porForma[x.pgto]||0)+x.total);
+  const recebido=pgtos.reduce((s,x)=>s+x.total,0);
+  cards+='<div class="card full"><div class="lbl">💳 Contas fechadas: '+money(recebido)+'</div><div class="val" style="font-size:14px;color:#e9dcc4;font-weight:600">'+
+    (pgtos.length? '📱 Pix '+money(porForma['Pix']||0)+' &nbsp;·&nbsp; 💵 Dinheiro '+money(porForma['Dinheiro']||0)+' &nbsp;·&nbsp; 💳 Cartão '+money(porForma['Cartão']||0) : 'Nenhuma conta fechada no período')+'</div></div>';
+  document.getElementById('cards').innerHTML=cards;
+
+  let h='';
+  // ranking de itens
+  const rank={};
+  vendas.forEach(v=>v.itens.forEach(i=>{if(!rank[i.nome])rank[i.nome]={qtd:0,tot:0};rank[i.nome].qtd+=i.qtd;rank[i.nome].tot+=i.qtd*i.preco;}));
+  const top=Object.entries(rank).sort((a,b)=>b[1].tot-a[1].tot);
+  if(top.length){
+    h+='<div class="sec">🏆 Mais vendidos</div>';
+    top.forEach(([nome,x])=>{h+='<div class="linha"><span>'+nome+' <span class="q">×'+x.qtd+'</span></span><b>'+money(x.tot)+'</b></div>';});
+  }
+  // por dia
+  const porDia={};
+  vendas.forEach(v=>{porDia[v.data]=(porDia[v.data]||0)+v.total;});
+  const dias=Object.entries(porDia).sort((a,b)=>b[0].localeCompare(a[0]));
+  if(dias.length>1){
+    h+='<div class="sec">📅 Por dia</div>';
+    dias.forEach(([d,t])=>{h+='<div class="linha"><span>'+fmtData(d)+'</span><b>'+money(t)+'</b></div>';});
+  }
+  // últimos lançamentos
+  if(vendas.length){
+    h+='<div class="sec">🧾 Últimos pedidos</div>';
+    vendas.slice(-30).reverse().forEach(v=>{
+      const its=v.itens.map(i=>i.qtd+'x '+i.nome).join(', ');
+      h+='<div class="linha"><span>'+fmtData(v.data)+' '+v.hora+' · Mesa '+v.mesa+'<br><span class="q">'+its+'</span></span><b>'+money(v.total)+'</b></div>';});
+  }
+  if(!vendas.length&&!pgtos.length) h='<div class="vazio">Nenhuma venda registrada no período.<br>As vendas aparecem aqui quando os pedidos são enviados à cozinha.</div>';
+  document.getElementById('conteudo').innerHTML=h;
+}
+
+function exportarCSV(){
+  const regs=filtrar().filter(r=>r.tipo==='venda');
+  if(!regs.length){alert('Nada para exportar neste período.');return;}
+  let csv='data;hora;mesa;item;quantidade;preco_unit;total\n';
+  regs.forEach(v=>v.itens.forEach(i=>{
+    csv+=[fmtData(v.data),v.hora,v.mesa,'"'+i.nome.replace(/"/g,'""')+'"',i.qtd,i.preco.toFixed(2).replace('.',','),(i.qtd*i.preco).toFixed(2).replace('.',',')].join(';')+'\n';
+  }));
+  const blob=new Blob(["﻿"+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='vendas_'+periodo+'_'+hoje()+'.csv';a.click();
+}
+init();
+</script>
+</body>
+</html>
