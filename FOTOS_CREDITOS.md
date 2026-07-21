@@ -55,3 +55,5 @@ Imagens obtidas do Wikimedia Commons (licenças livres). Fontes:
 - fotos/esfiha_frango.jpg — [File:Sfiha aberta.jpg](https://commons.wikimedia.org/wiki/File%3ASfiha_aberta.jpg)
 - fotos/empada_palmito.jpg — [File:Empadas de frango Vila Isabel Rio de Janeiro Brasil.jpg](https://commons.wikimedia.org/wiki/File%3AEmpadas_de_frango_Vila_Isabel_Rio_de_Janeiro_Brasil.jpg)
 - fotos/empada_frango.jpg — [File:Empanada - Stu Spivack.jpg](https://commons.wikimedia.org/wiki/File%3AEmpanada_-_Stu_Spivack.jpg)
+- fotos/esfiha_carne.jpg (atualizada) — [File:Fatayer.jpg](https://commons.wikimedia.org/wiki/File%3AFatayer.jpg)
+- fotos/esfiha_frango.jpg (atualizada) — [File:Heritage village fatayer (11389764333).jpg](https://commons.wikimedia.org/wiki/File%3AHeritage_village_fatayer_%2811389764333%29.jpg)
