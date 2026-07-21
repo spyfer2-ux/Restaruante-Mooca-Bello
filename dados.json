@@ -431,6 +431,13 @@
    "foto": "fotos/pinga.jpg"
   },
   {
+   "cat": "drinks",
+   "nome": "Dose de Pinga",
+   "desc": "51 ou Velho Barreiro",
+   "preco": 7.0,
+   "foto": "fotos/pinga.jpg"
+  },
+  {
    "cat": "cervejas",
    "nome": "Itaipava 350ml",
    "desc": "Lata",
