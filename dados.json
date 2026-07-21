@@ -22,6 +22,11 @@
    "icone": "🍟"
   },
   {
+   "id": "salgados",
+   "nome": "Salgados",
+   "icone": "🥟"
+  },
+  {
    "id": "drinks",
    "nome": "Drinks",
    "icone": "🍹"
@@ -268,18 +273,53 @@
    "foto": "fotos/parmegiana.jpg"
   },
   {
-   "cat": "porcoes",
+   "cat": "salgados",
    "nome": "Coxinha de Frango",
    "desc": "",
    "preco": 9.9,
    "foto": "fotos/coxinha.jpg"
   },
   {
-   "cat": "porcoes",
+   "cat": "salgados",
    "nome": "Coxinha de Frango com Catupiry",
    "desc": "",
    "preco": 11.9,
    "foto": "fotos/coxinha_catupiry.jpg"
+  },
+  {
+   "cat": "salgados",
+   "nome": "Esfiha de Carne",
+   "desc": "",
+   "preco": 12.5,
+   "foto": "fotos/esfiha_carne.jpg"
+  },
+  {
+   "cat": "salgados",
+   "nome": "Esfiha de Calabresa com Catupiry",
+   "desc": "",
+   "preco": 12.5,
+   "foto": "fotos/esfiha_calabresa.jpg"
+  },
+  {
+   "cat": "salgados",
+   "nome": "Esfiha de Frango com Catupiry",
+   "desc": "",
+   "preco": 12.5,
+   "foto": "fotos/esfiha_frango.jpg"
+  },
+  {
+   "cat": "salgados",
+   "nome": "Empada de Palmito",
+   "desc": "",
+   "preco": 12.5,
+   "foto": "fotos/empada_palmito.jpg"
+  },
+  {
+   "cat": "salgados",
+   "nome": "Empada de Frango com Catupiry",
+   "desc": "",
+   "preco": 12.5,
+   "foto": "fotos/empada_frango.jpg"
   },
   {
    "cat": "drinks",

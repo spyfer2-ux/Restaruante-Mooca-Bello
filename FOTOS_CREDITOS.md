@@ -50,3 +50,8 @@ Imagens obtidas do Wikimedia Commons (licenças livres). Fontes:
 - fotos/smirnoff.jpg — [File:Smirnoff Ice Original.jpg](https://commons.wikimedia.org/wiki/File%3ASmirnoff_Ice_Original.jpg)
 - fotos/coxinha.jpg — [File:Coxinha de Puerto Iguazú, Misiones, Argentina.jpg](https://commons.wikimedia.org/wiki/File%3ACoxinha_de_Puerto_Iguaz%C3%BA%2C_Misiones%2C_Argentina.jpg)
 - fotos/coxinha_catupiry.jpg — [File:Coxinha - iguaria brasileira 01.jpg](https://commons.wikimedia.org/wiki/File%3ACoxinha_-_iguaria_brasileira_01.jpg)
+- fotos/esfiha_carne.jpg — [File:Sfiha2.jpg](https://commons.wikimedia.org/wiki/File%3ASfiha2.jpg)
+- fotos/esfiha_calabresa.jpg — [File:Sfiha.jpg](https://commons.wikimedia.org/wiki/File%3ASfiha.jpg)
+- fotos/esfiha_frango.jpg — [File:Sfiha aberta.jpg](https://commons.wikimedia.org/wiki/File%3ASfiha_aberta.jpg)
+- fotos/empada_palmito.jpg — [File:Empadas de frango Vila Isabel Rio de Janeiro Brasil.jpg](https://commons.wikimedia.org/wiki/File%3AEmpadas_de_frango_Vila_Isabel_Rio_de_Janeiro_Brasil.jpg)
+- fotos/empada_frango.jpg — [File:Empanada - Stu Spivack.jpg](https://commons.wikimedia.org/wiki/File%3AEmpanada_-_Stu_Spivack.jpg)
