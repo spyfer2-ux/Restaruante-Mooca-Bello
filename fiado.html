@@ -42,6 +42,11 @@
   <h1>📒 Fiado — Contas em Aberto</h1>
 </header>
 <div class="status-bar" id="statusBar">carregando...</div>
+<div style="display:flex;gap:8px;padding:10px 12px 0;align-items:center">
+  <input id="buscaNome" type="search" placeholder="🔎 Buscar pessoa..." oninput="render()"
+    style="flex:1;padding:12px;border-radius:12px;border:1px solid #3a2d1c;background:#1a140e;color:#fff;font-size:15px">
+  <button id="btnDono" onclick="modoDono()" style="background:#221a12;border:1px solid #3a2d1c;color:#e9dcc4;border-radius:12px;padding:12px;font-size:13px;font-weight:700;cursor:pointer">🔒 Valores</button>
+</div>
 <div class="total-geral" id="totalGeral"></div>
 <div id="lista"></div>
 <div class="vazio" id="vazio" style="display:none">Ninguém devendo. 🎉<br>Pra anotar um fiado: na comanda do garçom,<br>Fechar conta → 📒 Fiado → nome do cliente.</div>
@@ -63,6 +68,20 @@
 const API_URL='https://pdv-vendas.spyfer2.workers.dev';
 const LS_PIN='pin_bmb';
 let FIADOS=[], nomeSel=null;
+let ADMIN = sessionStorage.getItem('admin_ok')==='1';
+function semAcento(t){return t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');}
+async function modoDono(){
+  if(ADMIN){ADMIN=false;sessionStorage.removeItem('admin_ok');render();return;}
+  const senha=(prompt('Senha do dono:')||'').trim();
+  if(!senha)return;
+  try{
+    const r=await fetch(API_URL+'/api/fiados',{headers:{'X-PIN':senha}});
+    if(r.status===401){alert('Senha incorreta.');return;}
+    localStorage.setItem(LS_PIN,senha);
+    ADMIN=true;sessionStorage.setItem('admin_ok','1');
+    carregar();
+  }catch(e){alert('Sem conexão.');}
+}
 
 function money(v){return 'R$ '+v.toFixed(2).replace('.',',');}
 function getPin(){
@@ -73,11 +92,13 @@ function getPin(){
 function fmtData(iso){return iso.split('-').reverse().join('/');}
 
 async function carregar(){
-  const pin=getPin();if(!pin)return;
   const bar=document.getElementById('statusBar');
   try{
-    const r=await fetch(API_URL+'/api/fiados',{headers:{'X-PIN':pin}});
-    if(r.status===401){localStorage.removeItem(LS_PIN);bar.textContent='PIN incorreto — recarregue';bar.classList.add('off');return;}
+    const headers={};
+    const pinSalvo=localStorage.getItem(LS_PIN);
+    if(ADMIN&&pinSalvo)headers['X-PIN']=pinSalvo;
+    const r=await fetch(API_URL+'/api/fiados',{headers});
+    if(r.status===401){ADMIN=false;sessionStorage.removeItem('admin_ok');localStorage.removeItem(LS_PIN);bar.textContent='PIN incorreto — recarregue';bar.classList.add('off');render();return;}
     const d=await r.json();
     FIADOS=d.fiados||[];
     bar.textContent='☁️ dados da nuvem';bar.classList.remove('off');
@@ -86,20 +107,23 @@ async function carregar(){
 }
 
 function render(){
+  document.getElementById('btnDono').textContent = ADMIN ? '🔓 Dono' : '🔒 Valores';
+  const busca=semAcento(document.getElementById('buscaNome').value||'');
+  const visiveis=busca?FIADOS.filter(f=>semAcento(f.nome).includes(busca)):FIADOS;
   const porNome={};
-  FIADOS.forEach(f=>{(porNome[f.nome]=porNome[f.nome]||[]).push(f);});
+  visiveis.forEach(f=>{(porNome[f.nome]=porNome[f.nome]||[]).push(f);});
   const nomes=Object.keys(porNome).sort((a,b)=>a.localeCompare(b));
-  const tot=FIADOS.reduce((s,f)=>s+f.total,0);
-  document.getElementById('totalGeral').innerHTML=FIADOS.length?
-    (nomes.length+' pessoa(s) devendo<b>'+money(tot)+'</b>'):'';
+  const tot=visiveis.reduce((s,f)=>s+f.total,0);
+  document.getElementById('totalGeral').innerHTML=visiveis.length?
+    (nomes.length+' pessoa(s) devendo'+(ADMIN?'<b>'+money(tot)+'</b>':'')):'';
   document.getElementById('vazio').style.display=FIADOS.length?'none':'block';
   document.getElementById('lista').innerHTML=nomes.map(n=>{
     const lancs=porNome[n]; const deve=lancs.reduce((s,f)=>s+f.total,0);
     return '<div class="cliente"><div class="cli-head" onclick="this.parentElement.classList.toggle(\'aberto\')">'+
-      '<span class="nome">'+n.replace(/</g,'&lt;')+'</span><span class="deve">'+money(deve)+'</span></div>'+
+      '<span class="nome">'+n.replace(/</g,'&lt;')+'</span><span class="deve">'+(ADMIN?money(deve):(lancs.length+' anotação(ões)'))+'</span></div>'+
       '<div class="cli-corpo">'+lancs.map(f=>
-        '<div class="lanc"><div class="cab">'+fmtData(f.data)+' '+f.hora+' — '+money(f.total)+'</div><pre>'+f.texto.replace(/</g,'&lt;')+'</pre></div>').join('')+
-      '<button class="btn-receber" onclick="abrirReceber(\''+encodeURIComponent(n)+'\')">✅ Receber '+money(deve)+'</button>'+
+        '<div class="lanc"><div class="cab">'+fmtData(f.data)+' '+f.hora+(ADMIN?' — '+money(f.total):'')+'</div><pre>'+(ADMIN?f.texto:f.texto.replace(/R\$\s?[\d.,]+/g,'')).replace(/</g,'&lt;')+'</pre></div>').join('')+
+      (ADMIN?'<button class="btn-receber" onclick="abrirReceber(\''+encodeURIComponent(n)+'\')">✅ Receber '+money(deve)+'</button>':'')+
       '</div></div>';
   }).join('');
 }
