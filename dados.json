@@ -279,7 +279,8 @@
    "nome": "Jack Daniel's",
    "desc": "Tennessee Whiskey",
    "preco": 26.9,
-   "foto": "fotos/jack_daniels.jpg"
+   "foto": "fotos/jack_daniels.jpg",
+   "ativo": false
   },
   {
    "cat": "drinks",
@@ -314,14 +315,16 @@
    "nome": "Cuba Libre",
    "desc": "Rum, cola e limão",
    "preco": 18.9,
-   "foto": "fotos/cuba_libre.jpg"
+   "foto": "fotos/cuba_libre.jpg",
+   "ativo": false
   },
   {
    "cat": "drinks",
    "nome": "Sex on the Beach",
    "desc": "Vodka Smirnoff, pêssego, laranja e grenadine",
    "preco": 22.9,
-   "foto": "fotos/sex_on_beach.jpg"
+   "foto": "fotos/sex_on_beach.jpg",
+   "ativo": false
   },
   {
    "cat": "drinks",
