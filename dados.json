@@ -609,16 +609,16 @@
   },
   {
    "cat": "extras",
-   "nome": "Arroz",
+   "nome": "Arroz Pequeno",
    "desc": "",
-   "preco": 5,
+   "preco": 5.0,
    "foto": "fotos/arroz.jpg"
   },
   {
    "cat": "extras",
    "nome": "Feijão",
    "desc": "",
-   "preco": 5,
+   "preco": 5.0,
    "foto": "fotos/feijao.jpg"
   },
   {
@@ -639,14 +639,14 @@
    "cat": "extras",
    "nome": "Batata Frita",
    "desc": "",
-   "preco": 12.9,
+   "preco": 6.0,
    "foto": "fotos/batata_frita.jpg"
   },
   {
    "cat": "extras",
    "nome": "Ovo Frito (2 un)",
    "desc": "",
-   "preco": 5,
+   "preco": 5.0,
    "foto": "fotos/ovo_frito.jpg"
   },
   {

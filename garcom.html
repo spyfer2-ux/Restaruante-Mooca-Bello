@@ -255,7 +255,7 @@ function render(){
 
 function addItem(idx){
   const p=DADOS.produtos[idx];
-  if(p.cat==='semanal'){abrirAdicionais(idx);return;} // almoço: pergunta adicionais
+  if(['semanal','porcoes','salgados','cafe'].includes(p.cat)){abrirAdicionais(idx);return;} // pratos: pergunta adicionais
   addDireto(idx,[]);
 }
 function addDireto(idx,adds){
