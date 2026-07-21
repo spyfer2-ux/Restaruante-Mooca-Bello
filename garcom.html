@@ -135,6 +135,11 @@
   </div>
 </div>
 
+<!-- modal adicionais -->
+<div class="modal" id="modalAdds">
+  <div class="modal-box" id="addsConteudo"></div>
+</div>
+
 <!-- modal caixa / faturamento -->
 <div class="modal" id="modalCaixa">
   <div class="modal-box">
@@ -191,7 +196,10 @@ function salvarHist(){localStorage.setItem(LS_HIST,JSON.stringify(historico));}
 function registrarVenda(c,origem){
   // computa no faturamento tudo que ainda não foi registrado (qtd além do já enviado)
   const novos=[];
-  c.itens.forEach(it=>{const env=it.env||0; if(it.qtd>env){novos.push({nome:it.nome,qtd:it.qtd-env,preco:it.preco}); it.env=it.qtd;}});
+  c.itens.forEach(it=>{const env=it.env||0; if(it.qtd>env){const delta=it.qtd-env;
+    novos.push({nome:it.nome,qtd:delta,preco:it.preco});
+    (it.adds||[]).forEach(a=>{novos.push({nome:'+ '+a.nome,qtd:a.qtd*delta,preco:a.preco});});
+    it.env=it.qtd;}});
   if(novos.length){
     const reg={tipo:'venda',origem:origem,data:hoje(),hora:agora(),mesa:mesaAtual,itens:novos,
       total:Math.round(novos.reduce((s,i)=>s+i.preco*i.qtd,0)*100)/100};
@@ -216,7 +224,7 @@ async function init(){
 }
 
 function getComanda(m){if(!comandas[m])comandas[m]={itens:[],status:'aberta'};return comandas[m];}
-function totalComanda(c){return c.itens.reduce((s,i)=>s+i.preco*i.qtd,0);}
+function totalComanda(c){return c.itens.reduce((s,i)=>s+(i.preco+addsTot(i))*i.qtd,0);}
 
 function renderMesas(){
   let h='';
@@ -246,11 +254,44 @@ function render(){
 }
 
 function addItem(idx){
+  const p=DADOS.produtos[idx];
+  if(p.cat==='semanal'){abrirAdicionais(idx);return;} // almoço: pergunta adicionais
+  addDireto(idx,[]);
+}
+function addDireto(idx,adds){
   const p=DADOS.produtos[idx];const c=getComanda(mesaAtual);
   if(c.status==='enviada')c.status='aberta';
-  const ex=c.itens.find(i=>i.nome===p.nome&&!i.obs);
-  if(ex)ex.qtd++;else c.itens.push({nome:p.nome,preco:p.preco,qtd:1,obs:''});
+  const ex=c.itens.find(i=>i.nome===p.nome&&!i.obs&&!(i.adds&&i.adds.length));
+  if(ex&&!(adds&&adds.length))ex.qtd++;
+  else c.itens.push({nome:p.nome,preco:p.preco,qtd:1,obs:'',adds:adds||[]});
   salvarCom();renderMesas();renderComanda();document.getElementById('comanda').classList.add('aberta');renderComanda();
+}
+function addsTot(it){return (it.adds||[]).reduce((s,a)=>s+a.preco*a.qtd,0);}
+
+/* ---- MODAL DE ADICIONAIS ---- */
+let addIdx=null, addSel={};
+function abrirAdicionais(idx){
+  addIdx=idx; addSel={};
+  const extras=DADOS.produtos.map((p,i)=>({p,i})).filter(x=>x.p.cat==='extras'&&x.p.ativo!==false);
+  let h='<h2>➕ '+DADOS.produtos[idx].nome+'</h2><p style="font-size:13px;color:#b9b0a0;margin-bottom:8px">Quer adicionais neste prato?</p>';
+  extras.forEach(x=>{
+    h+='<div class="citem"><div class="top"><div class="nome">'+x.p.nome+'  <span style="color:var(--ouro);font-weight:700">'+money(x.p.preco)+'</span></div></div>'+
+       '<div class="qtd"><button onclick="mudarAdd('+x.i+',-1)">−</button><span class="n" id="addn'+x.i+'">0</span><button onclick="mudarAdd('+x.i+',1)">+</button></div></div>';
+  });
+  h+='<button class="btn btn-enviar" style="width:100%;margin-top:8px" onclick="confirmarAdds()">✅ Adicionar à comanda</button>';
+  h+='<button class="btn btn-fechar" style="width:100%;margin-top:8px" onclick="fechar(\'modalAdds\')">Cancelar</button>';
+  document.getElementById('addsConteudo').innerHTML=h;
+  document.getElementById('modalAdds').classList.add('open');
+}
+function mudarAdd(i,delta){
+  addSel[i]=Math.max(0,(addSel[i]||0)+delta);
+  document.getElementById('addn'+i).textContent=addSel[i];
+}
+function confirmarAdds(){
+  const adds=Object.entries(addSel).filter(([i,q])=>q>0)
+    .map(([i,q])=>({nome:DADOS.produtos[i].nome,preco:DADOS.produtos[i].preco,qtd:q}));
+  fechar('modalAdds');
+  addDireto(addIdx,adds);
 }
 
 function renderComanda(){
@@ -258,8 +299,9 @@ function renderComanda(){
   document.getElementById('mesaTag').innerHTML='Mesa '+mesaAtual+' <span class="status-tag '+(c.status==='enviada'?'st-enviada':'st-aberta')+'">'+(c.status==='enviada'?'✅ Enviada':'Aberta')+'</span>';
   const body=document.getElementById('comandaBody');
   if(!c.itens.length){body.innerHTML='<div class="vazio-com">Nenhum item nesta mesa ainda.<br>Toque no + dos produtos acima.</div>';}
-  else{body.innerHTML=c.itens.map((it,i)=>{const sub=it.preco*it.qtd;
-    return '<div class="citem"><div class="top"><div class="nome">'+it.nome+'</div><button class="rem" onclick="remItem('+i+')">remover</button></div>'+
+  else{body.innerHTML=c.itens.map((it,i)=>{const sub=(it.preco+addsTot(it))*it.qtd;
+    const addsTxt=(it.adds&&it.adds.length)?'<div style="font-size:12px;color:#c8962a;margin-top:3px">'+it.adds.map(a=>'+ '+a.qtd+'x '+a.nome).join(' · ')+'</div>':'';
+    return '<div class="citem"><div class="top"><div class="nome">'+it.nome+addsTxt+'</div><button class="rem" onclick="remItem('+i+')">remover</button></div>'+
       '<div class="qtd"><button onclick="mudarQtd('+i+',-1)">−</button><span class="n">'+it.qtd+'</span><button onclick="mudarQtd('+i+',1)">+</button><span class="sub">'+money(sub)+'</span></div>'+
       '<input class="obs" type="text" placeholder="Obs. p/ cozinha (ex: bem passado, mais escuro)" value="'+(it.obs||'').replace(/"/g,'&quot;')+'" onchange="mudarObs('+i+',this.value)"></div>';}).join('');}
   const ab=document.getElementById('comanda').classList.contains('aberta');
@@ -277,7 +319,9 @@ function enviarCozinha(){
   registrarVenda(c,'cozinha');
   c.status='enviada';salvarCom();renderMesas();renderComanda();
   let txt='MESA '+mesaAtual+'\n----------------\n';
-  c.itens.forEach(it=>{txt+=it.qtd+'x '+it.nome+'\n';if(it.obs)txt+='   >> '+it.obs+'\n';});
+  c.itens.forEach(it=>{txt+=it.qtd+'x '+it.nome+'\n';
+    (it.adds||[]).forEach(a=>{txt+='   + '+(a.qtd*it.qtd)+'x '+a.nome+'\n';});
+    if(it.obs)txt+='   >> '+it.obs+'\n';});
   txt+='----------------\nTOTAL: '+money(totalComanda(c));
   document.getElementById('resumoEnvio').textContent=txt;
   document.getElementById('modalEnvio').classList.add('open');
@@ -288,7 +332,8 @@ function abrirFechamento(){
   const c=getComanda(mesaAtual);if(!c.itens.length){alert('Não há itens nesta mesa.');return;}
   pgSel=null;
   document.getElementById('fechMesa').textContent=mesaAtual;
-  let txt='';c.itens.forEach(it=>{txt+=it.qtd+'x '+it.nome+'  '+money(it.preco*it.qtd)+'\n';});
+  let txt='';c.itens.forEach(it=>{txt+=it.qtd+'x '+it.nome+'  '+money((it.preco+addsTot(it))*it.qtd)+'\n';
+    (it.adds||[]).forEach(a=>{txt+='   + '+(a.qtd*it.qtd)+'x '+a.nome+'\n';});});
   txt+='----------------\nTOTAL: '+money(totalComanda(c));
   document.getElementById('resumoFech').textContent=txt;
   document.getElementById('numPessoas').value=1;
