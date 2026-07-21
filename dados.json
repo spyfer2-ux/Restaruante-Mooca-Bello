@@ -208,7 +208,7 @@
    "cat": "porcoes",
    "nome": "Calabresa Acebolada",
    "desc": "",
-   "preco": 44.9,
+   "preco": 35.9,
    "foto": "fotos/calabresa.jpg"
   },
   {
@@ -236,7 +236,7 @@
    "cat": "porcoes",
    "nome": "Porção de Peixe",
    "desc": "",
-   "preco": 59.9,
+   "preco": 29.9,
    "foto": "fotos/porcao_peixe.jpg"
   },
   {
@@ -252,6 +252,20 @@
    "desc": "",
    "preco": 29.9,
    "foto": "fotos/pasteis.jpg"
+  },
+  {
+   "cat": "porcoes",
+   "nome": "Linguiça Toscana Acebolada",
+   "desc": "",
+   "preco": 39.9,
+   "foto": "fotos/calabresa.jpg"
+  },
+  {
+   "cat": "porcoes",
+   "nome": "Parmegiana",
+   "desc": "Frango à parmegiana",
+   "preco": 34.9,
+   "foto": "fotos/parmegiana.jpg"
   },
   {
    "cat": "drinks",
