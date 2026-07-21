@@ -243,8 +243,8 @@ async function sincronizarNuvem(){
   try{
     const r=await fetch(API_URL+'/api/registros',{method:'POST',
       headers:{'Content-Type':'application/json','X-PIN':pin},
-      body:JSON.stringify({vendas:fila.vendas||[],pagamentos:fila.pagamentos||[],pedidos:fila.pedidos||[]})});
-    if(r.ok){localStorage.setItem('fila_bmb',JSON.stringify({vendas:[],pagamentos:[],pedidos:[]}));}
+      body:JSON.stringify({vendas:fila.vendas||[],pagamentos:fila.pagamentos||[],pedidos:fila.pedidos||[],fiados:fila.fiados||[]})});
+    if(r.ok){localStorage.setItem('fila_bmb',JSON.stringify({vendas:[],pagamentos:[],pedidos:[],fiados:[]}));}
     else if(r.status===401){localStorage.removeItem('pin_bmb');}
   }catch(e){}
 }

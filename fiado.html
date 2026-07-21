@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiado - Bodega Mooca Bello</title>
+<style>
+  :root{--ouro:#c8962a;--preto:#141210;}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  body{font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#0d0b09;color:#f5efe2;padding-bottom:40px;}
+  header{background:var(--preto);padding:14px;text-align:center;border-bottom:3px solid var(--ouro);position:sticky;top:0;z-index:20;}
+  header h1{color:var(--ouro);font-size:18px;letter-spacing:1px;}
+  .voltar{position:absolute;left:12px;top:12px;background:#221a12;border:1px solid #3a2d1c;color:#e9dcc4;border-radius:20px;padding:8px 12px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;}
+  .status-bar{text-align:center;font-size:12px;padding:5px 0;color:#8fc98f;}
+  .status-bar.off{color:#e79c9c;}
+  .total-geral{text-align:center;padding:12px;font-size:15px;color:#c9bda5;}
+  .total-geral b{color:var(--ouro);font-size:22px;display:block;}
+  .cliente{background:#17130f;border:1px solid #2a2118;border-radius:14px;margin:0 12px 12px;overflow:hidden;}
+  .cli-head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;cursor:pointer;}
+  .cli-head .nome{font-size:17px;font-weight:800;}
+  .cli-head .deve{color:var(--ouro);font-size:17px;font-weight:800;}
+  .cli-corpo{display:none;border-top:1px solid #2a2118;padding:10px 14px;}
+  .cliente.aberto .cli-corpo{display:block;}
+  .lanc{padding:8px 0;border-bottom:1px dashed #2a2118;font-size:13px;}
+  .lanc:last-of-type{border-bottom:none;}
+  .lanc .cab{color:#8a7c64;font-size:12px;margin-bottom:2px;}
+  .lanc pre{font-family:inherit;white-space:pre-wrap;line-height:1.5;}
+  .btn-receber{width:100%;background:#2a4d1e;color:#c6f0a8;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:800;cursor:pointer;margin-top:10px;}
+  .vazio{padding:50px 20px;text-align:center;color:#6b5c44;font-size:15px;}
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;z-index:60;padding:16px;}
+  .modal.open{display:flex;}
+  .modal-box{background:#17130f;border:1px solid var(--ouro);border-radius:14px;padding:18px;max-width:420px;width:100%;}
+  .modal-box h2{color:var(--ouro);font-size:17px;margin-bottom:10px;}
+  .pgtos{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0;}
+  .pg-btn{background:#221a12;border:1px solid #3a2d1c;color:#e9dcc4;border-radius:10px;padding:14px 4px;font-size:14px;font-weight:700;cursor:pointer;}
+  .btn-cancel{width:100%;background:#2a2118;color:#e9dcc4;border:none;border-radius:10px;padding:12px;font-weight:700;cursor:pointer;}
+</style>
+</head>
+<body>
+<header>
+  <a class="voltar" href="garcom.html">← Voltar</a>
+  <h1>📒 Fiado — Contas em Aberto</h1>
+</header>
+<div class="status-bar" id="statusBar">carregando...</div>
+<div class="total-geral" id="totalGeral"></div>
+<div id="lista"></div>
+<div class="vazio" id="vazio" style="display:none">Ninguém devendo. 🎉<br>Pra anotar um fiado: na comanda do garçom,<br>Fechar conta → 📒 Fiado → nome do cliente.</div>
+
+<div class="modal" id="modalPg">
+  <div class="modal-box">
+    <h2>💰 Receber de <span id="pgNome"></span></h2>
+    <p style="font-size:14px;color:#c9bda5">Total: <b id="pgTotal" style="color:var(--ouro)"></b> — como pagou?</p>
+    <div class="pgtos">
+      <button class="pg-btn" onclick="receber('Pix')">📱 Pix</button>
+      <button class="pg-btn" onclick="receber('Dinheiro')">💵 Dinheiro</button>
+      <button class="pg-btn" onclick="receber('Cartão')">💳 Cartão</button>
+    </div>
+    <button class="btn-cancel" onclick="document.getElementById('modalPg').classList.remove('open')">Cancelar</button>
+  </div>
+</div>
+
+<script>
+const API_URL='https://pdv-vendas.spyfer2.workers.dev';
+const LS_PIN='pin_bmb';
+let FIADOS=[], nomeSel=null;
+
+function money(v){return 'R$ '+v.toFixed(2).replace('.',',');}
+function getPin(){
+  let pin=localStorage.getItem(LS_PIN);
+  if(!pin){pin=prompt('PIN do sistema (uma vez só neste aparelho):')||'';if(pin)localStorage.setItem(LS_PIN,pin.trim());}
+  return (pin||'').trim();
+}
+function fmtData(iso){return iso.split('-').reverse().join('/');}
+
+async function carregar(){
+  const pin=getPin();if(!pin)return;
+  const bar=document.getElementById('statusBar');
+  try{
+    const r=await fetch(API_URL+'/api/fiados',{headers:{'X-PIN':pin}});
+    if(r.status===401){localStorage.removeItem(LS_PIN);bar.textContent='PIN incorreto — recarregue';bar.classList.add('off');return;}
+    const d=await r.json();
+    FIADOS=d.fiados||[];
+    bar.textContent='☁️ dados da nuvem';bar.classList.remove('off');
+    render();
+  }catch(e){bar.textContent='📵 sem conexão — tente recarregar';bar.classList.add('off');}
+}
+
+function render(){
+  const porNome={};
+  FIADOS.forEach(f=>{(porNome[f.nome]=porNome[f.nome]||[]).push(f);});
+  const nomes=Object.keys(porNome).sort((a,b)=>a.localeCompare(b));
+  const tot=FIADOS.reduce((s,f)=>s+f.total,0);
+  document.getElementById('totalGeral').innerHTML=FIADOS.length?
+    (nomes.length+' pessoa(s) devendo<b>'+money(tot)+'</b>'):'';
+  document.getElementById('vazio').style.display=FIADOS.length?'none':'block';
+  document.getElementById('lista').innerHTML=nomes.map(n=>{
+    const lancs=porNome[n]; const deve=lancs.reduce((s,f)=>s+f.total,0);
+    return '<div class="cliente"><div class="cli-head" onclick="this.parentElement.classList.toggle(\'aberto\')">'+
+      '<span class="nome">'+n.replace(/</g,'&lt;')+'</span><span class="deve">'+money(deve)+'</span></div>'+
+      '<div class="cli-corpo">'+lancs.map(f=>
+        '<div class="lanc"><div class="cab">'+fmtData(f.data)+' '+f.hora+' — '+money(f.total)+'</div><pre>'+f.texto.replace(/</g,'&lt;')+'</pre></div>').join('')+
+      '<button class="btn-receber" onclick="abrirReceber(\''+encodeURIComponent(n)+'\')">✅ Receber '+money(deve)+'</button>'+
+      '</div></div>';
+  }).join('');
+}
+
+function abrirReceber(nomeEnc){
+  nomeSel=decodeURIComponent(nomeEnc);
+  const deve=FIADOS.filter(f=>f.nome===nomeSel).reduce((s,f)=>s+f.total,0);
+  document.getElementById('pgNome').textContent=nomeSel;
+  document.getElementById('pgTotal').textContent=money(deve);
+  document.getElementById('modalPg').classList.add('open');
+}
+
+async function receber(pgto){
+  const pin=getPin();if(!pin)return;
+  const ids=FIADOS.filter(f=>f.nome===nomeSel).map(f=>f.id);
+  const d=new Date();
+  try{
+    const r=await fetch(API_URL+'/api/fiados/receber',{method:'POST',
+      headers:{'Content-Type':'application/json','X-PIN':pin},
+      body:JSON.stringify({ids:ids,pgto:pgto,ts:Date.now(),
+        data:d.toISOString().slice(0,10),
+        hora:d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})})});
+    const resp=await r.json();
+    if(resp.ok){
+      document.getElementById('modalPg').classList.remove('open');
+      alert('✅ Recebido '+money(resp.recebido)+' de '+nomeSel+' ('+pgto+').\nEntrou no caixa de hoje.');
+      carregar();
+    }else alert('Erro: '+(resp.erro||'tente de novo'));
+  }catch(e){alert('Sem conexão — tente de novo.');}
+}
+
+carregar();
+setInterval(carregar,30000);
+</script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}</script>
+</body>
+</html>

@@ -80,7 +80,7 @@
   <button class="cx-btn" onclick="abrirCaixa()">💰 Caixa</button>
 </header>
 
-<div style="display:flex;justify-content:center;gap:16px;align-items:center;font-size:11px;padding:4px 0;background:#0d0b09"><span id="nuvem">☁️</span><a href="cozinha.html" style="color:#e4bc5e;font-weight:700;text-decoration:none">👨‍🍳 Tela da Cozinha</a></div>
+<div style="display:flex;justify-content:center;gap:16px;align-items:center;font-size:11px;padding:4px 0;background:#0d0b09"><span id="nuvem">☁️</span><a href="cozinha.html" style="color:#e4bc5e;font-weight:700;text-decoration:none">👨‍🍳 Tela da Cozinha</a><a href="fiado.html" style="color:#e4bc5e;font-weight:700;text-decoration:none">📒 Fiado</a></div>
 <div class="secao-tit">Mesa</div>
 <div class="mesas" id="mesas"></div>
 
@@ -129,7 +129,9 @@
       <button class="pg-btn" data-pg="Pix" onclick="selPg('Pix')">📱 Pix</button>
       <button class="pg-btn" data-pg="Dinheiro" onclick="selPg('Dinheiro')">💵 Dinheiro</button>
       <button class="pg-btn" data-pg="Cartão" onclick="selPg('Cartão')">💳 Cartão</button>
+      <button class="pg-btn" data-pg="Fiado" onclick="selPg('Fiado')">📒 Fiado</button>
     </div>
+    <input class="obs" id="fiadoNome" type="text" placeholder="Nome de quem vai deixar anotado" style="display:none;margin-top:10px">
     <button class="btn btn-fechar-c" onclick="confirmarFechamento()">✅ Confirmar pagamento</button>
     <button class="btn btn-fechar" onclick="fechar('modalFech')">Cancelar</button>
   </div>
@@ -166,14 +168,14 @@ function getPin(){
 function salvarFila(){localStorage.setItem(LS_FILA,JSON.stringify(fila));atualizarNuvem();}
 function atualizarNuvem(){
   const el=document.getElementById('nuvem');if(!el)return;
-  const pend=fila.vendas.length+fila.pagamentos.length+(fila.pedidos||[]).length;
+  const pend=fila.vendas.length+fila.pagamentos.length+(fila.pedidos||[]).length+(fila.fiados||[]).length;
   el.textContent=pend?('☁️ '+pend+' p/ enviar'):'☁️ ok';
   el.style.color=pend?'#e7b95c':'#8fc98f';
 }
 let sincronizando=false;
 async function sincronizar(){
   if(sincronizando)return;
-  const pend=fila.vendas.length+fila.pagamentos.length+(fila.pedidos||[]).length;
+  const pend=fila.vendas.length+fila.pagamentos.length+(fila.pedidos||[]).length+(fila.fiados||[]).length;
   if(!pend||!navigator.onLine)return;
   const pin=getPin();if(!pin)return;
   sincronizando=true;
@@ -182,7 +184,7 @@ async function sincronizar(){
       headers:{'Content-Type':'application/json','X-PIN':pin},
       body:JSON.stringify(fila)});
     if(r.status===401){localStorage.removeItem(LS_PIN);alert('PIN do banco de vendas incorreto. Tente de novo no próximo pedido.');}
-    else if(r.ok){fila={vendas:[],pagamentos:[],pedidos:[]};localStorage.setItem(LS_FILA,JSON.stringify(fila));}
+    else if(r.ok){fila={vendas:[],pagamentos:[],pedidos:[],fiados:[]};localStorage.setItem(LS_FILA,JSON.stringify(fila));}
   }catch(e){/* offline — fica na fila */}
   sincronizando=false;atualizarNuvem();
 }
@@ -219,7 +221,7 @@ async function init(){
   try{caixa=JSON.parse(localStorage.getItem(LS_CX));}catch(e){caixa=null;}
   try{historico=JSON.parse(localStorage.getItem(LS_HIST))||[];}catch(e){historico=[];}
   try{fila=JSON.parse(localStorage.getItem(LS_FILA))||{vendas:[],pagamentos:[],pedidos:[]};}catch(e){fila={vendas:[],pagamentos:[],pedidos:[]};}
-  fila.pedidos=fila.pedidos||[];
+  fila.pedidos=fila.pedidos||[];fila.fiados=fila.fiados||[];
   atualizarNuvem();setTimeout(sincronizar,1500);
   if(!caixa || caixa.dia!==hoje()){caixa={dia:hoje(),vendas:[]};salvarCx();}
   const r=await fetch('./dados.json?v='+Date.now());DADOS=await r.json();
@@ -356,10 +358,27 @@ function calcDivisao(){
   const t=totalComanda(c);
   document.getElementById('porPessoa').textContent = n>1 ? (money(t/n)+' cada') : '';
 }
-function selPg(p){pgSel=p;document.querySelectorAll('.pg-btn').forEach(b=>b.classList.toggle('sel',b.dataset.pg===p));}
+function selPg(p){pgSel=p;document.querySelectorAll('.pg-btn').forEach(b=>b.classList.toggle('sel',b.dataset.pg===p));document.getElementById('fiadoNome').style.display=(p==='Fiado'?'block':'none');}
 function confirmarFechamento(){
   if(!pgSel){alert('Escolha a forma de pagamento.');return;}
   const c=getComanda(mesaAtual);const t=totalComanda(c);const n=parseInt(document.getElementById('numPessoas').value)||1;
+  if(pgSel==='Fiado'){
+    const nome=(document.getElementById('fiadoNome').value||'').trim();
+    if(!nome){alert('Digite o nome de quem vai deixar anotado.');return;}
+    registrarVenda(c,'fechamento');
+    const linhas=[];
+    c.itens.forEach(it=>{linhas.push(it.qtd+'x '+it.nome+'  '+money((it.preco+addsTot(it))*it.qtd));
+      (it.adds||[]).forEach(a=>{linhas.push('   + '+(a.qtd*it.qtd)+'x '+a.nome);});});
+    fila.fiados=fila.fiados||[];
+    fila.fiados.push({id:(crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random()),ts:Date.now(),
+      data:hoje(),hora:agora(),nome:nome,texto:linhas.join('\n'),total:t});
+    salvarFila();sincronizar();
+    comandas[mesaAtual]={itens:[],status:'aberta'};salvarCom();
+    document.getElementById('fiadoNome').value='';
+    fechar('modalFech');renderMesas();renderComanda();
+    alert('📒 Anotado no fiado de '+nome+'!\n'+money(t)+'\nVeja em Fiado no topo da tela.');
+    return;
+  }
   registrarVenda(c,'fechamento'); // garante que item não enviado à cozinha também conte no faturamento
   historico.push({tipo:'pagamento',data:hoje(),hora:agora(),mesa:mesaAtual,total:t,pgto:pgSel,pessoas:n});
   salvarHist();
