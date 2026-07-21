@@ -494,7 +494,8 @@
    "nome": "Adicional - Misto Quente",
    "desc": "Adicional do café da manhã",
    "preco": 8.9,
-   "foto": "fotos/misto_quente.jpg"
+   "foto": "fotos/misto_quente.jpg",
+   "ativo": false
   },
   {
    "cat": "extras",
