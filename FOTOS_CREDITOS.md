@@ -48,3 +48,5 @@ Imagens obtidas do Wikimedia Commons (licenças livres). Fontes:
 - fotos/draft600.jpg — foto do produto enviada pelo restaurante
 - fotos/spaten.jpg — [File:Spaten 001.jpg](https://commons.wikimedia.org/wiki/File%3ASpaten_001.jpg)
 - fotos/smirnoff.jpg — [File:Smirnoff Ice Original.jpg](https://commons.wikimedia.org/wiki/File%3ASmirnoff_Ice_Original.jpg)
+- fotos/coxinha.jpg — [File:Coxinha de Puerto Iguazú, Misiones, Argentina.jpg](https://commons.wikimedia.org/wiki/File%3ACoxinha_de_Puerto_Iguaz%C3%BA%2C_Misiones%2C_Argentina.jpg)
+- fotos/coxinha_catupiry.jpg — [File:Coxinha - iguaria brasileira 01.jpg](https://commons.wikimedia.org/wiki/File%3ACoxinha_-_iguaria_brasileira_01.jpg)
