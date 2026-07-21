@@ -373,28 +373,28 @@
    "cat": "cervejas",
    "nome": "Itaipava 350ml",
    "desc": "Lata",
-   "preco": 5.9,
+   "preco": 9.9,
    "foto": "fotos/itaipava.jpg"
   },
   {
    "cat": "cervejas",
    "nome": "Skol 350ml",
    "desc": "Lata",
-   "preco": 6.5,
+   "preco": 9.9,
    "foto": "fotos/skol.jpg"
   },
   {
    "cat": "cervejas",
    "nome": "Original 350ml",
    "desc": "Lata",
-   "preco": 7.5,
+   "preco": 9.9,
    "foto": "fotos/original.jpg"
   },
   {
    "cat": "cervejas",
    "nome": "Demais Cervejas 350ml",
    "desc": "Heineken, Budweiser, Amstel, Stella e outras",
-   "preco": 7.9,
+   "preco": 9.9,
    "foto": "fotos/cerveja.jpg"
   },
   {
