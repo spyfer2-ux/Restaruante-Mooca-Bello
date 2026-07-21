@@ -45,7 +45,7 @@
  "produtos": [
   {
    "cat": "cafe",
-   "nome": "Experiência Passe o Seu Café (Completa)",
+   "nome": "Buffet Café da Manhã",
    "desc": "Bebida (café coado ou com leite) + 1 acompanhamento",
    "preco": 24.9,
    "foto": "fotos/cafe_completo.jpg"
