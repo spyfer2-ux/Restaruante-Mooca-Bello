@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cozinha - Bodega Mooca Bello</title>
+<style>
+  :root{--ouro:#c8962a;--preto:#141210;}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  body{font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#0d0b09;color:#f5efe2;padding-bottom:30px;}
+  header{background:var(--preto);padding:14px;text-align:center;border-bottom:3px solid var(--ouro);position:sticky;top:0;z-index:20;}
+  header h1{color:var(--ouro);font-size:18px;letter-spacing:1px;}
+  .status-bar{text-align:center;font-size:12px;padding:5px 0;background:#0d0b09;color:#8fc98f;}
+  .status-bar.off{color:#e79c9c;}
+  .pedidos{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;padding:12px;}
+  .pedido{background:#17130f;border:2px solid #c8962a;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;}
+  .pedido.novo{animation:pisca .6s ease 3;}
+  @keyframes pisca{0%,100%{border-color:#c8962a}50%{border-color:#8fc98f}}
+  .ped-head{background:linear-gradient(180deg,#e4bc5e,#c8962a);color:#1b1204;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;}
+  .ped-head .mesa{font-size:22px;font-weight:900;}
+  .ped-head .hora{font-size:14px;font-weight:700;}
+  .ped-corpo{padding:12px 14px;font-size:16px;line-height:1.6;white-space:pre-wrap;flex:1;}
+  .ped-btn{background:#2a4d1e;color:#c6f0a8;border:none;padding:16px;font-size:17px;font-weight:800;cursor:pointer;width:100%;}
+  .ped-btn:active{background:#3a6d2a;}
+  .vazio{padding:50px 20px;text-align:center;color:#6b5c44;font-size:16px;}
+  .contador{text-align:center;padding:8px;font-size:13px;color:#8a7c64;}
+</style>
+</head>
+<body>
+<header><h1>👨‍🍳 Cozinha — Pedidos</h1></header>
+<div class="status-bar" id="statusBar">conectando...</div>
+<div class="pedidos" id="pedidos"></div>
+<div class="vazio" id="vazio" style="display:none">Nenhum pedido na fila.<br>Os pedidos aparecem aqui na hora que o garçom envia. 🔔</div>
+<div class="contador" id="contador"></div>
+
+<script>
+const API_URL='https://pdv-vendas.spyfer2.workers.dev';
+const LS_PIN='pin_bmb';
+let ABERTOS=[], prontosHoje=0, idsConhecidos=new Set(), primeiraCarga=true;
+
+function getPin(){
+  let pin=localStorage.getItem(LS_PIN);
+  if(!pin){pin=prompt('PIN do sistema (uma vez só neste aparelho):')||'';if(pin)localStorage.setItem(LS_PIN,pin.trim());}
+  return (pin||'').trim();
+}
+function agora(){return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
+
+function beep(){
+  try{
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);
+    o.frequency.value=880;g.gain.value=0.3;
+    o.start();o.stop(ctx.currentTime+0.4);
+  }catch(e){}
+  if(navigator.vibrate)navigator.vibrate([200,100,200]);
+}
+
+async function carregar(){
+  const pin=getPin();if(!pin)return;
+  const bar=document.getElementById('statusBar');
+  try{
+    const r=await fetch(API_URL+'/api/pedidos?status=aberto',{headers:{'X-PIN':pin}});
+    if(r.status===401){localStorage.removeItem(LS_PIN);bar.textContent='PIN incorreto — recarregue a página';bar.classList.add('off');return;}
+    const d=await r.json();
+    ABERTOS=d.pedidos||[];
+    // toca o sino se chegou pedido novo
+    const novosIds=ABERTOS.filter(p=>!idsConhecidos.has(p.id)).map(p=>p.id);
+    if(novosIds.length&&!primeiraCarga)beep();
+    ABERTOS.forEach(p=>idsConhecidos.add(p.id));
+    primeiraCarga=false;
+    bar.textContent='🟢 ao vivo — atualiza sozinho';bar.classList.remove('off');
+    render(novosIds);
+  }catch(e){
+    bar.textContent='📵 sem conexão — tentando de novo...';bar.classList.add('off');
+  }
+}
+
+function render(novosIds){
+  novosIds=novosIds||[];
+  const div=document.getElementById('pedidos');
+  document.getElementById('vazio').style.display=ABERTOS.length?'none':'block';
+  div.innerHTML=ABERTOS.map(p=>
+    '<div class="pedido'+(novosIds.includes(p.id)?' novo':'')+'">'+
+      '<div class="ped-head"><span class="mesa">MESA '+p.mesa+'</span><span class="hora">'+p.hora+'</span></div>'+
+      '<div class="ped-corpo">'+p.texto.replace(/</g,'&lt;')+'</div>'+
+      '<button class="ped-btn" onclick="marcarPronto(\''+p.id+'\')">✅ PRONTO</button>'+
+    '</div>').join('');
+  document.getElementById('contador').textContent=ABERTOS.length+' pedido(s) na fila · '+prontosHoje+' pronto(s) desde que abriu esta tela';
+}
+
+async function marcarPronto(id){
+  const pin=getPin();if(!pin)return;
+  const card=event&&event.target?event.target.closest('.pedido'):null;
+  if(card)card.style.opacity='0.4';
+  try{
+    const r=await fetch(API_URL+'/api/pedidos/pronto',{method:'POST',
+      headers:{'Content-Type':'application/json','X-PIN':pin},
+      body:JSON.stringify({id:id,hora:agora()})});
+    if(r.ok){prontosHoje++;ABERTOS=ABERTOS.filter(p=>p.id!==id);render();}
+    else if(card)card.style.opacity='1';
+  }catch(e){if(card)card.style.opacity='1';alert('Sem conexão — tente de novo.');}
+}
+
+carregar();
+setInterval(carregar,8000);
+</script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}</script>
+</body>
+</html>

@@ -80,7 +80,7 @@
   <button class="cx-btn" onclick="abrirCaixa()">💰 Caixa</button>
 </header>
 
-<div style="text-align:center;font-size:11px;padding:4px 0;background:#0d0b09" id="nuvem">☁️</div>
+<div style="display:flex;justify-content:center;gap:16px;align-items:center;font-size:11px;padding:4px 0;background:#0d0b09"><span id="nuvem">☁️</span><a href="cozinha.html" style="color:#e4bc5e;font-weight:700;text-decoration:none">👨‍🍳 Tela da Cozinha</a></div>
 <div class="secao-tit">Mesa</div>
 <div class="mesas" id="mesas"></div>
 
@@ -157,7 +157,7 @@ let comandas={}, caixa=null, pgSel=null;
 const LS_COM='comandas_bmb', LS_CX='caixa_bmb', LS_HIST='historico_bmb';
 const API_URL='https://pdv-vendas.spyfer2.workers.dev';
 const LS_PIN='pin_bmb', LS_FILA='fila_bmb';
-let historico=[], fila={vendas:[],pagamentos:[]};
+let historico=[], fila={vendas:[],pagamentos:[],pedidos:[]};
 function getPin(){
   let pin=localStorage.getItem(LS_PIN);
   if(!pin){pin=prompt('PIN do banco de vendas (uma vez só neste aparelho):')||'';if(pin)localStorage.setItem(LS_PIN,pin.trim());}
@@ -166,14 +166,14 @@ function getPin(){
 function salvarFila(){localStorage.setItem(LS_FILA,JSON.stringify(fila));atualizarNuvem();}
 function atualizarNuvem(){
   const el=document.getElementById('nuvem');if(!el)return;
-  const pend=fila.vendas.length+fila.pagamentos.length;
+  const pend=fila.vendas.length+fila.pagamentos.length+(fila.pedidos||[]).length;
   el.textContent=pend?('☁️ '+pend+' p/ enviar'):'☁️ ok';
   el.style.color=pend?'#e7b95c':'#8fc98f';
 }
 let sincronizando=false;
 async function sincronizar(){
   if(sincronizando)return;
-  const pend=fila.vendas.length+fila.pagamentos.length;
+  const pend=fila.vendas.length+fila.pagamentos.length+(fila.pedidos||[]).length;
   if(!pend||!navigator.onLine)return;
   const pin=getPin();if(!pin)return;
   sincronizando=true;
@@ -182,7 +182,7 @@ async function sincronizar(){
       headers:{'Content-Type':'application/json','X-PIN':pin},
       body:JSON.stringify(fila)});
     if(r.status===401){localStorage.removeItem(LS_PIN);alert('PIN do banco de vendas incorreto. Tente de novo no próximo pedido.');}
-    else if(r.ok){fila={vendas:[],pagamentos:[]};localStorage.setItem(LS_FILA,JSON.stringify(fila));}
+    else if(r.ok){fila={vendas:[],pagamentos:[],pedidos:[]};localStorage.setItem(LS_FILA,JSON.stringify(fila));}
   }catch(e){/* offline — fica na fila */}
   sincronizando=false;atualizarNuvem();
 }
@@ -195,10 +195,12 @@ function salvarCx(){localStorage.setItem(LS_CX,JSON.stringify(caixa));}
 function salvarHist(){localStorage.setItem(LS_HIST,JSON.stringify(historico));}
 function registrarVenda(c,origem){
   // computa no faturamento tudo que ainda não foi registrado (qtd além do já enviado)
-  const novos=[];
+  const novos=[]; const linhas=[];
   c.itens.forEach(it=>{const env=it.env||0; if(it.qtd>env){const delta=it.qtd-env;
     novos.push({nome:it.nome,qtd:delta,preco:it.preco});
-    (it.adds||[]).forEach(a=>{novos.push({nome:'+ '+a.nome,qtd:a.qtd*delta,preco:a.preco});});
+    linhas.push(delta+'x '+it.nome);
+    (it.adds||[]).forEach(a=>{novos.push({nome:'+ '+a.nome,qtd:a.qtd*delta,preco:a.preco});linhas.push('   + '+(a.qtd*delta)+'x '+a.nome);});
+    if(it.obs)linhas.push('   >> '+it.obs);
     it.env=it.qtd;}});
   if(novos.length){
     const reg={tipo:'venda',origem:origem,data:hoje(),hora:agora(),mesa:mesaAtual,itens:novos,
@@ -208,7 +210,7 @@ function registrarVenda(c,origem){
       data:reg.data,hora:reg.hora,mesa:reg.mesa,origem:origem,itens:novos});
     salvarFila();sincronizar();
   }
-  return novos.length;
+  return {novos:novos,linhas:linhas};
 }
 function money(v){return 'R$ '+v.toFixed(2).replace('.',',');}
 
@@ -216,7 +218,8 @@ async function init(){
   try{comandas=JSON.parse(localStorage.getItem(LS_COM))||{};}catch(e){comandas={};}
   try{caixa=JSON.parse(localStorage.getItem(LS_CX));}catch(e){caixa=null;}
   try{historico=JSON.parse(localStorage.getItem(LS_HIST))||[];}catch(e){historico=[];}
-  try{fila=JSON.parse(localStorage.getItem(LS_FILA))||{vendas:[],pagamentos:[]};}catch(e){fila={vendas:[],pagamentos:[]};}
+  try{fila=JSON.parse(localStorage.getItem(LS_FILA))||{vendas:[],pagamentos:[],pedidos:[]};}catch(e){fila={vendas:[],pagamentos:[],pedidos:[]};}
+  fila.pedidos=fila.pedidos||[];
   atualizarNuvem();setTimeout(sincronizar,1500);
   if(!caixa || caixa.dia!==hoje()){caixa={dia:hoje(),vendas:[]};salvarCx();}
   const r=await fetch('./dados.json?v='+Date.now());DADOS=await r.json();
@@ -316,7 +319,13 @@ function limparComanda(){if(!confirm('Limpar a comanda da Mesa '+mesaAtual+'?'))
 
 function enviarCozinha(){
   const c=getComanda(mesaAtual);if(!c.itens.length){alert('Adicione itens antes de enviar.');return;}
-  registrarVenda(c,'cozinha');
+  const reg=registrarVenda(c,'cozinha');
+  if(reg.novos.length){
+    fila.pedidos=fila.pedidos||[];
+    fila.pedidos.push({id:(crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random()),ts:Date.now(),
+      data:hoje(),hora:agora(),mesa:mesaAtual,texto:reg.linhas.join('\n')});
+    salvarFila();sincronizar();
+  }
   c.status='enviada';salvarCom();renderMesas();renderComanda();
   let txt='MESA '+mesaAtual+'\n----------------\n';
   c.itens.forEach(it=>{txt+=it.qtd+'x '+it.nome+'\n';
