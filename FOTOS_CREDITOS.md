@@ -59,3 +59,5 @@ Imagens obtidas do Wikimedia Commons (licenças livres). Fontes:
 - fotos/esfiha_frango.jpg (atualizada) — [File:Heritage village fatayer (11389764333).jpg](https://commons.wikimedia.org/wiki/File%3AHeritage_village_fatayer_%2811389764333%29.jpg)
 - fotos/pinga.jpg — [File:Cachaca.JPG](https://commons.wikimedia.org/wiki/File%3ACachaca.JPG)
 - fotos/bombeirinho.jpg — [File:Jägerbombs Athens.jpg](https://commons.wikimedia.org/wiki/File%3AJ%C3%A4gerbombs_Athens.jpg)
+- fotos/pf_frango.jpg — mesma fonte da foto de frango do banner (Flickr, CC BY)
+- fotos/pf_picadinho.jpg — mesma fonte da foto de picadinho do banner (Flickr, licença comercial)

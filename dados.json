@@ -196,6 +196,27 @@
    "foto": "fotos/feijoada.jpg"
   },
   {
+   "cat": "semanal",
+   "nome": "Todo Dia - Filé de Frango",
+   "desc": "Prato feito — opcional disponível todos os dias",
+   "preco": 24.9,
+   "foto": "fotos/pf_frango.jpg"
+  },
+  {
+   "cat": "semanal",
+   "nome": "Todo Dia - Calabresa",
+   "desc": "Prato feito — opcional disponível todos os dias",
+   "preco": 24.9,
+   "foto": "fotos/calabresa.jpg"
+  },
+  {
+   "cat": "semanal",
+   "nome": "Todo Dia - Picadinho",
+   "desc": "Prato feito — opcional disponível todos os dias",
+   "preco": 24.9,
+   "foto": "fotos/pf_picadinho.jpg"
+  },
+  {
    "cat": "porcoes",
    "nome": "Frango à Passarinho",
    "desc": "",
