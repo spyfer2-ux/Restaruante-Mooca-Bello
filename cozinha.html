@@ -57,11 +57,9 @@ function beep(){
 }
 
 async function carregar(){
-  const pin=getPin();if(!pin)return;
   const bar=document.getElementById('statusBar');
   try{
-    const r=await fetch(API_URL+'/api/pedidos?status=aberto',{headers:{'X-PIN':pin}});
-    if(r.status===401){localStorage.removeItem(LS_PIN);bar.textContent='PIN incorreto — recarregue a página';bar.classList.add('off');return;}
+    const r=await fetch(API_URL+'/api/pedidos?status=aberto');
     const d=await r.json();
     ABERTOS=d.pedidos||[];
     // toca o sino se chegou pedido novo
@@ -90,12 +88,11 @@ function render(novosIds){
 }
 
 async function marcarPronto(id){
-  const pin=getPin();if(!pin)return;
   const card=event&&event.target?event.target.closest('.pedido'):null;
   if(card)card.style.opacity='0.4';
   try{
     const r=await fetch(API_URL+'/api/pedidos/pronto',{method:'POST',
-      headers:{'Content-Type':'application/json','X-PIN':pin},
+      headers:{'Content-Type':'application/json'},
       body:JSON.stringify({id:id,hora:agora()})});
     if(r.ok){prontosHoje++;ABERTOS=ABERTOS.filter(p=>p.id!==id);render();}
     else if(card)card.style.opacity='1';
