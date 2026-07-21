@@ -308,7 +308,8 @@
    "nome": "Moscow Mule",
    "desc": "Vodka Smirnoff, ginger beer e limão",
    "preco": 24.9,
-   "foto": "fotos/moscow_mule.jpg"
+   "foto": "fotos/moscow_mule.jpg",
+   "ativo": false
   },
   {
    "cat": "drinks",
