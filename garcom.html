@@ -251,7 +251,8 @@ function setCat(id){catAtual=id;renderCats();render();}
 document.getElementById('busca').addEventListener('input',e=>{busca=e.target.value.toLowerCase();render();});
 
 function render(){
-  let items=DADOS.produtos.filter(p=>p.ativo!==false&&(catAtual==='todas'||p.cat===catAtual)&&(!busca||p.nome.toLowerCase().includes(busca)));
+  const bn=busca?busca.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''):'';
+  let items=DADOS.produtos.filter(p=>p.ativo!==false&&(bn?true:(catAtual==='todas'||p.cat===catAtual))&&(!bn||p.nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').includes(bn)));
   const lista=document.getElementById('lista');
   if(!items.length){lista.innerHTML='<div class="aviso">Nenhum item.</div>';return;}
   lista.innerHTML=items.map(p=>{const idx=DADOS.produtos.indexOf(p);

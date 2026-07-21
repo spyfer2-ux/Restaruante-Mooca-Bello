@@ -111,11 +111,13 @@ function setCat(id,el){ catAtiva=id; document.querySelectorAll('.cat-btn').forEa
 function iconeCat(cat){ const c=CATS.find(x=>x.id===cat); return c?c.icone:'🍽️'; }
 function fmt(v){ return v.toFixed(2).replace('.',','); }
 
+function semAcento(t){return t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');}
 function render(){
-  const busca=(document.getElementById('busca').value||'').toLowerCase();
+  const busca=semAcento(document.getElementById('busca').value||'');
   let lista=PRODUTOS.filter(p=>{
-    const okCat = catAtiva==='todos' || p.cat===catAtiva;
-    const okBusca = !busca || p.nome.toLowerCase().includes(busca) || (p.desc||'').toLowerCase().includes(busca);
+    // buscando: procura no cardápio inteiro, ignorando a categoria selecionada
+    const okCat = busca ? true : (catAtiva==='todos' || p.cat===catAtiva);
+    const okBusca = !busca || semAcento(p.nome).includes(busca) || semAcento(p.desc||'').includes(busca);
     return okCat && okBusca;
   });
   let h='';
