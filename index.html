@@ -51,6 +51,11 @@
   .btn-ouro{ background:var(--ouro); color:#111; }
   .btn-linha{ background:transparent; color:var(--branco); border:2px solid var(--linha); }
   .total-modal{ font-size:1.4rem; color:var(--ouro); font-weight:800; text-align:right; margin-top:10px; }
+  .adds-btn{ background:transparent; border:1.5px solid var(--ouro); color:var(--ouro); border-radius:10px; padding:6px 10px; font-size:.85rem; font-weight:700; margin-top:6px; }
+  .adds-painel{ background:#241f19; border-radius:12px; padding:8px 10px; margin:6px 0 2px; }
+  .adds-linha{ display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid var(--linha); font-size:.9rem; }
+  .adds-linha:last-child{ border-bottom:none; }
+  .adds-tag{ color:var(--ouro); font-size:.8rem; }
 </style>
 </head>
 <body>
@@ -140,7 +145,8 @@ function mudar(id,d){
   if(document.getElementById('modal-carrinho').classList.contains('on')) renderPedido();
 }
 
-function totais(){ let q=0,t=0; Object.values(carrinho).forEach(i=>{q+=i.qtd; t+=i.qtd*i.preco;}); return {q,t}; }
+function addsSum(i){ let s=0; Object.entries(i.adds||{}).forEach(([eid,q])=>{ const e=PRODUTOS.find(x=>x.id==eid); if(e&&q>0) s+=e.preco*q; }); return s; }
+function totais(){ let q=0,t=0; Object.values(carrinho).forEach(i=>{q+=i.qtd; t+=i.qtd*(i.preco+addsSum(i));}); return {q,t}; }
 function atualizarBarra(){
   const {q,t}=totais(); const b=document.getElementById('barra-carrinho');
   document.getElementById('cart-qtd').textContent=q; document.getElementById('cart-total').textContent=fmt(t);
@@ -148,11 +154,33 @@ function atualizarBarra(){
 }
 function abrirCarrinho(){ renderPedido(); document.getElementById('modal-carrinho').classList.add('on'); }
 function fecharCarrinho(){ document.getElementById('modal-carrinho').classList.remove('on'); }
+let addsAberto=null;
+function toggleAdds(id){ addsAberto = (addsAberto===id?null:id); renderPedido(); }
+function mudarAddCar(itemId, extraId, d){
+  const it=carrinho[itemId]; if(!it)return;
+  it.adds=it.adds||{}; it.adds[extraId]=(it.adds[extraId]||0)+d;
+  if(it.adds[extraId]<=0) delete it.adds[extraId];
+  renderPedido(); atualizarBarra();
+}
+function comidas(cat){ return ['semanal','porcoes','salgados','cafe'].includes(cat); }
 function renderPedido(){
   let h=''; const {t}=totais();
+  const extras=PRODUTOS.filter(p=>p.cat==='extras');
   Object.values(carrinho).forEach(i=>{
-    h+='<div class="linha-ped"><div class="info"><b>'+i.nome+'</b><br><small>R$ '+fmt(i.preco)+' cada</small></div>'+
+    const nAdds=Object.values(i.adds||{}).reduce((s,q)=>s+q,0);
+    const addsTxt=Object.entries(i.adds||{}).map(([eid,q])=>{const e=PRODUTOS.find(x=>x.id==eid);return e?('+ '+q+'x '+e.nome):'';}).filter(Boolean).join(' · ');
+    h+='<div class="linha-ped"><div class="info"><b>'+i.nome+'</b><br><small>R$ '+fmt(i.preco+addsSum(i))+' cada</small>'+
+       (addsTxt?'<br><span class="adds-tag">'+addsTxt+'</span>':'')+
+       (comidas(i.cat)&&extras.length?'<br><button class="adds-btn" onclick="toggleAdds('+i.id+')">➕ Adicionais'+(nAdds?' ('+nAdds+')':'')+'</button>':'')+
+       '</div>'+
        '<div class="mini-ctrl"><button onclick="mudar('+i.id+',-1)">−</button><b>'+i.qtd+'</b><button onclick="mudar('+i.id+',1)">+</button></div></div>';
+    if(addsAberto===i.id&&comidas(i.cat)){
+      h+='<div class="adds-painel">'+extras.map(e=>{
+        const q=(i.adds||{})[e.id]||0;
+        return '<div class="adds-linha"><span>'+e.nome+' <small style="color:var(--ouro)">R$ '+fmt(e.preco)+'</small></span>'+
+          '<span class="mini-ctrl"><button onclick="mudarAddCar('+i.id+','+e.id+',-1)">−</button><b>'+q+'</b><button onclick="mudarAddCar('+i.id+','+e.id+',1)">+</button></span></div>';
+      }).join('')+'</div>';
+    }
   });
   document.getElementById('lista-pedido').innerHTML=h||'<p>Pedido vazio</p>';
   document.getElementById('modal-total').textContent=fmt(t);
@@ -169,16 +197,59 @@ function enviarCozinha(){
   cupom+='<div style="text-align:center"><b style="font-size:18px">BODEGA MOOCA BELLO</b><br>*** PEDIDO COZINHA ***</div><hr>';
   cupom+='Mesa/Cliente: <b>'+mesa+'</b><br>';
   cupom+='Data: '+agora.toLocaleString('pt-BR')+'<br><hr>';
-  Object.values(carrinho).forEach(i=>{ cupom+='<b>'+i.qtd+'x</b> '+i.nome+'<br>'; });
+  Object.values(carrinho).forEach(i=>{ cupom+='<b>'+i.qtd+'x</b> '+i.nome+'<br>';
+    Object.entries(i.adds||{}).forEach(([eid,q])=>{ const e=PRODUTOS.find(x=>x.id==eid); if(e&&q>0) cupom+='&nbsp;&nbsp;+ '+(q*i.qtd)+'x '+e.nome+'<br>'; }); });
   cupom+='<hr>';
   if(obs) cupom+='OBS: '+obs+'<br><hr>';
   cupom+='TOTAL: R$ '+fmt(t)+'<br>';
   cupom+='<div style="text-align:center;margin-top:8px">Comida • Bebida • Amigos</div></div>';
+  registrarNuvem(mesa,obs);
   const w=window.open('','_blank','width=320,height=600');
   w.document.write('<html><head><title>Pedido</title><style>@media print{@page{margin:4mm;size:80mm auto}}</style></head><body onload="window.print()">'+cupom+'</body></html>');
   w.document.close();
   setTimeout(()=>{ carrinho={}; document.getElementById('mesa').value=''; document.getElementById('obs').value=''; fecharCarrinho(); render(); }, 800);
 }
+
+/* ---- registro na nuvem: faturamento + tela da cozinha ---- */
+const API_URL='https://pdv-vendas.spyfer2.workers.dev';
+function hojeISO(){return new Date().toISOString().slice(0,10);}
+function agoraHM(){return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
+function uid(){return crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random();}
+function registrarNuvem(mesa,obs){
+  let fila; try{fila=JSON.parse(localStorage.getItem('fila_bmb'))||{};}catch(e){fila={};}
+  fila.vendas=fila.vendas||[];fila.pagamentos=fila.pagamentos||[];fila.pedidos=fila.pedidos||[];
+  const itens=[],linhas=[];
+  Object.values(carrinho).forEach(i=>{
+    itens.push({nome:i.nome,qtd:i.qtd,preco:i.preco});
+    linhas.push(i.qtd+'x '+i.nome);
+    Object.entries(i.adds||{}).forEach(([eid,q])=>{const e=PRODUTOS.find(x=>x.id==eid);if(!e||!(q>0))return;
+      itens.push({nome:'+ '+e.nome,qtd:q*i.qtd,preco:e.preco});linhas.push('   + '+(q*i.qtd)+'x '+e.nome);});
+  });
+  if(obs)linhas.push('   >> '+obs);
+  const mesaNum=parseInt(mesa)||0;
+  const cab=mesaNum?'':'Cliente: '+mesa;
+  fila.vendas.push({id:uid(),ts:Date.now(),data:hojeISO(),hora:agoraHM(),mesa:mesaNum,origem:'cardapio',itens:itens});
+  fila.pedidos.push({id:uid(),ts:Date.now(),data:hojeISO(),hora:agoraHM(),mesa:mesaNum,texto:(cab?cab+'\n':'')+linhas.join('\n')});
+  localStorage.setItem('fila_bmb',JSON.stringify(fila));
+  sincronizarNuvem();
+}
+async function sincronizarNuvem(){
+  let fila; try{fila=JSON.parse(localStorage.getItem('fila_bmb'))||{};}catch(e){return;}
+  const pend=(fila.vendas||[]).length+(fila.pagamentos||[]).length+(fila.pedidos||[]).length;
+  if(!pend||!navigator.onLine)return;
+  let pin=localStorage.getItem('pin_bmb');
+  if(!pin){pin=prompt('PIN do sistema (uma vez só neste aparelho):')||'';if(pin)localStorage.setItem('pin_bmb',pin.trim());}
+  pin=(pin||'').trim();if(!pin)return;
+  try{
+    const r=await fetch(API_URL+'/api/registros',{method:'POST',
+      headers:{'Content-Type':'application/json','X-PIN':pin},
+      body:JSON.stringify({vendas:fila.vendas||[],pagamentos:fila.pagamentos||[],pedidos:fila.pedidos||[]})});
+    if(r.ok){localStorage.setItem('fila_bmb',JSON.stringify({vendas:[],pagamentos:[],pedidos:[]}));}
+    else if(r.status===401){localStorage.removeItem('pin_bmb');}
+  }catch(e){}
+}
+window.addEventListener('online',sincronizarNuvem);
+setTimeout(sincronizarNuvem,1500);
 
 carregar();
 </script>
