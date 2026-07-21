@@ -424,6 +424,13 @@
    "foto": "fotos/smirnoff.jpg"
   },
   {
+   "cat": "drinks",
+   "nome": "Meia Dose de Pinga",
+   "desc": "51 ou Velho Barreiro",
+   "preco": 5.9,
+   "foto": "fotos/pinga.jpg"
+  },
+  {
    "cat": "cervejas",
    "nome": "Itaipava 350ml",
    "desc": "Lata",

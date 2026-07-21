@@ -57,3 +57,4 @@ Imagens obtidas do Wikimedia Commons (licenças livres). Fontes:
 - fotos/empada_frango.jpg — [File:Empanada - Stu Spivack.jpg](https://commons.wikimedia.org/wiki/File%3AEmpanada_-_Stu_Spivack.jpg)
 - fotos/esfiha_carne.jpg (atualizada) — [File:Fatayer.jpg](https://commons.wikimedia.org/wiki/File%3AFatayer.jpg)
 - fotos/esfiha_frango.jpg (atualizada) — [File:Heritage village fatayer (11389764333).jpg](https://commons.wikimedia.org/wiki/File%3AHeritage_village_fatayer_%2811389764333%29.jpg)
+- fotos/pinga.jpg — [File:Cachaca.JPG](https://commons.wikimedia.org/wiki/File%3ACachaca.JPG)
