@@ -46,3 +46,5 @@ Imagens obtidas do Wikimedia Commons (licenças livres). Fontes:
 - fotos/stella.jpg — [File:Stella Artois bottle.jpg](https://commons.wikimedia.org/wiki/File%3AStella_Artois_bottle.jpg)
 - fotos/heineken.jpg — [File:Heineken Bottle.jpg](https://commons.wikimedia.org/wiki/File%3AHeineken_Bottle.jpg)
 - fotos/draft600.jpg — foto do produto enviada pelo restaurante
+- fotos/spaten.jpg — [File:Spaten 001.jpg](https://commons.wikimedia.org/wiki/File%3ASpaten_001.jpg)
+- fotos/smirnoff.jpg — [File:Smirnoff Ice Original.jpg](https://commons.wikimedia.org/wiki/File%3ASmirnoff_Ice_Original.jpg)

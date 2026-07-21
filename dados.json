@@ -338,6 +338,20 @@
    "foto": "fotos/copao_askov.jpg"
   },
   {
+   "cat": "drinks",
+   "nome": "Smirnoff Ice Lata",
+   "desc": "",
+   "preco": 10.9,
+   "foto": ""
+  },
+  {
+   "cat": "drinks",
+   "nome": "Smirnoff Ice Long Neck",
+   "desc": "",
+   "preco": 12.9,
+   "foto": "fotos/smirnoff.jpg"
+  },
+  {
    "cat": "cervejas",
    "nome": "Itaipava 350ml",
    "desc": "Lata",
@@ -387,6 +401,20 @@
    "foto": "fotos/draft600.jpg"
   },
   {
+   "cat": "cervejas",
+   "nome": "Heineken 600ml",
+   "desc": "Garrafa 600ml",
+   "preco": 21.9,
+   "foto": "fotos/heineken.jpg"
+  },
+  {
+   "cat": "cervejas",
+   "nome": "Spaten 600ml",
+   "desc": "Garrafa 600ml",
+   "preco": 21.9,
+   "foto": "fotos/spaten.jpg"
+  },
+  {
    "cat": "refri",
    "nome": "Refri 200ml",
    "desc": "Coca-Cola, Coca Zero ou Guaraná Antarctica",
@@ -396,7 +424,7 @@
   {
    "cat": "refri",
    "nome": "Refri Lata 350ml",
-   "desc": "Coca, Coca Zero, Guaraná, Guaraná Zero, Pepsi, Pepsi Black, Fanta Laranja, Fanta Uva, Sprite, Schweppes",
+   "desc": "Fanta, Coca-Cola, Sprite, Schweppes, Guaraná (comum ou zero) e Itubaína",
    "preco": 7.9,
    "foto": "fotos/refri_lata.jpg"
   },
