@@ -56,8 +56,12 @@
   .adds-linha{ display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid var(--linha); font-size:.9rem; }
   .adds-linha:last-child{ border-bottom:none; }
   .adds-tag{ color:var(--ouro); font-size:.8rem; }
-  .mesa-btn{ display:block; text-align:center; background:var(--card); color:var(--branco); border:2px solid var(--linha); border-radius:10px; padding:9px 0; font-size:.9rem; font-weight:800; text-decoration:none; }
-  .mesa-btn .ped{ display:block; font-size:.62rem; font-weight:600; margin-top:2px; color:var(--ouro); }
+  .mesa-btn{ display:block; width:100%; text-align:center; background:var(--card); color:var(--branco); border:2px solid var(--linha); border-radius:10px; padding:9px 0; font-size:.9rem; font-weight:800; text-decoration:none; font-family:inherit; cursor:pointer; }
+  .mesa-btn .ped{ display:block; font-size:.62rem; font-weight:600; margin-top:2px; }
+  .mesa-btn.livre{ background:#1e4d2b; border-color:#2a6d3d; color:#c6f0a8; }
+  .mesa-btn.livre .ped{ color:#8fc98f; }
+  .mesa-btn.ocupada{ background:#5a1f1f; border-color:#7a2b2b; color:#f5c6c6; }
+  .mesa-btn.ocupada .ped{ color:#f0a8a8; }
 </style>
 </head>
 <body>
@@ -88,6 +92,15 @@
   <span>Ver pedido • R$ <span id="cart-total">0,00</span></span>
 </div>
 
+<div class="modal" id="modal-mesa">
+  <div class="modal-box">
+    <h2 id="mesaPrevTit">Mesa</h2>
+    <div id="mesaPrevConteudo"></div>
+    <button class="btn-grande btn-ouro" onclick="irComanda()">🧾 Abrir comanda</button>
+    <button class="btn-grande btn-linha" onclick="fecharPreviewMesa()">Fechar</button>
+  </div>
+</div>
+
 <div class="modal" id="modal-carrinho">
   <div class="modal-box">
     <h2>🛒 Seu Pedido</h2>
@@ -103,23 +116,54 @@
 <script>
 let PRODUTOS=[], CATS=[], catAtiva='todos', carrinho={};
 
+function comandasSalvas(){ let c={}; try{c=JSON.parse(localStorage.getItem('comandas_bmb'))||{};}catch(e){} return c; }
+
 function renderMesasHome(){
-  let comandas={};try{comandas=JSON.parse(localStorage.getItem('comandas_bmb'))||{};}catch(e){}
+  const comandas=comandasSalvas();
   let h='';
   for(let i=1;i<=8;i++){
-    const c=comandas[i];let ped='';
-    if(c&&c.itens&&c.itens.length){
+    const c=comandas[i];
+    const ocupada = c && c.itens && c.itens.length>0;
+    let ped='';
+    if(ocupada){
       const tot=c.itens.reduce((s,it)=>{
         const addsTot=(it.adds||[]).reduce((s2,a)=>s2+a.preco*a.qtd,0);
         return s+(it.preco+addsTot)*it.qtd;
       },0);
       ped='<span class="ped">'+(c.status==='enviada'?'✅ R$ '+tot.toFixed(2).replace('.',','):c.itens.length+' item(s)')+'</span>';
     }
-    h+='<a class="mesa-btn" href="garcom.html?tab=comanda&mesa='+i+'">'+i+ped+'</a>';
+    h+='<button type="button" class="mesa-btn '+(ocupada?'ocupada':'livre')+'" onclick="abrirPreviewMesa('+i+')">'+i+ped+'</button>';
   }
   document.getElementById('mesasHome').innerHTML=h;
 }
 renderMesasHome();
+
+let mesaPrevSel=null;
+function abrirPreviewMesa(mesa){
+  mesaPrevSel=mesa;
+  const comandas=comandasSalvas();
+  const c=comandas[mesa];
+  document.getElementById('mesaPrevTit').textContent='Mesa '+mesa+(c&&c.status==='enviada'?' — enviada à cozinha':'');
+  let h='';
+  if(c&&c.itens&&c.itens.length){
+    let tot=0;
+    c.itens.forEach(it=>{
+      const addsTot=(it.adds||[]).reduce((s,a)=>s+a.preco*a.qtd,0);
+      const sub=(it.preco+addsTot)*it.qtd; tot+=sub;
+      h+='<div class="linha-ped"><div class="info"><b>'+it.qtd+'x '+it.nome+'</b>'+
+         ((it.adds&&it.adds.length)?'<br><span class="adds-tag">'+it.adds.map(a=>'+ '+a.qtd+'x '+a.nome).join(' · ')+'</span>':'')+
+         (it.obs?'<br><small style="color:#a99e88">obs: '+it.obs+'</small>':'')+
+         '</div><b style="color:var(--ouro)">R$ '+sub.toFixed(2).replace('.',',')+'</b></div>';
+    });
+    h+='<div class="total-modal">Total: R$ '+tot.toFixed(2).replace('.',',')+'</div>';
+  }else{
+    h='<p style="padding:10px 0;color:#a99e88">Mesa livre — nenhum item lançado ainda.</p>';
+  }
+  document.getElementById('mesaPrevConteudo').innerHTML=h;
+  document.getElementById('modal-mesa').classList.add('on');
+}
+function fecharPreviewMesa(){ document.getElementById('modal-mesa').classList.remove('on'); }
+function irComanda(){ if(mesaPrevSel) location.href='garcom.html?tab=comanda&mesa='+mesaPrevSel; }
 
 async function carregar(){
   try{
