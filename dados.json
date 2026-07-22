@@ -7,11 +7,6 @@
  },
  "categorias": [
   {
-   "id": "cafe",
-   "nome": "Café da Manhã",
-   "icone": "☕"
-  },
-  {
    "id": "semanal",
    "nome": "Almoço (Semanal)",
    "icone": "🍛"
@@ -53,63 +48,72 @@
    "nome": "Buffet Café da Manhã",
    "desc": "Bebida (café coado ou com leite) + 1 acompanhamento",
    "preco": 24.9,
-   "foto": "fotos/cafe_completo.jpg"
+   "foto": "fotos/cafe_completo.jpg",
+   "ativo": false
   },
   {
    "cat": "cafe",
    "nome": "Pão com Manteiga na Chapa",
    "desc": "Pão francês na chapa com manteiga",
    "preco": 7.9,
-   "foto": "fotos/pao_manteiga.jpg"
+   "foto": "fotos/pao_manteiga.jpg",
+   "ativo": false
   },
   {
    "cat": "cafe",
    "nome": "Pão na Chapa com Requeijão",
    "desc": "Pão francês na chapa com requeijão cremoso",
    "preco": 12.9,
-   "foto": "fotos/pao_requeijao.jpg"
+   "foto": "fotos/pao_requeijao.jpg",
+   "ativo": false
   },
   {
    "cat": "cafe",
    "nome": "Pão com Ovo",
    "desc": "Pão francês com ovo frito",
    "preco": 11.9,
-   "foto": "fotos/pao_ovo.jpg"
+   "foto": "fotos/pao_ovo.jpg",
+   "ativo": false
   },
   {
    "cat": "cafe",
    "nome": "Pão com Ovo e Muçarela",
    "desc": "Pão francês com ovo frito e muçarela",
    "preco": 15.9,
-   "foto": "fotos/pao_ovo_mucarela.jpg"
+   "foto": "fotos/pao_ovo_mucarela.jpg",
+   "ativo": false
   },
   {
    "cat": "cafe",
    "nome": "Misto Quente",
    "desc": "Pão francês com presunto e muçarela, grelhado",
    "preco": 14.9,
-   "foto": "fotos/misto_quente.jpg"
+   "foto": "fotos/misto_quente.jpg",
+   "ativo": false
   },
   {
    "cat": "cafe",
    "nome": "Pão de Queijo (2 unidades)",
    "desc": "Tradicional e quentinho",
    "preco": 10.9,
-   "foto": "fotos/pao_queijo.jpg"
+   "foto": "fotos/pao_queijo.jpg",
+   "ativo": false
   },
   {
    "cat": "cafe",
    "nome": "Café Coado",
    "desc": "",
    "preco": 6.9,
-   "foto": "fotos/cafe_coado.jpg"
+   "foto": "fotos/cafe_coado.jpg",
+   "ativo": false
   },
   {
    "cat": "cafe",
    "nome": "Café com Leite",
    "desc": "",
    "preco": 8.9,
-   "foto": "fotos/cafe_com_leite.jpg"
+   "foto": "fotos/cafe_com_leite.jpg",
+   "ativo": false
   },
   {
    "cat": "semanal",
@@ -719,14 +723,16 @@
    "nome": "Chocolate Quente",
    "desc": "Chocolate quente cremoso.",
    "preco": 13,
-   "foto": "fotos/chocolate_quente.jpg"
+   "foto": "fotos/chocolate_quente.jpg",
+   "ativo": false
   },
   {
    "cat": "cafe",
    "nome": "Mini Pão de Queijo (unidade)",
    "desc": "Mini pão de queijo, por unidade.",
    "preco": 1,
-   "foto": "fotos/mini_pao_queijo.jpg"
+   "foto": "fotos/mini_pao_queijo.jpg",
+   "ativo": false
   },
   {
    "cat": "refri",
