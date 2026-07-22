@@ -679,9 +679,9 @@
   },
   {
    "cat": "extras",
-   "nome": "Ovo Frito (2 un)",
+   "nome": "Ovo Frito (unidade)",
    "desc": "",
-   "preco": 5.0,
+   "preco": 4.0,
    "foto": "fotos/ovo_frito.jpg"
   },
   {
