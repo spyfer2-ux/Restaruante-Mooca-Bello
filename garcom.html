@@ -21,10 +21,10 @@
   .tabsec{display:none;}
   .tabsec.active{display:block;}
   .secao-tit{padding:12px 12px 4px;font-size:13px;color:#8a7c64;text-transform:uppercase;letter-spacing:1px;}
-  .mesas{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:8px 12px;}
-  .mesa-btn{background:#221a12;color:#e9dcc4;border:1px solid #3a2d1c;padding:16px 0;border-radius:12px;font-size:18px;font-weight:700;cursor:pointer;transition:.15s;}
+  .mesas{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:6px 12px;}
+  .mesa-btn{background:#221a12;color:#e9dcc4;border:1px solid #3a2d1c;padding:9px 0;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:.15s;}
   .mesa-btn.active{background:var(--ouro);color:#1b1409;border-color:var(--ouro);}
-  .mesa-btn .ped{display:block;font-size:10px;font-weight:600;margin-top:3px;color:#c98;}
+  .mesa-btn .ped{display:block;font-size:9px;font-weight:600;margin-top:2px;color:#c98;}
   .mesa-btn.active .ped{color:#5a3a12;}
   .cats{display:flex;gap:8px;overflow-x:auto;padding:10px 12px;background:#17130f;border-bottom:1px solid #2a2118;scrollbar-width:none;}
   .cats::-webkit-scrollbar{display:none;}
@@ -132,45 +132,24 @@
   .linha b{color:var(--ouro);white-space:nowrap;}
   .btn-csv{display:block;margin:16px 12px;width:calc(100% - 24px);background:#2a4d1e;color:#c6f0a8;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;}
 
-  /* ---- Login ---- */
-  .login-overlay{position:fixed;inset:0;background:#0d0b09;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;}
-  .login-overlay.hidden{display:none;}
-  .login-box{background:#17130f;border:1px solid var(--ouro);border-radius:16px;padding:26px 22px;max-width:340px;width:100%;text-align:center;}
-  .login-box h1{color:var(--ouro);font-size:20px;margin-bottom:4px;}
-  .login-box p{color:#8a7c64;font-size:13px;margin-bottom:20px;}
-  .login-box input{width:100%;padding:13px;border-radius:10px;border:1px solid #3a2d1c;background:#1a140e;color:#fff;font-size:16px;margin-bottom:10px;}
-  .login-box input::placeholder{color:#6b5c44;}
-  .login-box button{width:100%;background:var(--ouro);color:#1b1409;border:none;border-radius:10px;padding:14px;font-size:16px;font-weight:800;cursor:pointer;margin-top:4px;}
-  .login-erro{color:#e79c9c;font-size:13px;margin-top:10px;min-height:16px;}
-  .sair-link{color:#8a7c64;text-decoration:underline;cursor:pointer;}
+  .btn-desbloq{background:#221a12;border:1px solid var(--ouro);color:var(--ouro);border-radius:10px;padding:11px 12px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;}
 </style>
 </head>
 <body>
 
-<div class="login-overlay" id="loginOverlay">
-  <div class="login-box">
-    <h1>🔐 Entrar no PDV</h1>
-    <p>Bodega Mooca Bello</p>
-    <input id="loginUsuario" type="text" placeholder="Usuário" autocomplete="username" autocapitalize="off">
-    <input id="loginSenha" type="password" placeholder="Senha" autocomplete="current-password">
-    <button onclick="fazerLogin()">Entrar</button>
-    <div class="login-erro" id="loginErro"></div>
-  </div>
-</div>
-
-<div id="appContent" style="display:none">
+<div id="appContent">
 <div class="topo">
   <header>
     <a class="cx-btn" style="right:auto;left:12px;text-decoration:none" href="index.html">🏠 Início</a>
     <h1>🧾 Bodega Mooca Bello — PDV</h1>
     <button class="cx-btn" onclick="abrirCaixa()">💰 Caixa</button>
   </header>
-  <div class="nuvem-line"><span id="nuvem" onclick="sincronizar(true)" style="cursor:pointer;text-decoration:underline">☁️</span> · <span id="usuarioLogado"></span> · <span class="sair-link" onclick="sair()">🚪 Sair</span></div>
+  <div class="nuvem-line"><span id="nuvem" onclick="sincronizar(true)" style="cursor:pointer;text-decoration:underline">☁️</span></div>
   <div class="tabbar" id="tabbar">
     <button class="tab-btn active" data-tab="comanda" onclick="switchTab('comanda')">🧾 Comanda</button>
     <button class="tab-btn" data-tab="cozinha" onclick="switchTab('cozinha')">👨‍🍳 Cozinha<span class="tab-badge" id="badgeCozinha" style="display:none">0</span></button>
     <button class="tab-btn" data-tab="fiado" onclick="switchTab('fiado')">📒 Fiado</button>
-    <button class="tab-btn" data-tab="relatorio" onclick="switchTab('relatorio')">📊 Faturamento</button>
+    <button class="tab-btn" data-tab="relatorio" onclick="tentarAbrirFaturamento()">📊 Faturamento</button>
   </div>
 </div>
 
@@ -213,6 +192,7 @@
   <div style="display:flex;gap:8px;padding:10px 12px 0;align-items:center">
     <input id="buscaNome" type="search" placeholder="🔎 Buscar pessoa..." oninput="renderFiado()"
       style="flex:1;padding:12px;border-radius:12px;border:1px solid #3a2d1c;background:#1a140e;color:#fff;font-size:15px">
+    <button class="btn-desbloq" id="btnDesbloqFiado" onclick="desbloquearFiado()">🔓 Ver valores</button>
   </div>
   <div class="total-geral" id="totalGeral"></div>
   <div id="listaFiado"></div>
@@ -309,56 +289,24 @@ function semAcento(t){return (t||'').toLowerCase().normalize('NFD').replace(/[\u
 function uid(){return crypto.randomUUID?crypto.randomUUID():(Date.now()+'-'+Math.random());}
 
 /* ---------------------------------------------------------------
-   LOGIN / SESSÃO POR PAPEL (garçom / gerente / cozinha)
+   SENHA ÚNICA DO FATURAMENTO (protege Faturamento e os valores do Fiado)
    --------------------------------------------------------------- */
-const LS_SESSAO='sessao_bmb';
-let SESSAO=null;
+const SENHA_FATURAMENTO='1408';
+let PIN_OK=false;
 function headersAuth(extra){
   const h=Object.assign({},extra||{});
-  if(SESSAO){h['X-Usuario']=SESSAO.usuario;h['X-Senha']=SESSAO.senha;}
+  if(PIN_OK) h['X-PIN']=SENHA_FATURAMENTO;
   return h;
 }
-async function fazerLogin(){
-  const usuario=(document.getElementById('loginUsuario').value||'').trim();
-  const senha=(document.getElementById('loginSenha').value||'').trim();
-  const erroEl=document.getElementById('loginErro');
-  erroEl.textContent='';
-  if(!usuario||!senha){erroEl.textContent='Preencha usuário e senha.';return;}
-  try{
-    const r=await fetch(API_URL+'/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({usuario,senha})});
-    const d=await r.json();
-    if(!d.ok){erroEl.textContent=d.erro||'Usuário ou senha incorretos.';return;}
-    SESSAO={usuario:usuario,senha:senha,papel:d.papel};
-    localStorage.setItem(LS_SESSAO,JSON.stringify(SESSAO));
-    entrarNoApp();
-  }catch(e){erroEl.textContent='Sem conexão com a internet agora. Tente de novo.';}
+function pedirSenha(cb){
+  if(PIN_OK){cb();return;}
+  const s=prompt('Senha do Faturamento:');
+  if(s===null)return;
+  if(s.trim()===SENHA_FATURAMENTO){PIN_OK=true;cb();}
+  else alert('Senha incorreta.');
 }
-function sair(){
-  if(!confirm('Sair do PDV?'))return;
-  localStorage.removeItem(LS_SESSAO);
-  location.reload();
-}
-const TABS_POR_PAPEL={
-  garcom:['comanda','cozinha','fiado'],
-  gerente:['comanda','cozinha','fiado','relatorio'],
-  cozinha:['cozinha'],
-};
-function aplicarPermissoesPapel(){
-  const permitidas=TABS_POR_PAPEL[SESSAO.papel]||[];
-  document.getElementById('usuarioLogado').textContent=SESSAO.usuario+' ('+SESSAO.papel+')';
-  document.querySelectorAll('.tab-btn').forEach(b=>{b.style.display=permitidas.includes(b.dataset.tab)?'':'none';});
-  switchTab(permitidas[0]||'comanda');
-}
-function entrarNoApp(){
-  document.getElementById('loginOverlay').classList.add('hidden');
-  document.getElementById('appContent').style.display='';
-  aplicarPermissoesPapel();
-  init();
-}
-(function iniciarSessao(){
-  try{SESSAO=JSON.parse(localStorage.getItem(LS_SESSAO));}catch(e){SESSAO=null;}
-  if(SESSAO && SESSAO.usuario && SESSAO.senha && SESSAO.papel) entrarNoApp();
-})();
+function tentarAbrirFaturamento(){ pedirSenha(()=>{ switchTab('relatorio'); }); }
+function desbloquearFiado(){ pedirSenha(()=>{ renderFiado(); }); }
 
 /* ---------------------------------------------------------------
    NAVEGAÇÃO ENTRE ABAS
@@ -370,6 +318,7 @@ function switchTab(tab){
   const secId={comanda:'secComanda',cozinha:'secCozinha',fiado:'secFiado',relatorio:'secRelatorio'}[tab];
   document.getElementById(secId).classList.add('active');
   document.body.style.paddingBottom = (tab==='comanda') ? '150px' : '30px';
+  if(tab==='fiado') renderFiado();
   if(tab==='relatorio' && !relatorioCarregado){relatorioCarregado=true;renderPeriodos();carregarRelatorio();}
   try{ history.replaceState(null,'', location.pathname+'?tab='+tab); }catch(e){}
 }
@@ -445,16 +394,16 @@ async function init(){
   const r=await fetch('./dados.json?v='+Date.now());DADOS=await r.json();
   renderMesas();renderCats();render();renderComanda();
 
-  // escolhe a aba inicial pela URL (?tab=cozinha / fiado / relatorio), se vier de um atalho e o papel permitir
-  const permitidas=TABS_POR_PAPEL[SESSAO.papel]||[];
+  // escolhe a aba inicial pela URL (?tab=cozinha / fiado / relatorio), se vier de um atalho
   const tabPedida=new URLSearchParams(location.search).get('tab');
-  if(tabPedida && permitidas.includes(tabPedida)) switchTab(tabPedida);
+  if(tabPedida==='relatorio') tentarAbrirFaturamento();
+  else if(tabPedida) switchTab(tabPedida);
 
   // cozinha e fiado ficam de olho em segundo plano, mesmo em outra aba (pra avisar/atualizar na hora)
-  // — só liga o que o papel logado realmente pode ver.
-  if(permitidas.includes('cozinha')){carregarCozinha(); setInterval(carregarCozinha,8000);}
-  if(permitidas.includes('fiado')){carregarFiado(); setInterval(carregarFiado,30000);}
+  carregarCozinha(); setInterval(carregarCozinha,8000);
+  carregarFiado(); setInterval(carregarFiado,30000);
 }
+init();
 
 function getComanda(m){if(!comandas[m])comandas[m]={itens:[],status:'aberta'};return comandas[m];}
 function totalComanda(c){return c.itens.reduce((s,i)=>s+(i.preco+addsTot(i))*i.qtd,0);}
@@ -704,10 +653,8 @@ async function marcarPronto(id){
    FIADO — valores só aparecem pra quem logou como gerente
    --------------------------------------------------------------- */
 let FIADOS=[], nomeSel=null;
-let ADMIN=false;
 
 async function carregarFiado(){
-  ADMIN = SESSAO && SESSAO.papel==='gerente';
   const bar=document.getElementById('statusFi');
   try{
     const r=await fetch(API_URL+'/api/fiados',{headers:headersAuth()});
@@ -719,6 +666,9 @@ async function carregarFiado(){
 }
 
 function renderFiado(){
+  const admin=PIN_OK;
+  const btnD=document.getElementById('btnDesbloqFiado');
+  if(btnD) btnD.style.display = admin?'none':'';
   const busca=semAcento(document.getElementById('buscaNome').value||'');
   const visiveis=busca?FIADOS.filter(f=>semAcento(f.nome).includes(busca)):FIADOS;
   const porNome={};
@@ -726,15 +676,15 @@ function renderFiado(){
   const nomes=Object.keys(porNome).sort((a,b)=>a.localeCompare(b));
   const tot=visiveis.reduce((s,f)=>s+f.total,0);
   document.getElementById('totalGeral').innerHTML=visiveis.length?
-    (nomes.length+' pessoa(s) devendo'+(ADMIN?'<b>'+money(tot)+'</b>':'')):'';
+    (nomes.length+' pessoa(s) devendo'+(admin?'<b>'+money(tot)+'</b>':'')):'';
   document.getElementById('vazioFi').style.display=FIADOS.length?'none':'block';
   document.getElementById('listaFiado').innerHTML=nomes.map(n=>{
     const lancs=porNome[n]; const deve=lancs.reduce((s,f)=>s+f.total,0);
     return '<div class="cliente"><div class="cli-head" onclick="this.parentElement.classList.toggle(\'aberto\')">'+
-      '<span class="nome">'+n.replace(/</g,'&lt;')+'</span><span class="deve">'+(ADMIN?money(deve):(lancs.length+' anotação(ões)'))+'</span></div>'+
+      '<span class="nome">'+n.replace(/</g,'&lt;')+'</span><span class="deve">'+(admin?money(deve):(lancs.length+' anotação(ões)'))+'</span></div>'+
       '<div class="cli-corpo">'+lancs.map(f=>
-        '<div class="lanc"><div class="cab">'+fmtData(f.data)+' '+f.hora+(ADMIN?' — '+money(f.total):'')+'</div><pre>'+(ADMIN?f.texto:f.texto.replace(/R\$\s?[\d.,]+/g,'')).replace(/</g,'&lt;')+'</pre></div>').join('')+
-      (ADMIN?'<button class="btn-receber" onclick="abrirReceber(\''+encodeURIComponent(n)+'\')">✅ Receber '+money(deve)+'</button>':'')+
+        '<div class="lanc"><div class="cab">'+fmtData(f.data)+' '+f.hora+(admin?' — '+money(f.total):'')+'</div><pre>'+(admin?f.texto:f.texto.replace(/R\$\s?[\d.,]+/g,'')).replace(/</g,'&lt;')+'</pre></div>').join('')+
+      (admin?'<button class="btn-receber" onclick="abrirReceber(\''+encodeURIComponent(n)+'\')">✅ Receber '+money(deve)+'</button>':'')+
       '</div></div>';
   }).join('');
 }
