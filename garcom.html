@@ -3,14 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Comanda do Garçom - Bodega Mooca Bello</title>
+<title>PDV - Bodega Mooca Bello</title>
 <style>
   :root{--ouro:#c8962a;--preto:#141210;}
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
   body{font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#0d0b09;color:#f5efe2;padding-bottom:150px;}
-  header{background:var(--preto);padding:14px;text-align:center;border-bottom:3px solid var(--ouro);position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:center;gap:10px;}
-  header h1{color:var(--ouro);font-size:17px;letter-spacing:1px;}
+  .topo{position:sticky;top:0;z-index:25;background:var(--preto);}
+  header{padding:12px 14px;text-align:center;border-bottom:1px solid #2a2118;display:flex;align-items:center;justify-content:center;gap:10px;position:relative;}
+  header h1{color:var(--ouro);font-size:16px;letter-spacing:.5px;}
   .cx-btn{position:absolute;right:12px;background:#221a12;border:1px solid #3a2d1c;color:#e9dcc4;border-radius:20px;padding:8px 12px;font-size:13px;font-weight:700;cursor:pointer;}
+  .nuvem-line{text-align:center;font-size:11px;padding:4px 0;background:var(--preto);color:#8a7c64;}
+  #nuvem{font-weight:600;}
+  .tabbar{display:flex;background:#17130f;border-bottom:3px solid var(--ouro);}
+  .tab-btn{flex:1;text-align:center;padding:11px 2px;font-size:12px;font-weight:700;color:#b9b0a0;background:none;border:none;cursor:pointer;border-bottom:3px solid transparent;position:relative;margin-bottom:-3px;}
+  .tab-btn.active{color:var(--ouro);border-bottom-color:var(--ouro);}
+  .tab-badge{position:absolute;top:2px;right:8px;background:#c0392b;color:#fff;border-radius:10px;padding:1px 6px;font-size:10px;font-weight:800;line-height:1.3;}
+  .tabsec{display:none;}
+  .tabsec.active{display:block;}
   .secao-tit{padding:12px 12px 4px;font-size:13px;color:#8a7c64;text-transform:uppercase;letter-spacing:1px;}
   .mesas{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:8px 12px;}
   .mesa-btn{background:#221a12;color:#e9dcc4;border:1px solid #3a2d1c;padding:16px 0;border-radius:12px;font-size:18px;font-weight:700;cursor:pointer;transition:.15s;}
@@ -71,35 +80,130 @@
   .por-pessoa{color:var(--ouro);font-weight:700;font-size:15px;}
   .cx-linha{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #2a2118;font-size:14px;}
   .cx-tot{font-size:20px;font-weight:800;color:var(--ouro);text-align:center;margin:12px 0;}
+
+  /* ---- Cozinha ---- */
+  .pedidos{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;padding:12px;}
+  .pedido{background:#17130f;border:2px solid #c8962a;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;}
+  .pedido.novo{animation:pisca .6s ease 3;}
+  @keyframes pisca{0%,100%{border-color:#c8962a}50%{border-color:#8fc98f}}
+  .ped-head{background:linear-gradient(180deg,#e4bc5e,#c8962a);color:#1b1204;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;}
+  .ped-head .mesa{font-size:22px;font-weight:900;}
+  .ped-head .hora{font-size:14px;font-weight:700;}
+  .ped-corpo{padding:12px 14px;font-size:16px;line-height:1.6;white-space:pre-wrap;flex:1;}
+  .ped-btn{background:#2a4d1e;color:#c6f0a8;border:none;padding:16px;font-size:17px;font-weight:800;cursor:pointer;width:100%;}
+  .ped-btn:active{background:#3a6d2a;}
+  .contador{text-align:center;padding:8px;font-size:13px;color:#8a7c64;}
+
+  /* ---- status compartilhado (cozinha/fiado) ---- */
+  .status-bar{text-align:center;font-size:12px;padding:5px 0;background:#0d0b09;color:#8fc98f;}
+  .status-bar.off{color:#e79c9c;}
+  .vazio{padding:40px 20px;text-align:center;color:#6b5c44;font-size:15px;}
+
+  /* ---- Fiado ---- */
+  .total-geral{text-align:center;padding:12px;font-size:15px;color:#c9bda5;}
+  .total-geral b{color:var(--ouro);font-size:22px;display:block;}
+  .cliente{background:#17130f;border:1px solid #2a2118;border-radius:14px;margin:0 12px 12px;overflow:hidden;}
+  .cli-head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;cursor:pointer;}
+  .cli-head .nome{font-size:17px;font-weight:800;}
+  .cli-head .deve{color:var(--ouro);font-size:17px;font-weight:800;}
+  .cli-corpo{display:none;border-top:1px solid #2a2118;padding:10px 14px;}
+  .cliente.aberto .cli-corpo{display:block;}
+  .lanc{padding:8px 0;border-bottom:1px dashed #2a2118;font-size:13px;}
+  .lanc:last-of-type{border-bottom:none;}
+  .lanc .cab{color:#8a7c64;font-size:12px;margin-bottom:2px;}
+  .lanc pre{font-family:inherit;white-space:pre-wrap;line-height:1.5;}
+  .btn-receber{width:100%;background:#2a4d1e;color:#c6f0a8;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:800;cursor:pointer;margin-top:10px;}
+
+  /* ---- Relatório ---- */
+  .fonte{text-align:center;font-size:11px;padding:4px 0;background:#0d0b09;color:#8fc98f;}
+  .fonte.off{color:#e7b95c;}
+  .periodos{display:flex;gap:8px;overflow-x:auto;padding:12px;scrollbar-width:none;}
+  .periodos::-webkit-scrollbar{display:none;}
+  .p-btn{flex:0 0 auto;background:#221a12;color:#e9dcc4;border:1px solid #3a2d1c;padding:9px 14px;border-radius:20px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;}
+  .p-btn.active{background:var(--ouro);color:#1b1409;border-color:var(--ouro);}
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 12px;}
+  .card{background:#17130f;border:1px solid #2a2118;border-radius:14px;padding:14px;}
+  .card .lbl{font-size:12px;color:#8a7c64;text-transform:uppercase;letter-spacing:1px;}
+  .card .val{font-size:22px;font-weight:800;color:var(--ouro);margin-top:4px;}
+  .card.full{grid-column:1/-1;}
+  .sec{padding:16px 12px 4px;font-size:13px;color:#8a7c64;text-transform:uppercase;letter-spacing:1px;}
+  .linha{display:flex;justify-content:space-between;gap:8px;background:#17130f;border:1px solid #2a2118;border-radius:10px;padding:11px 12px;margin:0 12px 8px;font-size:14px;align-items:center;}
+  .linha .q{color:#8a7c64;font-size:12px;}
+  .linha b{color:var(--ouro);white-space:nowrap;}
+  .btn-csv{display:block;margin:16px 12px;width:calc(100% - 24px);background:#2a4d1e;color:#c6f0a8;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;}
 </style>
 </head>
 <body>
-<header>
-  <h1>🧾 Comanda do Garçom</h1>
-  <button class="cx-btn" style="right:auto;left:12px" onclick="location.href='relatorio.html'">📊 Relatório</button>
-  <button class="cx-btn" onclick="abrirCaixa()">💰 Caixa</button>
-</header>
 
-<div style="display:flex;justify-content:center;gap:16px;align-items:center;font-size:11px;padding:4px 0;background:#0d0b09"><span id="nuvem">☁️</span><a href="cozinha.html" style="color:#e4bc5e;font-weight:700;text-decoration:none">👨‍🍳 Tela da Cozinha</a><a href="fiado.html" style="color:#e4bc5e;font-weight:700;text-decoration:none">📒 Fiado</a></div>
-<div class="secao-tit">Mesa</div>
-<div class="mesas" id="mesas"></div>
-
-<div class="cats" id="cats"></div>
-<div class="search"><input id="busca" type="text" placeholder="🔎 Buscar item..."></div>
-<div class="lista" id="lista"></div>
-
-<div class="comanda" id="comanda">
-  <div class="comanda-head" onclick="toggleComanda()">
-    <div><span class="t">Comanda</span> <span id="mesaTag"></span></div>
-    <div class="tot" id="totHead">R$ 0,00 ▲</div>
-  </div>
-  <div class="comanda-body" id="comandaBody"></div>
-  <div class="comanda-foot">
-    <button class="btn btn-limpar" onclick="limparComanda()">🗑️</button>
-    <button class="btn btn-enviar" onclick="enviarCozinha()">📤 Cozinha</button>
-    <button class="btn btn-fechar-c" onclick="abrirFechamento()">💳 Fechar conta</button>
+<div class="topo">
+  <header>
+    <h1>🧾 Bodega Mooca Bello — PDV</h1>
+    <button class="cx-btn" onclick="abrirCaixa()">💰 Caixa</button>
+  </header>
+  <div class="nuvem-line"><span id="nuvem">☁️</span></div>
+  <div class="tabbar" id="tabbar">
+    <button class="tab-btn active" data-tab="comanda" onclick="switchTab('comanda')">🧾 Comanda</button>
+    <button class="tab-btn" data-tab="cozinha" onclick="switchTab('cozinha')">👨‍🍳 Cozinha<span class="tab-badge" id="badgeCozinha" style="display:none">0</span></button>
+    <button class="tab-btn" data-tab="fiado" onclick="switchTab('fiado')">📒 Fiado</button>
+    <button class="tab-btn" data-tab="relatorio" onclick="switchTab('relatorio')">📊 Faturamento</button>
   </div>
 </div>
+
+<!-- ============ SEÇÃO: COMANDA ============ -->
+<section class="tabsec active" id="secComanda">
+  <div class="secao-tit">Mesa</div>
+  <div class="mesas" id="mesas"></div>
+
+  <div class="cats" id="cats"></div>
+  <div class="search"><input id="busca" type="text" placeholder="🔎 Buscar item..."></div>
+  <div class="lista" id="lista"></div>
+
+  <div class="comanda" id="comanda">
+    <div class="comanda-head" onclick="toggleComanda()">
+      <div><span class="t">Comanda</span> <span id="mesaTag"></span></div>
+      <div class="tot" id="totHead">R$ 0,00 ▲</div>
+    </div>
+    <div class="comanda-body" id="comandaBody"></div>
+    <div class="comanda-foot">
+      <button class="btn btn-limpar" onclick="limparComanda()">🗑️</button>
+      <button class="btn btn-enviar" onclick="enviarCozinha()">📤 Cozinha</button>
+      <button class="btn btn-fechar-c" onclick="abrirFechamento()">💳 Fechar conta</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEÇÃO: COZINHA ============ -->
+<section class="tabsec" id="secCozinha">
+  <div class="secao-tit">👨‍🍳 Cozinha — Pedidos</div>
+  <div class="status-bar" id="statusCz">conectando...</div>
+  <div class="pedidos" id="pedidosCz"></div>
+  <div class="vazio" id="vazioCz" style="display:none">Nenhum pedido na fila.<br>Os pedidos aparecem aqui na hora que o garçom envia. 🔔</div>
+  <div class="contador" id="contadorCz"></div>
+</section>
+
+<!-- ============ SEÇÃO: FIADO ============ -->
+<section class="tabsec" id="secFiado">
+  <div class="secao-tit">📒 Fiado — Contas em Aberto</div>
+  <div class="status-bar" id="statusFi">carregando...</div>
+  <div style="display:flex;gap:8px;padding:10px 12px 0;align-items:center">
+    <input id="buscaNome" type="search" placeholder="🔎 Buscar pessoa..." oninput="renderFiado()"
+      style="flex:1;padding:12px;border-radius:12px;border:1px solid #3a2d1c;background:#1a140e;color:#fff;font-size:15px">
+    <button id="btnDono" onclick="modoDono()" style="background:#221a12;border:1px solid #3a2d1c;color:#e9dcc4;border-radius:12px;padding:12px;font-size:13px;font-weight:700;cursor:pointer">🔒 Valores</button>
+  </div>
+  <div class="total-geral" id="totalGeral"></div>
+  <div id="listaFiado"></div>
+  <div class="vazio" id="vazioFi" style="display:none">Ninguém devendo. 🎉<br>Pra anotar um fiado: na Comanda, Fechar conta → 📒 Fiado → nome do cliente.</div>
+</section>
+
+<!-- ============ SEÇÃO: RELATÓRIO / FATURAMENTO ============ -->
+<section class="tabsec" id="secRelatorio">
+  <div class="secao-tit">📊 Relatório de Vendas</div>
+  <div class="fonte" id="fonte">☁️ carregando...</div>
+  <div class="periodos" id="periodos"></div>
+  <div class="cards" id="cardsRel"></div>
+  <div id="conteudoRel"></div>
+  <button class="btn-csv" onclick="exportarCSV()">⬇️ Exportar planilha (CSV)</button>
+</section>
 
 <!-- modal envio cozinha -->
 <div class="modal" id="modalEnvio">
@@ -142,7 +246,7 @@
   <div class="modal-box" id="addsConteudo"></div>
 </div>
 
-<!-- modal caixa / faturamento -->
+<!-- modal caixa / faturamento do dia -->
 <div class="modal" id="modalCaixa">
   <div class="modal-box">
     <h2>💰 Caixa do dia</h2>
@@ -152,18 +256,60 @@
   </div>
 </div>
 
-<script>
-let DADOS=null, catAtual='todas', busca='', mesaAtual=1;
-let comandas={}, caixa=null, pgSel=null;
+<!-- modal receber (fiado) -->
+<div class="modal" id="modalPg">
+  <div class="modal-box">
+    <h2>💰 Receber de <span id="pgNome"></span></h2>
+    <p style="font-size:14px;color:#c9bda5">Total: <b id="pgTotal" style="color:var(--ouro)"></b> — como pagou?</p>
+    <div class="pgtos">
+      <button class="pg-btn" onclick="receber('Pix')">📱 Pix</button>
+      <button class="pg-btn" onclick="receber('Dinheiro')">💵 Dinheiro</button>
+      <button class="pg-btn" onclick="receber('Cartão')">💳 Cartão</button>
+    </div>
+    <button class="btn-fechar" style="width:100%;border:none;border-radius:10px;padding:12px;font-weight:700;cursor:pointer" onclick="document.getElementById('modalPg').classList.remove('open')">Cancelar</button>
+  </div>
+</div>
 
-const LS_COM='comandas_bmb', LS_CX='caixa_bmb', LS_HIST='historico_bmb';
+<script>
+/* ==================================================================
+   PDV UNIFICADO — Comanda + Cozinha + Fiado + Faturamento numa tela só
+   ================================================================== */
 const API_URL='https://pdv-vendas.spyfer2.workers.dev';
-const LS_PIN='pin_bmb', LS_FILA='fila_bmb';
-let historico=[], fila={vendas:[],pagamentos:[],pedidos:[]};
+const LS_PIN='pin_bmb';
 function getPin(){
   // PIN desativado temporariamente — não pede mais senha aqui.
   return (localStorage.getItem(LS_PIN)||'').trim();
 }
+function money(v){return 'R$ '+v.toFixed(2).replace('.',',');}
+function hoje(){return new Date().toISOString().slice(0,10);}
+function agora(){return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
+function fmtData(iso){return iso.split('-').reverse().join('/');}
+function semAcento(t){return (t||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');}
+function uid(){return crypto.randomUUID?crypto.randomUUID():(Date.now()+'-'+Math.random());}
+
+/* ---------------------------------------------------------------
+   NAVEGAÇÃO ENTRE ABAS
+   --------------------------------------------------------------- */
+let relatorioCarregado=false;
+function switchTab(tab){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab));
+  document.querySelectorAll('.tabsec').forEach(s=>s.classList.remove('active'));
+  const secId={comanda:'secComanda',cozinha:'secCozinha',fiado:'secFiado',relatorio:'secRelatorio'}[tab];
+  document.getElementById(secId).classList.add('active');
+  document.body.style.paddingBottom = (tab==='comanda') ? '150px' : '30px';
+  if(tab==='relatorio' && !relatorioCarregado){relatorioCarregado=true;renderPeriodos();carregarRelatorio();}
+  try{ history.replaceState(null,'', location.pathname+'?tab='+tab); }catch(e){}
+}
+
+/* ---------------------------------------------------------------
+   COMANDA DO GARÇOM
+   --------------------------------------------------------------- */
+let DADOS=null, catAtual='todas', busca='', mesaAtual=1;
+let comandas={}, caixa=null, pgSel=null;
+
+const LS_COM='comandas_bmb', LS_CX='caixa_bmb', LS_HIST='historico_bmb', LS_FILA='fila_bmb';
+let historico=[], fila={vendas:[],pagamentos:[],pedidos:[],fiados:[]};
+
 function salvarFila(){localStorage.setItem(LS_FILA,JSON.stringify(fila));atualizarNuvem();}
 function atualizarNuvem(){
   const el=document.getElementById('nuvem');if(!el)return;
@@ -180,9 +326,7 @@ async function sincronizar(){
   sincronizando=true;
   try{
     const headers={'Content-Type':'application/json'};if(pin)headers['X-PIN']=pin;
-    const r=await fetch(API_URL+'/api/registros',{method:'POST',
-      headers:headers,
-      body:JSON.stringify(fila)});
+    const r=await fetch(API_URL+'/api/registros',{method:'POST', headers:headers, body:JSON.stringify(fila)});
     if(r.status===401){localStorage.removeItem(LS_PIN);alert('PIN do banco de vendas incorreto. Tente de novo no próximo pedido.');}
     else if(r.ok){fila={vendas:[],pagamentos:[],pedidos:[],fiados:[]};localStorage.setItem(LS_FILA,JSON.stringify(fila));}
   }catch(e){/* offline — fica na fila */}
@@ -190,13 +334,11 @@ async function sincronizar(){
 }
 window.addEventListener('online',sincronizar);
 setInterval(sincronizar,60000);
-function hoje(){return new Date().toISOString().slice(0,10);}
-function agora(){return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
+
 function salvarCom(){localStorage.setItem(LS_COM,JSON.stringify(comandas));}
 function salvarCx(){localStorage.setItem(LS_CX,JSON.stringify(caixa));}
 function salvarHist(){localStorage.setItem(LS_HIST,JSON.stringify(historico));}
 function registrarVenda(c,origem){
-  // computa no faturamento tudo que ainda não foi registrado (qtd além do já enviado)
   const novos=[]; const linhas=[];
   c.itens.forEach(it=>{const env=it.env||0; if(it.qtd>env){const delta=it.qtd-env;
     novos.push({nome:it.nome,qtd:delta,preco:it.preco});
@@ -208,13 +350,11 @@ function registrarVenda(c,origem){
     const reg={tipo:'venda',origem:origem,data:hoje(),hora:agora(),mesa:mesaAtual,itens:novos,
       total:Math.round(novos.reduce((s,i)=>s+i.preco*i.qtd,0)*100)/100};
     historico.push(reg);salvarHist();
-    fila.vendas.push({id:(crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random()),ts:Date.now(),
-      data:reg.data,hora:reg.hora,mesa:reg.mesa,origem:origem,itens:novos});
+    fila.vendas.push({id:uid(),ts:Date.now(),data:reg.data,hora:reg.hora,mesa:reg.mesa,origem:origem,itens:novos});
     salvarFila();sincronizar();
   }
   return {novos:novos,linhas:linhas};
 }
-function money(v){return 'R$ '+v.toFixed(2).replace('.',',');}
 
 async function init(){
   try{comandas=JSON.parse(localStorage.getItem(LS_COM))||{};}catch(e){comandas={};}
@@ -226,6 +366,14 @@ async function init(){
   if(!caixa || caixa.dia!==hoje()){caixa={dia:hoje(),vendas:[]};salvarCx();}
   const r=await fetch('./dados.json?v='+Date.now());DADOS=await r.json();
   renderMesas();renderCats();render();renderComanda();
+
+  // escolhe a aba inicial pela URL (?tab=cozinha / fiado / relatorio), se vier de um atalho
+  const tabPedida=new URLSearchParams(location.search).get('tab');
+  if(tabPedida && ['comanda','cozinha','fiado','relatorio'].includes(tabPedida)) switchTab(tabPedida);
+
+  // cozinha e fiado ficam de olho em segundo plano, mesmo em outra aba (pra avisar/atualizar na hora)
+  carregarCozinha(); setInterval(carregarCozinha,8000);
+  carregarFiado(); setInterval(carregarFiado,30000);
 }
 
 function getComanda(m){if(!comandas[m])comandas[m]={itens:[],status:'aberta'};return comandas[m];}
@@ -251,8 +399,8 @@ function setCat(id){catAtual=id;renderCats();render();}
 document.getElementById('busca').addEventListener('input',e=>{busca=e.target.value.toLowerCase();render();});
 
 function render(){
-  const bn=busca?busca.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''):'';
-  let items=DADOS.produtos.filter(p=>p.ativo!==false&&(bn?true:(catAtual==='todas'||p.cat===catAtual))&&(!bn||p.nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').includes(bn)));
+  const bn=busca?semAcento(busca):'';
+  let items=DADOS.produtos.filter(p=>p.ativo!==false&&(bn?true:(catAtual==='todas'||p.cat===catAtual))&&(!bn||semAcento(p.nome).includes(bn)));
   const lista=document.getElementById('lista');
   if(!items.length){lista.innerHTML='<div class="aviso">Nenhum item.</div>';return;}
   lista.innerHTML=items.map(p=>{const idx=DADOS.produtos.indexOf(p);
@@ -261,7 +409,7 @@ function render(){
 
 function addItem(idx){
   const p=DADOS.produtos[idx];
-  if(['semanal','porcoes','salgados','cafe'].includes(p.cat)){abrirAdicionais(idx);return;} // pratos: pergunta adicionais
+  if(['semanal','porcoes','salgados','cafe'].includes(p.cat)){abrirAdicionais(idx);return;}
   addDireto(idx,[]);
 }
 function addDireto(idx,adds){
@@ -325,8 +473,7 @@ function enviarCozinha(){
   const reg=registrarVenda(c,'cozinha');
   if(reg.novos.length){
     fila.pedidos=fila.pedidos||[];
-    fila.pedidos.push({id:(crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random()),ts:Date.now(),
-      data:hoje(),hora:agora(),mesa:mesaAtual,texto:reg.linhas.join('\n')});
+    fila.pedidos.push({id:uid(),ts:Date.now(),data:hoje(),hora:agora(),mesa:mesaAtual,texto:reg.linhas.join('\n')});
     salvarFila();sincronizar();
   }
   c.status='enviada';salvarCom();renderMesas();renderComanda();
@@ -371,20 +518,19 @@ function confirmarFechamento(){
     c.itens.forEach(it=>{linhas.push(it.qtd+'x '+it.nome+'  '+money((it.preco+addsTot(it))*it.qtd));
       (it.adds||[]).forEach(a=>{linhas.push('   + '+(a.qtd*it.qtd)+'x '+a.nome);});});
     fila.fiados=fila.fiados||[];
-    fila.fiados.push({id:(crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random()),ts:Date.now(),
-      data:hoje(),hora:agora(),nome:nome,texto:linhas.join('\n'),total:t});
+    fila.fiados.push({id:uid(),ts:Date.now(),data:hoje(),hora:agora(),nome:nome,texto:linhas.join('\n'),total:t});
     salvarFila();sincronizar();
     comandas[mesaAtual]={itens:[],status:'aberta'};salvarCom();
     document.getElementById('fiadoNome').value='';
     fechar('modalFech');renderMesas();renderComanda();
-    alert('📒 Anotado no fiado de '+nome+'!\n'+money(t)+'\nVeja em Fiado no topo da tela.');
+    alert('📒 Anotado no fiado de '+nome+'!\n'+money(t)+'\nVeja na aba Fiado, no topo da tela.');
+    carregarFiado();
     return;
   }
-  registrarVenda(c,'fechamento'); // garante que item não enviado à cozinha também conte no faturamento
+  registrarVenda(c,'fechamento');
   historico.push({tipo:'pagamento',data:hoje(),hora:agora(),mesa:mesaAtual,total:t,pgto:pgSel,pessoas:n});
   salvarHist();
-  fila.pagamentos.push({id:(crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random()),ts:Date.now(),
-    data:hoje(),hora:agora(),mesa:mesaAtual,total:t,pgto:pgSel,pessoas:n});
+  fila.pagamentos.push({id:uid(),ts:Date.now(),data:hoje(),hora:agora(),mesa:mesaAtual,total:t,pgto:pgSel,pessoas:n});
   salvarFila();sincronizar();
   caixa.vendas.push({mesa:mesaAtual,total:t,pgto:pgSel,pessoas:n,hora:agora()});
   salvarCx();
@@ -413,6 +559,245 @@ function fecharCaixaDia(){
 
 function copiar(id){const t=document.getElementById(id).textContent;navigator.clipboard&&navigator.clipboard.writeText(t);alert('Copiado!');}
 function fechar(id){document.getElementById(id).classList.remove('open');}
+
+/* ---------------------------------------------------------------
+   COZINHA (pedidos)
+   --------------------------------------------------------------- */
+let ABERTOS=[], prontosHoje=0, idsConhecidosCz=new Set(), primeiraCargaCz=true;
+
+function beep(){
+  try{
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);
+    o.frequency.value=880;g.gain.value=0.3;
+    o.start();o.stop(ctx.currentTime+0.4);
+  }catch(e){}
+  if(navigator.vibrate)navigator.vibrate([200,100,200]);
+}
+
+async function carregarCozinha(){
+  const bar=document.getElementById('statusCz');
+  try{
+    const r=await fetch(API_URL+'/api/pedidos?status=aberto');
+    const d=await r.json();
+    ABERTOS=d.pedidos||[];
+    const novosIds=ABERTOS.filter(p=>!idsConhecidosCz.has(p.id)).map(p=>p.id);
+    if(novosIds.length&&!primeiraCargaCz)beep();
+    ABERTOS.forEach(p=>idsConhecidosCz.add(p.id));
+    primeiraCargaCz=false;
+    bar.textContent='🟢 ao vivo — atualiza sozinho';bar.classList.remove('off');
+    renderCozinha(novosIds);
+  }catch(e){
+    bar.textContent='📵 sem conexão — tentando de novo...';bar.classList.add('off');
+  }
+}
+
+function renderCozinha(novosIds){
+  novosIds=novosIds||[];
+  const div=document.getElementById('pedidosCz');
+  document.getElementById('vazioCz').style.display=ABERTOS.length?'none':'block';
+  div.innerHTML=ABERTOS.map(p=>
+    '<div class="pedido'+(novosIds.includes(p.id)?' novo':'')+'">'+
+      '<div class="ped-head"><span class="mesa">MESA '+p.mesa+'</span><span class="hora">'+p.hora+'</span></div>'+
+      '<div class="ped-corpo">'+p.texto.replace(/</g,'&lt;')+'</div>'+
+      '<button class="ped-btn" onclick="marcarPronto(\''+p.id+'\')">✅ PRONTO</button>'+
+    '</div>').join('');
+  document.getElementById('contadorCz').textContent=ABERTOS.length+' pedido(s) na fila · '+prontosHoje+' pronto(s) desde que abriu esta tela';
+  const badge=document.getElementById('badgeCozinha');
+  if(ABERTOS.length){badge.style.display='inline-block';badge.textContent=ABERTOS.length;}else{badge.style.display='none';}
+}
+
+async function marcarPronto(id){
+  const card=event&&event.target?event.target.closest('.pedido'):null;
+  if(card)card.style.opacity='0.4';
+  try{
+    const r=await fetch(API_URL+'/api/pedidos/pronto',{method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({id:id,hora:agora()})});
+    if(r.ok){prontosHoje++;ABERTOS=ABERTOS.filter(p=>p.id!==id);renderCozinha();}
+    else if(card)card.style.opacity='1';
+  }catch(e){if(card)card.style.opacity='1';alert('Sem conexão — tente de novo.');}
+}
+
+/* ---------------------------------------------------------------
+   FIADO
+   --------------------------------------------------------------- */
+let FIADOS=[], nomeSel=null;
+let ADMIN = sessionStorage.getItem('admin_ok')==='1';
+
+async function modoDono(){
+  if(ADMIN){ADMIN=false;sessionStorage.removeItem('admin_ok');renderFiado();return;}
+  const senha=(prompt('Senha do dono:')||'').trim();
+  if(!senha)return;
+  try{
+    const r=await fetch(API_URL+'/api/fiados',{headers:{'X-PIN':senha}});
+    if(r.status===401){alert('Senha incorreta.');return;}
+    localStorage.setItem(LS_PIN,senha);
+    ADMIN=true;sessionStorage.setItem('admin_ok','1');
+    carregarFiado();
+  }catch(e){alert('Sem conexão.');}
+}
+
+async function carregarFiado(){
+  const bar=document.getElementById('statusFi');
+  try{
+    const headers={};
+    const pinSalvo=localStorage.getItem(LS_PIN);
+    if(ADMIN&&pinSalvo)headers['X-PIN']=pinSalvo;
+    const r=await fetch(API_URL+'/api/fiados',{headers});
+    if(r.status===401){ADMIN=false;sessionStorage.removeItem('admin_ok');localStorage.removeItem(LS_PIN);bar.textContent='PIN incorreto — recarregue';bar.classList.add('off');renderFiado();return;}
+    const d=await r.json();
+    FIADOS=d.fiados||[];
+    bar.textContent='☁️ dados da nuvem';bar.classList.remove('off');
+    renderFiado();
+  }catch(e){bar.textContent='📵 sem conexão — tente recarregar';bar.classList.add('off');}
+}
+
+function renderFiado(){
+  document.getElementById('btnDono').textContent = ADMIN ? '🔓 Dono' : '🔒 Valores';
+  const busca=semAcento(document.getElementById('buscaNome').value||'');
+  const visiveis=busca?FIADOS.filter(f=>semAcento(f.nome).includes(busca)):FIADOS;
+  const porNome={};
+  visiveis.forEach(f=>{(porNome[f.nome]=porNome[f.nome]||[]).push(f);});
+  const nomes=Object.keys(porNome).sort((a,b)=>a.localeCompare(b));
+  const tot=visiveis.reduce((s,f)=>s+f.total,0);
+  document.getElementById('totalGeral').innerHTML=visiveis.length?
+    (nomes.length+' pessoa(s) devendo'+(ADMIN?'<b>'+money(tot)+'</b>':'')):'';
+  document.getElementById('vazioFi').style.display=FIADOS.length?'none':'block';
+  document.getElementById('listaFiado').innerHTML=nomes.map(n=>{
+    const lancs=porNome[n]; const deve=lancs.reduce((s,f)=>s+f.total,0);
+    return '<div class="cliente"><div class="cli-head" onclick="this.parentElement.classList.toggle(\'aberto\')">'+
+      '<span class="nome">'+n.replace(/</g,'&lt;')+'</span><span class="deve">'+(ADMIN?money(deve):(lancs.length+' anotação(ões)'))+'</span></div>'+
+      '<div class="cli-corpo">'+lancs.map(f=>
+        '<div class="lanc"><div class="cab">'+fmtData(f.data)+' '+f.hora+(ADMIN?' — '+money(f.total):'')+'</div><pre>'+(ADMIN?f.texto:f.texto.replace(/R\$\s?[\d.,]+/g,'')).replace(/</g,'&lt;')+'</pre></div>').join('')+
+      (ADMIN?'<button class="btn-receber" onclick="abrirReceber(\''+encodeURIComponent(n)+'\')">✅ Receber '+money(deve)+'</button>':'')+
+      '</div></div>';
+  }).join('');
+}
+
+function abrirReceber(nomeEnc){
+  nomeSel=decodeURIComponent(nomeEnc);
+  const deve=FIADOS.filter(f=>f.nome===nomeSel).reduce((s,f)=>s+f.total,0);
+  document.getElementById('pgNome').textContent=nomeSel;
+  document.getElementById('pgTotal').textContent=money(deve);
+  document.getElementById('modalPg').classList.add('open');
+}
+
+async function receber(pgto){
+  const pin=getPin();
+  const ids=FIADOS.filter(f=>f.nome===nomeSel).map(f=>f.id);
+  const d=new Date();
+  try{
+    const headers={'Content-Type':'application/json'};if(pin)headers['X-PIN']=pin;
+    const r=await fetch(API_URL+'/api/fiados/receber',{method:'POST',
+      headers:headers,
+      body:JSON.stringify({ids:ids,pgto:pgto,ts:Date.now(),
+        data:d.toISOString().slice(0,10),
+        hora:d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})})});
+    const resp=await r.json();
+    if(resp.ok){
+      document.getElementById('modalPg').classList.remove('open');
+      alert('✅ Recebido '+money(resp.recebido)+' de '+nomeSel+' ('+pgto+').\nEntrou no caixa de hoje.');
+      carregarFiado();
+    }else alert('Erro: '+(resp.erro||'tente de novo'));
+  }catch(e){alert('Sem conexão — tente de novo.');}
+}
+
+/* ---------------------------------------------------------------
+   RELATÓRIO / FATURAMENTO
+   --------------------------------------------------------------- */
+let VENDAS=[], PGTOS=[], periodo='hoje', online=false;
+function diasAtras(n){const d=new Date();d.setDate(d.getDate()-n);return d.toISOString().slice(0,10);}
+
+const PERIODOS=[
+  {id:'hoje', nome:'Hoje',      de:()=>hoje()},
+  {id:'ontem',nome:'Ontem',     de:()=>diasAtras(1), ate:()=>diasAtras(1)},
+  {id:'7',    nome:'7 dias',    de:()=>diasAtras(6)},
+  {id:'30',   nome:'30 dias',   de:()=>diasAtras(29)},
+  {id:'mes',  nome:'Este mês',  de:()=>hoje().slice(0,8)+'01'},
+  {id:'tudo', nome:'Tudo',      de:()=>'2000-01-01'},
+];
+function intervalo(){const p=PERIODOS.find(x=>x.id===periodo);return [p.de(), p.ate?p.ate():hoje()];}
+
+async function carregarRelatorio(){
+  const [de,ate]=intervalo();
+  const f=document.getElementById('fonte');
+  const pin=getPin();
+  try{
+    const r=await fetch(API_URL+'/api/relatorio?de='+de+'&ate='+ate,{headers: pin?{'X-PIN':pin}:{}});
+    if(r.status===401){localStorage.removeItem(LS_PIN);throw new Error('pin');}
+    const d=await r.json();
+    VENDAS=d.vendas||[];PGTOS=d.pagamentos||[];online=true;
+    f.textContent='☁️ dados da nuvem';f.classList.remove('off');
+    renderRelatorio();return;
+  }catch(e){}
+  online=false;
+  let hist=[];try{hist=JSON.parse(localStorage.getItem(LS_HIST))||[];}catch(e){}
+  VENDAS=[];PGTOS=[];
+  hist.forEach(r=>{
+    if(r.data<de||r.data>ate)return;
+    if(r.tipo==='venda')r.itens.forEach(i=>VENDAS.push({data:r.data,hora:r.hora,mesa:r.mesa,origem:r.origem,item:i.nome,qtd:i.qtd,preco:i.preco,total:Math.round(i.qtd*i.preco*100)/100}));
+    if(r.tipo==='pagamento')PGTOS.push({data:r.data,hora:r.hora,mesa:r.mesa,total:r.total,pgto:r.pgto,pessoas:r.pessoas});
+  });
+  f.textContent='📵 sem conexão com a nuvem — mostrando só as vendas deste aparelho';f.classList.add('off');
+  renderRelatorio();
+}
+
+function renderPeriodos(){
+  document.getElementById('periodos').innerHTML=PERIODOS.map(p=>
+    '<button class="p-btn '+(periodo===p.id?'active':'')+'" onclick="setPeriodo(\''+p.id+'\')">'+p.nome+'</button>').join('');
+}
+function setPeriodo(id){periodo=id;renderPeriodos();carregarRelatorio();}
+
+function renderRelatorio(){
+  const fat=VENDAS.reduce((s,v)=>s+v.total,0);
+  const nItens=VENDAS.reduce((s,v)=>s+v.qtd,0);
+  const pedidos=new Set(VENDAS.map(v=>v.data+'|'+v.hora+'|'+v.mesa)).size;
+
+  let cards='<div class="card full"><div class="lbl">💰 Faturamento (enviado à cozinha)</div><div class="val">'+money(fat)+'</div></div>';
+  cards+='<div class="card"><div class="lbl">Pedidos</div><div class="val">'+pedidos+'</div></div>';
+  cards+='<div class="card"><div class="lbl">Itens vendidos</div><div class="val">'+nItens+'</div></div>';
+  const porForma={};PGTOS.forEach(x=>porForma[x.pgto]=(porForma[x.pgto]||0)+x.total);
+  const recebido=PGTOS.reduce((s,x)=>s+x.total,0);
+  cards+='<div class="card full"><div class="lbl">💳 Contas fechadas: '+money(recebido)+'</div><div class="val" style="font-size:14px;color:#e9dcc4;font-weight:600">'+
+    (PGTOS.length? '📱 Pix '+money(porForma['Pix']||0)+' &nbsp;·&nbsp; 💵 Dinheiro '+money(porForma['Dinheiro']||0)+' &nbsp;·&nbsp; 💳 Cartão '+money(porForma['Cartão']||0) : 'Nenhuma conta fechada no período')+'</div></div>';
+  document.getElementById('cardsRel').innerHTML=cards;
+
+  let h='';
+  const rank={};
+  VENDAS.forEach(v=>{if(!rank[v.item])rank[v.item]={qtd:0,tot:0};rank[v.item].qtd+=v.qtd;rank[v.item].tot+=v.total;});
+  const top=Object.entries(rank).sort((a,b)=>b[1].tot-a[1].tot);
+  if(top.length){
+    h+='<div class="sec">🏆 Mais vendidos</div>';
+    top.forEach(([nome,x])=>{h+='<div class="linha"><span>'+nome+' <span class="q">×'+x.qtd+'</span></span><b>'+money(x.tot)+'</b></div>';});
+  }
+  const porDia={};
+  VENDAS.forEach(v=>{porDia[v.data]=(porDia[v.data]||0)+v.total;});
+  const dias=Object.entries(porDia).sort((a,b)=>b[0].localeCompare(a[0]));
+  if(dias.length>1){
+    h+='<div class="sec">📅 Por dia</div>';
+    dias.forEach(([d,t])=>{h+='<div class="linha"><span>'+fmtData(d)+'</span><b>'+money(t)+'</b></div>';});
+  }
+  if(VENDAS.length){
+    h+='<div class="sec">🧾 Últimos lançamentos</div>';
+    VENDAS.slice(0,40).forEach(v=>{
+      h+='<div class="linha"><span>'+fmtData(v.data)+' '+v.hora+' · Mesa '+v.mesa+'<br><span class="q">'+v.qtd+'x '+v.item+'</span></span><b>'+money(v.total)+'</b></div>';});
+  }
+  if(!VENDAS.length&&!PGTOS.length) h='<div class="vazio">Nenhuma venda registrada no período.<br>As vendas aparecem aqui quando os pedidos são enviados à cozinha.</div>';
+  document.getElementById('conteudoRel').innerHTML=h;
+}
+
+function exportarCSV(){
+  if(!VENDAS.length){alert('Nada para exportar neste período.');return;}
+  let csv='data;hora;mesa;item;quantidade;preco_unit;total\n';
+  VENDAS.forEach(v=>{
+    csv+=[fmtData(v.data),v.hora,v.mesa,'"'+v.item.replace(/"/g,'""')+'"',v.qtd,v.preco.toFixed(2).replace('.',','),v.total.toFixed(2).replace('.',',')].join(';')+'\n';
+  });
+  const blob=new Blob(["﻿"+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='vendas_'+periodo+'_'+hoje()+'.csv';a.click();
+}
 
 init();
 </script>
