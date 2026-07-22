@@ -340,18 +340,31 @@ function atualizarNuvem(){
   el.textContent=pend?('☁️ '+pend+' p/ enviar (toque p/ tentar agora)'):'☁️ tudo sincronizado';
   el.style.color=pend?'#e7b95c':'#8fc98f';
 }
-let sincronizando=false;
+let sincronizando=false, reexecutarSync=false;
 async function sincronizar(manual){
-  if(sincronizando)return;
-  const pend=fila.vendas.length+fila.pagamentos.length+(fila.pedidos||[]).length+(fila.fiados||[]).length;
+  if(sincronizando){ reexecutarSync=true; return; }
+  // tira uma "foto" do que existe agora — se algo novo entrar na fila (ex: outro registro)
+  // enquanto esse envio está no ar, isso NÃO pode ser apagado quando o envio atual terminar.
+  const snapshot=JSON.parse(JSON.stringify(fila));
+  const pend=snapshot.vendas.length+snapshot.pagamentos.length+(snapshot.pedidos||[]).length+(snapshot.fiados||[]).length;
   if(!pend){if(manual)alert('☁️ Tudo certo — não há nada pendente pra enviar.');return;}
   // não confiamos em navigator.onLine (é impreciso em vários celulares/PWAs) — tentamos enviar sempre
   // e só mantemos na fila se o próprio envio falhar de verdade.
   sincronizando=true;
   let erro=null;
   try{
-    const r=await fetch(API_URL+'/api/registros',{method:'POST', headers:headersAuth({'Content-Type':'application/json'}), body:JSON.stringify(fila)});
-    if(r.ok){fila={vendas:[],pagamentos:[],pedidos:[],fiados:[]};localStorage.setItem(LS_FILA,JSON.stringify(fila));}
+    const r=await fetch(API_URL+'/api/registros',{method:'POST', headers:headersAuth({'Content-Type':'application/json'}), body:JSON.stringify(snapshot)});
+    if(r.ok){
+      // remove da fila só o que foi enviado com sucesso (por id) — preserva qualquer item novo
+      // que tenha entrado na fila enquanto esse envio estava no ar (ex: um fiado registrado logo em seguida).
+      const idsV=new Set(snapshot.vendas.map(x=>x.id)), idsP=new Set(snapshot.pagamentos.map(x=>x.id));
+      const idsPd=new Set((snapshot.pedidos||[]).map(x=>x.id)), idsF=new Set((snapshot.fiados||[]).map(x=>x.id));
+      fila.vendas=fila.vendas.filter(x=>!idsV.has(x.id));
+      fila.pagamentos=fila.pagamentos.filter(x=>!idsP.has(x.id));
+      fila.pedidos=(fila.pedidos||[]).filter(x=>!idsPd.has(x.id));
+      fila.fiados=(fila.fiados||[]).filter(x=>!idsF.has(x.id));
+      localStorage.setItem(LS_FILA,JSON.stringify(fila));
+    }
     else{erro='servidor respondeu '+r.status;}
   }catch(e){erro='sem conexão com a internet agora';}
   sincronizando=false;atualizarNuvem();
@@ -359,6 +372,7 @@ async function sincronizar(manual){
     if(erro)alert('⚠️ Não consegui enviar ('+erro+'). Vai tentar de novo sozinho em instantes.');
     else alert('☁️ Sincronizado com sucesso!');
   }
+  if(reexecutarSync){ reexecutarSync=false; sincronizar(false); }
 }
 window.addEventListener('online',()=>sincronizar(false));
 setInterval(()=>sincronizar(false),20000);
@@ -794,11 +808,16 @@ function renderRelatorio(){
   document.getElementById('cardsRel').innerHTML=cards;
 
   let h='';
+  if(VENDAS.length){
+    h+='<div class="sec">🧾 Vendas do período — hora e produto</div>';
+    VENDAS.forEach(v=>{
+      h+='<div class="linha"><span>'+fmtData(v.data)+' · <b style="color:#e9dcc4">'+v.hora+'</b> · Mesa '+v.mesa+'<br><span class="q">'+v.qtd+'x '+v.item+'</span></span><b>'+money(v.total)+'</b></div>';});
+  }
   const rank={};
   VENDAS.forEach(v=>{if(!rank[v.item])rank[v.item]={qtd:0,tot:0};rank[v.item].qtd+=v.qtd;rank[v.item].tot+=v.total;});
   const top=Object.entries(rank).sort((a,b)=>b[1].tot-a[1].tot);
   if(top.length){
-    h+='<div class="sec">🏆 Mais vendidos</div>';
+    h+='<div class="sec">🏆 Mais vendidos (resumo do período)</div>';
     top.forEach(([nome,x])=>{h+='<div class="linha"><span>'+nome+' <span class="q">×'+x.qtd+'</span></span><b>'+money(x.tot)+'</b></div>';});
   }
   const porDia={};
@@ -807,11 +826,6 @@ function renderRelatorio(){
   if(dias.length>1){
     h+='<div class="sec">📅 Por dia</div>';
     dias.forEach(([d,t])=>{h+='<div class="linha"><span>'+fmtData(d)+'</span><b>'+money(t)+'</b></div>';});
-  }
-  if(VENDAS.length){
-    h+='<div class="sec">🧾 Últimos lançamentos</div>';
-    VENDAS.slice(0,40).forEach(v=>{
-      h+='<div class="linha"><span>'+fmtData(v.data)+' '+v.hora+' · Mesa '+v.mesa+'<br><span class="q">'+v.qtd+'x '+v.item+'</span></span><b>'+money(v.total)+'</b></div>';});
   }
   if(!VENDAS.length&&!PGTOS.length) h='<div class="vazio">Nenhuma venda registrada no período.<br>As vendas aparecem aqui quando os pedidos são enviados à cozinha.</div>';
   document.getElementById('conteudoRel').innerHTML=h;

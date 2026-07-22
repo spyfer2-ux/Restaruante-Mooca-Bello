@@ -310,21 +310,35 @@ function registrarNuvem(mesa,obs){
   localStorage.setItem('fila_bmb',JSON.stringify(fila));
   sincronizarNuvem();
 }
+let sincronizandoIndex=false, reexecutarSyncIndex=false;
 async function sincronizarNuvem(){
+  if(sincronizandoIndex){ reexecutarSyncIndex=true; return; }
   let fila; try{fila=JSON.parse(localStorage.getItem('fila_bmb'))||{};}catch(e){return;}
-  const pend=(fila.vendas||[]).length+(fila.pagamentos||[]).length+(fila.pedidos||[]).length;
+  // tira uma "foto" do que existe agora — se algo novo entrar na fila enquanto esse envio
+  // está no ar, isso não pode ser apagado quando o envio atual terminar.
+  const snapshot={vendas:fila.vendas||[],pagamentos:fila.pagamentos||[],pedidos:fila.pedidos||[],fiados:fila.fiados||[]};
+  const pend=snapshot.vendas.length+snapshot.pagamentos.length+snapshot.pedidos.length+snapshot.fiados.length;
   if(!pend)return;
-  // PIN desativado temporariamente — não pede mais senha aqui.
   // não confiamos em navigator.onLine (impreciso em vários celulares) — tentamos enviar sempre.
-  let pin=(localStorage.getItem('pin_bmb')||'').trim();
+  sincronizandoIndex=true;
   try{
-    const headers={'Content-Type':'application/json'};if(pin)headers['X-PIN']=pin;
     const r=await fetch(API_URL+'/api/registros',{method:'POST',
-      headers:headers,
-      body:JSON.stringify({vendas:fila.vendas||[],pagamentos:fila.pagamentos||[],pedidos:fila.pedidos||[],fiados:fila.fiados||[]})});
-    if(r.ok){localStorage.setItem('fila_bmb',JSON.stringify({vendas:[],pagamentos:[],pedidos:[],fiados:[]}));}
-    else if(r.status===401){localStorage.removeItem('pin_bmb');}
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(snapshot)});
+    if(r.ok){
+      // remove da fila só o que foi enviado com sucesso, preservando qualquer item novo adicionado nesse meio-tempo
+      let atual; try{atual=JSON.parse(localStorage.getItem('fila_bmb'))||{};}catch(e){atual={};}
+      const idsV=new Set(snapshot.vendas.map(x=>x.id)), idsP=new Set(snapshot.pagamentos.map(x=>x.id));
+      const idsPd=new Set(snapshot.pedidos.map(x=>x.id)), idsF=new Set(snapshot.fiados.map(x=>x.id));
+      atual.vendas=(atual.vendas||[]).filter(x=>!idsV.has(x.id));
+      atual.pagamentos=(atual.pagamentos||[]).filter(x=>!idsP.has(x.id));
+      atual.pedidos=(atual.pedidos||[]).filter(x=>!idsPd.has(x.id));
+      atual.fiados=(atual.fiados||[]).filter(x=>!idsF.has(x.id));
+      localStorage.setItem('fila_bmb',JSON.stringify(atual));
+    }
   }catch(e){}
+  sincronizandoIndex=false;
+  if(reexecutarSyncIndex){ reexecutarSyncIndex=false; sincronizarNuvem(); }
 }
 window.addEventListener('online',sincronizarNuvem);
 setInterval(sincronizarNuvem,20000);
