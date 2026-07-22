@@ -394,6 +394,10 @@ async function init(){
   const r=await fetch('./dados.json?v='+Date.now());DADOS=await r.json();
   renderMesas();renderCats();render();renderComanda();
 
+  // veio de um atalho "Mesa N" na tela inicial? já abre direto naquela mesa
+  const mesaPedida=parseInt(new URLSearchParams(location.search).get('mesa'));
+  if(mesaPedida>=1 && mesaPedida<=8) setMesa(mesaPedida);
+
   // escolhe a aba inicial pela URL (?tab=cozinha / fiado / relatorio), se vier de um atalho
   const tabPedida=new URLSearchParams(location.search).get('tab');
   if(tabPedida==='relatorio') tentarAbrirFaturamento();
