@@ -161,9 +161,8 @@ const API_URL='https://pdv-vendas.spyfer2.workers.dev';
 const LS_PIN='pin_bmb', LS_FILA='fila_bmb';
 let historico=[], fila={vendas:[],pagamentos:[],pedidos:[]};
 function getPin(){
-  let pin=localStorage.getItem(LS_PIN);
-  if(!pin){pin=prompt('PIN do banco de vendas (uma vez só neste aparelho):')||'';if(pin)localStorage.setItem(LS_PIN,pin.trim());}
-  return (pin||'').trim();
+  // PIN desativado temporariamente — não pede mais senha aqui.
+  return (localStorage.getItem(LS_PIN)||'').trim();
 }
 function salvarFila(){localStorage.setItem(LS_FILA,JSON.stringify(fila));atualizarNuvem();}
 function atualizarNuvem(){
@@ -177,11 +176,12 @@ async function sincronizar(){
   if(sincronizando)return;
   const pend=fila.vendas.length+fila.pagamentos.length+(fila.pedidos||[]).length+(fila.fiados||[]).length;
   if(!pend||!navigator.onLine)return;
-  const pin=getPin();if(!pin)return;
+  const pin=getPin();
   sincronizando=true;
   try{
+    const headers={'Content-Type':'application/json'};if(pin)headers['X-PIN']=pin;
     const r=await fetch(API_URL+'/api/registros',{method:'POST',
-      headers:{'Content-Type':'application/json','X-PIN':pin},
+      headers:headers,
       body:JSON.stringify(fila)});
     if(r.status===401){localStorage.removeItem(LS_PIN);alert('PIN do banco de vendas incorreto. Tente de novo no próximo pedido.');}
     else if(r.ok){fila={vendas:[],pagamentos:[],pedidos:[],fiados:[]};localStorage.setItem(LS_FILA,JSON.stringify(fila));}

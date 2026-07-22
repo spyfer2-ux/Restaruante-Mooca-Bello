@@ -63,18 +63,17 @@ const PERIODOS=[
 function intervalo(){const p=PERIODOS.find(x=>x.id===periodo);return [p.de(), p.ate?p.ate():hoje()];}
 
 function getPin(){
-  let pin=localStorage.getItem(LS_PIN);
-  if(!pin){pin=prompt('PIN do banco de vendas (uma vez só neste aparelho):')||'';if(pin)localStorage.setItem(LS_PIN,pin.trim());}
-  return (pin||'').trim();
+  // PIN desativado temporariamente — não pede mais senha aqui.
+  return (localStorage.getItem(LS_PIN)||'').trim();
 }
 
 async function carregar(){
   const [de,ate]=intervalo();
   const f=document.getElementById('fonte');
   const pin=getPin();
-  if(pin){
+  {
     try{
-      const r=await fetch(API_URL+'/api/relatorio?de='+de+'&ate='+ate,{headers:{'X-PIN':pin}});
+      const r=await fetch(API_URL+'/api/relatorio?de='+de+'&ate='+ate,{headers: pin?{'X-PIN':pin}:{}});
       if(r.status===401){localStorage.removeItem(LS_PIN);throw new Error('pin');}
       const d=await r.json();
       VENDAS=d.vendas||[];PGTOS=d.pagamentos||[];online=true;

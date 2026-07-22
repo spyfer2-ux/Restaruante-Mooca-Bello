@@ -245,12 +245,12 @@ async function sincronizarNuvem(){
   let fila; try{fila=JSON.parse(localStorage.getItem('fila_bmb'))||{};}catch(e){return;}
   const pend=(fila.vendas||[]).length+(fila.pagamentos||[]).length+(fila.pedidos||[]).length;
   if(!pend||!navigator.onLine)return;
-  let pin=localStorage.getItem('pin_bmb');
-  if(!pin){pin=prompt('PIN do sistema (uma vez só neste aparelho):')||'';if(pin)localStorage.setItem('pin_bmb',pin.trim());}
-  pin=(pin||'').trim();if(!pin)return;
+  // PIN desativado temporariamente — não pede mais senha aqui.
+  let pin=(localStorage.getItem('pin_bmb')||'').trim();
   try{
+    const headers={'Content-Type':'application/json'};if(pin)headers['X-PIN']=pin;
     const r=await fetch(API_URL+'/api/registros',{method:'POST',
-      headers:{'Content-Type':'application/json','X-PIN':pin},
+      headers:headers,
       body:JSON.stringify({vendas:fila.vendas||[],pagamentos:fila.pagamentos||[],pedidos:fila.pedidos||[],fiados:fila.fiados||[]})});
     if(r.ok){localStorage.setItem('fila_bmb',JSON.stringify({vendas:[],pagamentos:[],pedidos:[],fiados:[]}));}
     else if(r.status===401){localStorage.removeItem('pin_bmb');}
