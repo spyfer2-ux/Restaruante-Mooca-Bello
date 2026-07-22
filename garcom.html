@@ -140,7 +140,7 @@
     <h1>🧾 Bodega Mooca Bello — PDV</h1>
     <button class="cx-btn" onclick="abrirCaixa()">💰 Caixa</button>
   </header>
-  <div class="nuvem-line"><span id="nuvem">☁️</span></div>
+  <div class="nuvem-line"><span id="nuvem" onclick="sincronizar(true)" style="cursor:pointer;text-decoration:underline">☁️</span></div>
   <div class="tabbar" id="tabbar">
     <button class="tab-btn active" data-tab="comanda" onclick="switchTab('comanda')">🧾 Comanda</button>
     <button class="tab-btn" data-tab="cozinha" onclick="switchTab('cozinha')">👨‍🍳 Cozinha<span class="tab-badge" id="badgeCozinha" style="display:none">0</span></button>
@@ -314,26 +314,34 @@ function salvarFila(){localStorage.setItem(LS_FILA,JSON.stringify(fila));atualiz
 function atualizarNuvem(){
   const el=document.getElementById('nuvem');if(!el)return;
   const pend=fila.vendas.length+fila.pagamentos.length+(fila.pedidos||[]).length+(fila.fiados||[]).length;
-  el.textContent=pend?('☁️ '+pend+' p/ enviar'):'☁️ ok';
+  el.textContent=pend?('☁️ '+pend+' p/ enviar (toque p/ tentar agora)'):'☁️ tudo sincronizado';
   el.style.color=pend?'#e7b95c':'#8fc98f';
 }
 let sincronizando=false;
-async function sincronizar(){
+async function sincronizar(manual){
   if(sincronizando)return;
   const pend=fila.vendas.length+fila.pagamentos.length+(fila.pedidos||[]).length+(fila.fiados||[]).length;
-  if(!pend||!navigator.onLine)return;
+  if(!pend){if(manual)alert('☁️ Tudo certo — não há nada pendente pra enviar.');return;}
+  // não confiamos em navigator.onLine (é impreciso em vários celulares/PWAs) — tentamos enviar sempre
+  // e só mantemos na fila se o próprio envio falhar de verdade.
   const pin=getPin();
   sincronizando=true;
+  let erro=null;
   try{
     const headers={'Content-Type':'application/json'};if(pin)headers['X-PIN']=pin;
     const r=await fetch(API_URL+'/api/registros',{method:'POST', headers:headers, body:JSON.stringify(fila)});
-    if(r.status===401){localStorage.removeItem(LS_PIN);alert('PIN do banco de vendas incorreto. Tente de novo no próximo pedido.');}
+    if(r.status===401){localStorage.removeItem(LS_PIN);erro='PIN incorreto';}
     else if(r.ok){fila={vendas:[],pagamentos:[],pedidos:[],fiados:[]};localStorage.setItem(LS_FILA,JSON.stringify(fila));}
-  }catch(e){/* offline — fica na fila */}
+    else{erro='servidor respondeu '+r.status;}
+  }catch(e){erro='sem conexão com a internet agora';}
   sincronizando=false;atualizarNuvem();
+  if(manual){
+    if(erro)alert('⚠️ Não consegui enviar ('+erro+'). Vai tentar de novo sozinho em instantes.');
+    else alert('☁️ Sincronizado com sucesso!');
+  }
 }
-window.addEventListener('online',sincronizar);
-setInterval(sincronizar,60000);
+window.addEventListener('online',()=>sincronizar(false));
+setInterval(()=>sincronizar(false),20000);
 
 function salvarCom(){localStorage.setItem(LS_COM,JSON.stringify(comandas));}
 function salvarCx(){localStorage.setItem(LS_CX,JSON.stringify(caixa));}
@@ -362,7 +370,7 @@ async function init(){
   try{historico=JSON.parse(localStorage.getItem(LS_HIST))||[];}catch(e){historico=[];}
   try{fila=JSON.parse(localStorage.getItem(LS_FILA))||{vendas:[],pagamentos:[],pedidos:[]};}catch(e){fila={vendas:[],pagamentos:[],pedidos:[]};}
   fila.pedidos=fila.pedidos||[];fila.fiados=fila.fiados||[];
-  atualizarNuvem();setTimeout(sincronizar,1500);
+  atualizarNuvem();setTimeout(()=>sincronizar(false),1500);
   if(!caixa || caixa.dia!==hoje()){caixa={dia:hoje(),vendas:[]};salvarCx();}
   const r=await fetch('./dados.json?v='+Date.now());DADOS=await r.json();
   renderMesas();renderCats();render();renderComanda();

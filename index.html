@@ -244,8 +244,9 @@ function registrarNuvem(mesa,obs){
 async function sincronizarNuvem(){
   let fila; try{fila=JSON.parse(localStorage.getItem('fila_bmb'))||{};}catch(e){return;}
   const pend=(fila.vendas||[]).length+(fila.pagamentos||[]).length+(fila.pedidos||[]).length;
-  if(!pend||!navigator.onLine)return;
+  if(!pend)return;
   // PIN desativado temporariamente — não pede mais senha aqui.
+  // não confiamos em navigator.onLine (impreciso em vários celulares) — tentamos enviar sempre.
   let pin=(localStorage.getItem('pin_bmb')||'').trim();
   try{
     const headers={'Content-Type':'application/json'};if(pin)headers['X-PIN']=pin;
@@ -257,6 +258,7 @@ async function sincronizarNuvem(){
   }catch(e){}
 }
 window.addEventListener('online',sincronizarNuvem);
+setInterval(sincronizarNuvem,20000);
 setTimeout(sincronizarNuvem,1500);
 
 carregar();

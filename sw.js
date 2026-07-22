@@ -1,10 +1,13 @@
 // Service worker do PDV — estratégia "rede primeiro":
 // sempre busca a versão mais nova do site; se estiver sem internet,
 // usa a última versão guardada no aparelho.
-const CACHE = 'bmb-v1';
+const CACHE = 'bmb-v2';
 
 self.addEventListener('install', e => self.skipWaiting());
-self.addEventListener('activate', e => e.waitUntil(clients.claim()));
+self.addEventListener('activate', e => e.waitUntil(
+  caches.keys().then(nomes => Promise.all(nomes.filter(n => n !== CACHE).map(n => caches.delete(n))))
+    .then(() => clients.claim())
+));
 
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
