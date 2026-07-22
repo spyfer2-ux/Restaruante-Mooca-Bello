@@ -251,11 +251,6 @@
   </div>
 </div>
 
-<!-- modal adicionais -->
-<div class="modal" id="modalAdds">
-  <div class="modal-box" id="addsConteudo"></div>
-</div>
-
 <!-- modal caixa / faturamento do dia -->
 <div class="modal" id="modalCaixa">
   <div class="modal-box">
@@ -458,11 +453,7 @@ function render(){
     return '<div class="prod"><div class="info"><h3>'+p.nome+'</h3><div class="preco">'+money(p.preco)+'</div></div><button class="add" onclick="addItem('+idx+')">+</button></div>';}).join('');
 }
 
-function addItem(idx){
-  const p=DADOS.produtos[idx];
-  if(['semanal','porcoes','salgados','cafe'].includes(p.cat)){abrirAdicionais(idx);return;}
-  addDireto(idx,[]);
-}
+function addItem(idx){ addDireto(idx,[]); }
 function addDireto(idx,adds){
   const p=DADOS.produtos[idx];const c=getComanda(mesaAtual);
   if(c.status==='enviada')c.status='aberta';
@@ -473,30 +464,21 @@ function addDireto(idx,adds){
 }
 function addsTot(it){return (it.adds||[]).reduce((s,a)=>s+a.preco*a.qtd,0);}
 
-/* ---- MODAL DE ADICIONAIS ---- */
-let addIdx=null, addSel={};
-function abrirAdicionais(idx){
-  addIdx=idx; addSel={};
-  const extras=DADOS.produtos.map((p,i)=>({p,i})).filter(x=>x.p.cat==='extras'&&x.p.ativo!==false);
-  let h='<h2>➕ '+DADOS.produtos[idx].nome+'</h2><p style="font-size:13px;color:#b9b0a0;margin-bottom:8px">Quer adicionais neste prato?</p>';
-  extras.forEach(x=>{
-    h+='<div class="citem"><div class="top"><div class="nome">'+x.p.nome+'  <span style="color:var(--ouro);font-weight:700">'+money(x.p.preco)+'</span></div></div>'+
-       '<div class="qtd"><button onclick="mudarAdd('+x.i+',-1)">−</button><span class="n" id="addn'+x.i+'">0</span><button onclick="mudarAdd('+x.i+',1)">+</button></div></div>';
-  });
-  h+='<button class="btn btn-enviar" style="width:100%;margin-top:8px" onclick="confirmarAdds()">✅ Adicionar à comanda</button>';
-  h+='<button class="btn btn-fechar" style="width:100%;margin-top:8px" onclick="fechar(\'modalAdds\')">Cancelar</button>';
-  document.getElementById('addsConteudo').innerHTML=h;
-  document.getElementById('modalAdds').classList.add('open');
-}
-function mudarAdd(i,delta){
-  addSel[i]=Math.max(0,(addSel[i]||0)+delta);
-  document.getElementById('addn'+i).textContent=addSel[i];
-}
-function confirmarAdds(){
-  const adds=Object.entries(addSel).filter(([i,q])=>q>0)
-    .map(([i,q])=>({nome:DADOS.produtos[i].nome,preco:DADOS.produtos[i].preco,qtd:q}));
-  fechar('modalAdds');
-  addDireto(addIdx,adds);
+/* ---- ADICIONAIS: painel dentro do próprio item da comanda (sem modal) ---- */
+const COMIDA_CATS=['semanal','porcoes','salgados','cafe'];
+function ehComida(nome){ const p=DADOS.produtos.find(x=>x.nome===nome); return p && COMIDA_CATS.includes(p.cat); }
+let addsAbertoIdx=null;
+function toggleAddsComanda(i){ addsAbertoIdx=(addsAbertoIdx===i?null:i); renderComanda(); }
+function mudarAddComanda(i,extraIdx,delta){
+  const c=getComanda(mesaAtual); const it=c.itens[i]; if(!it)return;
+  it.adds=it.adds||[];
+  const prod=DADOS.produtos[extraIdx];
+  let a=it.adds.find(x=>x.nome===prod.nome);
+  if(!a){ if(delta<=0)return; a={nome:prod.nome,preco:prod.preco,qtd:0}; it.adds.push(a); }
+  a.qtd+=delta;
+  if(a.qtd<=0) it.adds=it.adds.filter(x=>x!==a);
+  if(c.status==='enviada')c.status='aberta';
+  salvarCom();renderMesas();renderComanda();
 }
 
 function renderComanda(){
@@ -504,11 +486,26 @@ function renderComanda(){
   document.getElementById('mesaTag').innerHTML='Mesa '+mesaAtual+' <span class="status-tag '+(c.status==='enviada'?'st-enviada':'st-aberta')+'">'+(c.status==='enviada'?'✅ Enviada':'Aberta')+'</span>';
   const body=document.getElementById('comandaBody');
   if(!c.itens.length){body.innerHTML='<div class="vazio-com">Nenhum item nesta mesa ainda.<br>Toque no + dos produtos acima.</div>';}
-  else{body.innerHTML=c.itens.map((it,i)=>{const sub=(it.preco+addsTot(it))*it.qtd;
+  else{
+    const extras=DADOS.produtos.map((p,i)=>({p,i})).filter(x=>x.p.cat==='extras'&&x.p.ativo!==false);
+    body.innerHTML=c.itens.map((it,i)=>{const sub=(it.preco+addsTot(it))*it.qtd;
     const addsTxt=(it.adds&&it.adds.length)?'<div style="font-size:12px;color:#c8962a;margin-top:3px">'+it.adds.map(a=>'+ '+a.qtd+'x '+a.nome).join(' · ')+'</div>':'';
-    return '<div class="citem"><div class="top"><div class="nome">'+it.nome+addsTxt+'</div><button class="rem" onclick="remItem('+i+')">remover</button></div>'+
+    const podeAdd = ehComida(it.nome) && extras.length;
+    const nAdds=(it.adds||[]).reduce((s,a)=>s+a.qtd,0);
+    const btnAdds = podeAdd?'<button style="background:transparent;border:1px solid var(--ouro);color:var(--ouro);border-radius:8px;padding:3px 9px;font-size:11px;font-weight:700;margin-top:6px;cursor:pointer" onclick="toggleAddsComanda('+i+')">➕ Adicionais'+(nAdds?' ('+nAdds+')':'')+'</button>':'';
+    let painel='';
+    if(podeAdd && addsAbertoIdx===i){
+      painel='<div style="background:#1a140e;border-radius:8px;padding:6px 10px;margin-top:8px">'+extras.map(x=>{
+        const cur=(it.adds||[]).find(a=>a.nome===x.p.nome); const q=cur?cur.qtd:0;
+        return '<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #2a2118;font-size:13px"><span>'+x.p.nome+' <small style="color:var(--ouro)">'+money(x.p.preco)+'</small></span>'+
+          '<span style="display:flex;align-items:center;gap:8px"><button onclick="mudarAddComanda('+i+','+x.i+',-1)" style="width:28px;height:28px;border-radius:6px;border:1px solid #3a2d1c;background:#221a12;color:#fff;font-weight:700;cursor:pointer">−</button><b>'+q+'</b><button onclick="mudarAddComanda('+i+','+x.i+',1)" style="width:28px;height:28px;border-radius:6px;border:1px solid #3a2d1c;background:#221a12;color:#fff;font-weight:700;cursor:pointer">+</button></span></div>';
+      }).join('')+'</div>';
+    }
+    return '<div class="citem"><div class="top"><div class="nome">'+it.nome+addsTxt+btnAdds+'</div><button class="rem" onclick="remItem('+i+')">remover</button></div>'+
       '<div class="qtd"><button onclick="mudarQtd('+i+',-1)">−</button><span class="n">'+it.qtd+'</span><button onclick="mudarQtd('+i+',1)">+</button><span class="sub">'+money(sub)+'</span></div>'+
-      '<input class="obs" type="text" placeholder="Obs. p/ cozinha (ex: bem passado, mais escuro)" value="'+(it.obs||'').replace(/"/g,'&quot;')+'" onchange="mudarObs('+i+',this.value)"></div>';}).join('');}
+      painel+
+      '<input class="obs" type="text" placeholder="Obs. p/ cozinha (ex: bem passado, mais escuro)" value="'+(it.obs||'').replace(/"/g,'&quot;')+'" onchange="mudarObs('+i+',this.value)"></div>';}).join('');
+  }
   const ab=document.getElementById('comanda').classList.contains('aberta');
   document.getElementById('totHead').innerHTML=money(totalComanda(c))+' '+(ab?'▼':'▲');
 }
