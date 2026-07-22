@@ -155,8 +155,14 @@
 
 <!-- ============ SEÇÃO: COMANDA ============ -->
 <section class="tabsec active" id="secComanda">
-  <div class="secao-tit">Mesa</div>
-  <div class="mesas" id="mesas"></div>
+  <div id="blocoMesas">
+    <div class="secao-tit">Mesa</div>
+    <div class="mesas" id="mesas"></div>
+  </div>
+  <div id="mesaFixa" style="display:none;padding:10px 12px 2px">
+    <span style="color:#8a7c64;font-size:13px">Mesa <b id="mesaFixaNum" style="color:var(--ouro)"></b></span> ·
+    <span style="text-decoration:underline;cursor:pointer;color:#8a7c64;font-size:13px" onclick="trocarMesa()">trocar mesa</span>
+  </div>
 
   <div class="cats" id="cats"></div>
   <div class="search"><input id="busca" type="text" placeholder="🔎 Buscar item..."></div>
@@ -394,9 +400,12 @@ async function init(){
   const r=await fetch('./dados.json?v='+Date.now());DADOS=await r.json();
   renderMesas();renderCats();render();renderComanda();
 
-  // veio de um atalho "Mesa N" na tela inicial? já abre direto naquela mesa
+  // veio de um atalho "Mesa N" na tela inicial? já abre direto naquela mesa, sem pedir pra escolher de novo
   const mesaPedida=parseInt(new URLSearchParams(location.search).get('mesa'));
-  if(mesaPedida>=1 && mesaPedida<=8) setMesa(mesaPedida);
+  if(mesaPedida>=1 && mesaPedida<=8){
+    setMesa(mesaPedida);
+    if(getComanda(mesaPedida).itens.length){ document.getElementById('comanda').classList.add('aberta'); renderComanda(); }
+  }
 
   // escolhe a aba inicial pela URL (?tab=cozinha / fiado / relatorio), se vier de um atalho
   const tabPedida=new URLSearchParams(location.search).get('tab');
@@ -421,7 +430,16 @@ function renderMesas(){
   }
   document.getElementById('mesas').innerHTML=h;
 }
-function setMesa(m){mesaAtual=m;renderMesas();renderComanda();}
+function setMesa(m){
+  mesaAtual=m;renderMesas();renderComanda();
+  document.getElementById('blocoMesas').style.display='none';
+  document.getElementById('mesaFixa').style.display='';
+  document.getElementById('mesaFixaNum').textContent=m;
+}
+function trocarMesa(){
+  document.getElementById('blocoMesas').style.display='';
+  document.getElementById('mesaFixa').style.display='none';
+}
 
 function renderCats(){
   let h='<button class="cat-btn '+(catAtual==='todas'?'active':'')+'" onclick="setCat(\'todas\')">📋 Todas</button>';
