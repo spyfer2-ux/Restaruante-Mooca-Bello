@@ -220,7 +220,7 @@ function enviarCozinha(){
 
 /* ---- registro na nuvem: faturamento + tela da cozinha ---- */
 const API_URL='https://pdv-vendas.spyfer2.workers.dev';
-function hojeISO(){return new Date().toISOString().slice(0,10);}
+function hojeISO(){const d=new Date();const off=d.getTimezoneOffset()*60000;return new Date(d.getTime()-off).toISOString().slice(0,10);}
 function agoraHM(){return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
 function uid(){return crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random();}
 function registrarNuvem(mesa,obs){

@@ -281,7 +281,8 @@ function getPin(){
   return (localStorage.getItem(LS_PIN)||'').trim();
 }
 function money(v){return 'R$ '+v.toFixed(2).replace('.',',');}
-function hoje(){return new Date().toISOString().slice(0,10);}
+function dataLocalISO(d){const off=d.getTimezoneOffset()*60000;return new Date(d.getTime()-off).toISOString().slice(0,10);}
+function hoje(){return dataLocalISO(new Date());}
 function agora(){return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
 function fmtData(iso){return iso.split('-').reverse().join('/');}
 function semAcento(t){return (t||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');}
@@ -716,7 +717,7 @@ async function receber(pgto){
    RELATÓRIO / FATURAMENTO
    --------------------------------------------------------------- */
 let VENDAS=[], PGTOS=[], periodo='hoje', online=false;
-function diasAtras(n){const d=new Date();d.setDate(d.getDate()-n);return d.toISOString().slice(0,10);}
+function diasAtras(n){const d=new Date();d.setDate(d.getDate()-n);return dataLocalISO(d);}
 
 const PERIODOS=[
   {id:'hoje', nome:'Hoje',      de:()=>hoje()},

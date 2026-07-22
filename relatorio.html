@@ -48,8 +48,9 @@ const LS_PIN='pin_bmb';
 let VENDAS=[], PGTOS=[], periodo='hoje', online=false;
 
 function money(v){return 'R$ '+v.toFixed(2).replace('.',',');}
-function hoje(){return new Date().toISOString().slice(0,10);}
-function diasAtras(n){const d=new Date();d.setDate(d.getDate()-n);return d.toISOString().slice(0,10);}
+function dataLocalISO(d){const off=d.getTimezoneOffset()*60000;return new Date(d.getTime()-off).toISOString().slice(0,10);}
+function hoje(){return dataLocalISO(new Date());}
+function diasAtras(n){const d=new Date();d.setDate(d.getDate()-n);return dataLocalISO(d);}
 function fmtData(iso){return iso.split('-').reverse().join('/');}
 
 const PERIODOS=[
