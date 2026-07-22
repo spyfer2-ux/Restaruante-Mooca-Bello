@@ -45,6 +45,11 @@
    "id": "extras",
    "nome": "Acompanhamentos",
    "icone": "➕"
+  },
+  {
+   "id": "teste",
+   "nome": "Teste",
+   "icone": "🧪"
   }
  ],
  "produtos": [
@@ -748,6 +753,12 @@
    "desc": "H2OH! sabor limão.",
    "preco": 9.9,
    "foto": "fotos/h2oh.jpg"
+  },
+  {
+   "cat": "teste",
+   "nome": "Item Teste",
+   "desc": "Item de teste, não é produto de verdade.",
+   "preco": 0.01
   }
  ]
 }
