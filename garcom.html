@@ -185,6 +185,7 @@
 <!-- ============ SEÇÃO: COZINHA ============ -->
 <section class="tabsec" id="secCozinha">
   <div class="secao-tit">👨‍🍳 Cozinha — Pedidos</div>
+  <div id="somAvisoCz" onclick="ativarSom()" style="margin:6px 12px;padding:12px;background:#3a2d1c;color:#f5efe2;text-align:center;font-size:13px;font-weight:800;border-radius:10px;cursor:pointer;border:1px solid var(--ouro)">🔔 Toque aqui pra ativar o som de aviso de pedido novo neste aparelho</div>
   <div class="status-bar" id="statusCz">conectando...</div>
   <div class="pedidos" id="pedidosCz"></div>
   <div class="vazio" id="vazioCz" style="display:none">Nenhum pedido na fila.<br>Os pedidos aparecem aqui na hora que o garçom envia. 🔔</div>
@@ -627,15 +628,29 @@ function fechar(id){document.getElementById(id).classList.remove('open');}
    --------------------------------------------------------------- */
 let ABERTOS=[], prontosHoje=0, idsConhecidosCz=new Set(), primeiraCargaCz=true;
 
-function beep(){
+/* ---- SOM DE AVISO: precisa de um toque do usuário pra "destravar" áudio no celular ---- */
+let audioCtx=null, somAtivado=false;
+function ativarSom(){
   try{
-    const ctx=new (window.AudioContext||window.webkitAudioContext)();
-    const o=ctx.createOscillator(),g=ctx.createGain();
-    o.connect(g);g.connect(ctx.destination);
-    o.frequency.value=880;g.gain.value=0.3;
-    o.start();o.stop(ctx.currentTime+0.4);
+    if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state==='suspended') audioCtx.resume();
+    somAtivado=true;
+    const banner=document.getElementById('somAvisoCz'); if(banner) banner.style.display='none';
+    tocarAlerta();
+  }catch(e){ alert('Não consegui ativar o som neste aparelho. Deixe o volume do celular alto do mesmo jeito.'); }
+}
+function tocarAlerta(){
+  if(navigator.vibrate) navigator.vibrate([300,150,300,150,300]);
+  if(!audioCtx) return;
+  try{
+    if(audioCtx.state==='suspended') audioCtx.resume();
+    [0,0.45,0.9].forEach(t=>{
+      const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+      o.connect(g); g.connect(audioCtx.destination);
+      o.frequency.value=1000; g.gain.value=0.5;
+      o.start(audioCtx.currentTime+t); o.stop(audioCtx.currentTime+t+0.35);
+    });
   }catch(e){}
-  if(navigator.vibrate)navigator.vibrate([200,100,200]);
 }
 
 async function carregarCozinha(){
@@ -645,7 +660,7 @@ async function carregarCozinha(){
     const d=await r.json();
     ABERTOS=d.pedidos||[];
     const novosIds=ABERTOS.filter(p=>!idsConhecidosCz.has(p.id)).map(p=>p.id);
-    if(novosIds.length&&!primeiraCargaCz)beep();
+    if(novosIds.length&&!primeiraCargaCz)tocarAlerta();
     ABERTOS.forEach(p=>idsConhecidosCz.add(p.id));
     primeiraCargaCz=false;
     bar.textContent='🟢 ao vivo — atualiza sozinho';bar.classList.remove('off');
