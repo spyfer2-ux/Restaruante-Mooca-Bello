@@ -1,764 +1,771 @@
 {
- "restaurante": {
-  "nome": "BODEGA MOOCA BELLO",
-  "slogan": "Comida • Bebida • Amigos",
-  "cor_primaria": "#c8962a",
-  "cor_fundo": "#141210"
- },
- "categorias": [
-  {
-   "id": "cafe",
-   "nome": "Café da Manhã",
-   "icone": "☕"
-  },
-  {
-   "id": "semanal",
-   "nome": "Almoço (Semanal)",
-   "icone": "🍛"
-  },
-  {
-   "id": "porcoes",
-   "nome": "Porções",
-   "icone": "🍟"
-  },
-  {
-   "id": "salgados",
-   "nome": "Salgados",
-   "icone": "🥟"
-  },
-  {
-   "id": "drinks",
-   "nome": "Drinks",
-   "icone": "🍹"
-  },
-  {
-   "id": "cervejas",
-   "nome": "Cervejas",
-   "icone": "🍺"
-  },
-  {
-   "id": "refri",
-   "nome": "Refrigerantes/Bebidas",
-   "icone": "🥤"
-  },
-  {
-   "id": "extras",
-   "nome": "Acompanhamentos",
-   "icone": "➕"
-  },
-  {
-   "id": "teste",
-   "nome": "Teste",
-   "icone": "🧪"
-  }
- ],
- "produtos": [
-  {
-   "cat": "cafe",
-   "nome": "Buffet Café da Manhã",
-   "desc": "Bebida (café coado ou com leite) + 1 acompanhamento",
-   "preco": 24.9,
-   "foto": "fotos/cafe_completo.jpg"
-  },
-  {
-   "cat": "cafe",
-   "nome": "Pão com Manteiga na Chapa",
-   "desc": "Pão francês na chapa com manteiga",
-   "preco": 7.9,
-   "foto": "fotos/pao_manteiga.jpg"
-  },
-  {
-   "cat": "cafe",
-   "nome": "Pão na Chapa com Requeijão",
-   "desc": "Pão francês na chapa com requeijão cremoso",
-   "preco": 12.9,
-   "foto": "fotos/pao_requeijao.jpg"
-  },
-  {
-   "cat": "cafe",
-   "nome": "Pão com Ovo",
-   "desc": "Pão francês com ovo frito",
-   "preco": 11.9,
-   "foto": "fotos/pao_ovo.jpg"
-  },
-  {
-   "cat": "cafe",
-   "nome": "Pão com Ovo e Muçarela",
-   "desc": "Pão francês com ovo frito e muçarela",
-   "preco": 15.9,
-   "foto": "fotos/pao_ovo_mucarela.jpg"
-  },
-  {
-   "cat": "cafe",
-   "nome": "Misto Quente",
-   "desc": "Pão francês com presunto e muçarela, grelhado",
-   "preco": 14.9,
-   "foto": "fotos/misto_quente.jpg"
-  },
-  {
-   "cat": "cafe",
-   "nome": "Pão de Queijo (2 unidades)",
-   "desc": "Tradicional e quentinho",
-   "preco": 10.9,
-   "foto": "fotos/pao_queijo.jpg"
-  },
-  {
-   "cat": "cafe",
-   "nome": "Café Coado",
-   "desc": "",
-   "preco": 6.9,
-   "foto": "fotos/cafe_coado.jpg"
-  },
-  {
-   "cat": "cafe",
-   "nome": "Café com Leite",
-   "desc": "",
-   "preco": 8.9,
-   "foto": "fotos/cafe_com_leite.jpg"
-  },
-  {
-   "cat": "semanal",
-   "nome": "Segunda - Virada Paulista",
-   "desc": "Tutu de feijão, couve, banana à milanesa, bisteca, linguiça, ovo, torresmo",
-   "preco": 29.9,
-   "foto": "fotos/virada_paulista.jpg"
-  },
-  {
-   "cat": "semanal",
-   "nome": "Terça - Carne de Panela",
-   "desc": "Carne cozida lentamente, batata e cenoura",
-   "preco": 24.9,
-   "foto": "fotos/carne_panela.jpg"
-  },
-  {
-   "cat": "semanal",
-   "nome": "Quarta - Feijoada (Prato Feito)",
-   "desc": "Arroz, couve, farofa, torresmo, laranja, vinagrete",
-   "preco": 29.99,
-   "foto": "fotos/feijoada.jpg"
-  },
-  {
-   "cat": "semanal",
-   "nome": "Quarta - Feijoada (Pequena)",
-   "desc": "Arroz, couve, farofa, torresmo, laranja, vinagrete",
-   "preco": 48.0,
-   "foto": "fotos/feijoada.jpg"
-  },
-  {
-   "cat": "semanal",
-   "nome": "Quarta - Feijoada (Média)",
-   "desc": "Arroz, couve, farofa, torresmo, laranja, vinagrete",
-   "preco": 59.9,
-   "foto": "fotos/feijoada.jpg"
-  },
-  {
-   "cat": "semanal",
-   "nome": "Quarta - Feijoada (Grande)",
-   "desc": "Arroz, couve, farofa, torresmo, laranja, vinagrete",
-   "preco": 68.9,
-   "foto": "fotos/feijoada.jpg"
-  },
-  {
-   "cat": "semanal",
-   "nome": "Quinta - Massas",
-   "desc": "À bolonhesa ou molho branco (presunto e queijo), salada",
-   "preco": 24.9,
-   "foto": "fotos/massas.jpg"
-  },
-  {
-   "cat": "semanal",
-   "nome": "Sexta - Peixe Empanado",
-   "desc": "Arroz, feijão, salada, purê de batata ou batata frita",
-   "preco": 29.9,
-   "foto": "fotos/peixe_empanado.jpg"
-  },
-  {
-   "cat": "semanal",
-   "nome": "Sábado - Feijoada (Prato Feito)",
-   "desc": "Arroz, couve, farofa, torresmo, laranja, vinagrete",
-   "preco": 29.99,
-   "foto": "fotos/feijoada.jpg"
-  },
-  {
-   "cat": "semanal",
-   "nome": "Sábado - Feijoada (Pequena)",
-   "desc": "Arroz, couve, farofa, torresmo, laranja, vinagrete",
-   "preco": 48.0,
-   "foto": "fotos/feijoada.jpg"
-  },
-  {
-   "cat": "semanal",
-   "nome": "Sábado - Feijoada (Média)",
-   "desc": "Arroz, couve, farofa, torresmo, laranja, vinagrete",
-   "preco": 59.9,
-   "foto": "fotos/feijoada.jpg"
-  },
-  {
-   "cat": "semanal",
-   "nome": "Sábado - Feijoada (Grande)",
-   "desc": "Arroz, couve, farofa, torresmo, laranja, vinagrete",
-   "preco": 68.9,
-   "foto": "fotos/feijoada.jpg"
-  },
-  {
-   "cat": "semanal",
-   "nome": "Todo Dia - Filé de Frango",
-   "desc": "Prato feito — opcional disponível todos os dias",
-   "preco": 24.9,
-   "foto": "fotos/pf_frango.jpg"
-  },
-  {
-   "cat": "semanal",
-   "nome": "Todo Dia - Calabresa",
-   "desc": "Prato feito — opcional disponível todos os dias",
-   "preco": 24.9,
-   "foto": "fotos/calabresa.jpg"
-  },
-  {
-   "cat": "semanal",
-   "nome": "Todo Dia - Picadinho",
-   "desc": "Prato feito — opcional disponível todos os dias",
-   "preco": 24.9,
-   "foto": "fotos/pf_picadinho.jpg"
-  },
-  {
-   "cat": "porcoes",
-   "nome": "Frango à Passarinho",
-   "desc": "",
-   "preco": 49.9,
-   "foto": "fotos/frango_passarinho.jpg"
-  },
-  {
-   "cat": "porcoes",
-   "nome": "Isca de Contrafilé",
-   "desc": "",
-   "preco": 69.9,
-   "foto": "fotos/isca_contrafile.jpg"
-  },
-  {
-   "cat": "porcoes",
-   "nome": "Calabresa Acebolada",
-   "desc": "",
-   "preco": 35.9,
-   "foto": "fotos/calabresa.jpg"
-  },
-  {
-   "cat": "porcoes",
-   "nome": "Batata Frita",
-   "desc": "",
-   "preco": 39.9,
-   "foto": "fotos/batata_frita.jpg"
-  },
-  {
-   "cat": "porcoes",
-   "nome": "Fritas com Cheddar, Bacon e Calabresa",
-   "desc": "",
-   "preco": 54.9,
-   "foto": "fotos/fritas_cheddar.jpg"
-  },
-  {
-   "cat": "porcoes",
-   "nome": "Mandioca Frita",
-   "desc": "",
-   "preco": 44.9,
-   "foto": "fotos/mandioca_frita.jpg"
-  },
-  {
-   "cat": "porcoes",
-   "nome": "Porção de Peixe",
-   "desc": "",
-   "preco": 29.9,
-   "foto": "fotos/porcao_peixe.jpg"
-  },
-  {
-   "cat": "porcoes",
-   "nome": "Polenta Frita",
-   "desc": "",
-   "preco": 39.9,
-   "foto": "fotos/polenta_frita.jpg"
-  },
-  {
-   "cat": "porcoes",
-   "nome": "Porçãozinha de Mini Pastéis (6 un)",
-   "desc": "",
-   "preco": 29.9,
-   "foto": "fotos/pasteis.jpg"
-  },
-  {
-   "cat": "porcoes",
-   "nome": "Linguiça Toscana Acebolada",
-   "desc": "",
-   "preco": 39.9,
-   "foto": "fotos/calabresa.jpg"
-  },
-  {
-   "cat": "porcoes",
-   "nome": "Parmegiana",
-   "desc": "Frango à parmegiana",
-   "preco": 34.9,
-   "foto": "fotos/parmegiana.jpg"
-  },
-  {
-   "cat": "salgados",
-   "nome": "Coxinha de Frango",
-   "desc": "",
-   "preco": 9.9,
-   "foto": "fotos/coxinha.jpg"
-  },
-  {
-   "cat": "salgados",
-   "nome": "Coxinha de Frango com Catupiry",
-   "desc": "",
-   "preco": 11.9,
-   "foto": "fotos/coxinha_catupiry.jpg"
-  },
-  {
-   "cat": "salgados",
-   "nome": "Esfiha de Carne",
-   "desc": "",
-   "preco": 12.5,
-   "foto": "fotos/esfiha_carne.jpg"
-  },
-  {
-   "cat": "salgados",
-   "nome": "Esfiha de Calabresa com Catupiry",
-   "desc": "",
-   "preco": 12.5,
-   "foto": "fotos/esfiha_calabresa.jpg"
-  },
-  {
-   "cat": "salgados",
-   "nome": "Esfiha de Frango com Catupiry",
-   "desc": "",
-   "preco": 12.5,
-   "foto": "fotos/esfiha_frango.jpg"
-  },
-  {
-   "cat": "salgados",
-   "nome": "Empada de Palmito",
-   "desc": "",
-   "preco": 12.5,
-   "foto": "fotos/empada_palmito.jpg"
-  },
-  {
-   "cat": "salgados",
-   "nome": "Empada de Frango com Catupiry",
-   "desc": "",
-   "preco": 12.5,
-   "foto": "fotos/empada_frango.jpg"
-  },
-  {
-   "cat": "drinks",
-   "nome": "Caipirinha",
-   "desc": "Cachaça, limão, açúcar e gelo",
-   "preco": 16.9,
-   "foto": "fotos/caipirinha.jpg"
-  },
-  {
-   "cat": "drinks",
-   "nome": "Caipivodka",
-   "desc": "Vodka Smirnoff, limão, açúcar e gelo",
-   "preco": 19.9,
-   "foto": "fotos/caipivodka.jpg"
-  },
-  {
-   "cat": "drinks",
-   "nome": "Whisky (8 anos)",
-   "desc": "",
-   "preco": 18.9,
-   "foto": "fotos/whisky.jpg"
-  },
-  {
-   "cat": "drinks",
-   "nome": "Jack Daniel's",
-   "desc": "Tennessee Whiskey",
-   "preco": 26.9,
-   "foto": "fotos/jack_daniels.jpg",
-   "ativo": false
-  },
-  {
-   "cat": "drinks",
-   "nome": "Cavalo Branco",
-   "desc": "Cachaça Cavalo Branco",
-   "preco": 14.9,
-   "foto": "fotos/whisky.jpg"
-  },
-  {
-   "cat": "drinks",
-   "nome": "Gin Tônica",
-   "desc": "Gin, água tônica e limão",
-   "preco": 22.9,
-   "foto": "fotos/gin_tonica.jpg"
-  },
-  {
-   "cat": "drinks",
-   "nome": "Vodka com Energético",
-   "desc": "Vodka Smirnoff e Red Bull",
-   "preco": 39.9,
-   "foto": "fotos/vodka_energetico.jpg"
-  },
-  {
-   "cat": "drinks",
-   "nome": "Moscow Mule",
-   "desc": "Vodka Smirnoff, ginger beer e limão",
-   "preco": 24.9,
-   "foto": "fotos/moscow_mule.jpg",
-   "ativo": false
-  },
-  {
-   "cat": "drinks",
-   "nome": "Cuba Libre",
-   "desc": "Rum, cola e limão",
-   "preco": 18.9,
-   "foto": "fotos/cuba_libre.jpg",
-   "ativo": false
-  },
-  {
-   "cat": "drinks",
-   "nome": "Sex on the Beach",
-   "desc": "Vodka Smirnoff, pêssego, laranja e grenadine",
-   "preco": 22.9,
-   "foto": "fotos/sex_on_beach.jpg",
-   "ativo": false
-  },
-  {
-   "cat": "drinks",
-   "nome": "Copão de Gin",
-   "desc": "Gin Eternit Sabores",
-   "preco": 16.99,
-   "foto": "fotos/copao_gin.jpg"
-  },
-  {
-   "cat": "drinks",
-   "nome": "Copão de Askov",
-   "desc": "Vodka Askov no copão com gelo",
-   "preco": 11.99,
-   "foto": "fotos/copao_askov.jpg"
-  },
-  {
-   "cat": "drinks",
-   "nome": "Smirnoff Ice Lata",
-   "desc": "",
-   "preco": 10.9,
-   "foto": ""
-  },
-  {
-   "cat": "drinks",
-   "nome": "Smirnoff Ice Long Neck",
-   "desc": "",
-   "preco": 12.9,
-   "foto": "fotos/smirnoff.jpg"
-  },
-  {
-   "cat": "drinks",
-   "nome": "Meia Dose de Pinga",
-   "desc": "51 ou Velho Barreiro",
-   "preco": 5.9,
-   "foto": "fotos/pinga.jpg"
-  },
-  {
-   "cat": "drinks",
-   "nome": "Dose de Pinga",
-   "desc": "51 ou Velho Barreiro",
-   "preco": 7.0,
-   "foto": "fotos/pinga.jpg"
-  },
-  {
-   "cat": "drinks",
-   "nome": "Dose de Askov",
-   "desc": "Vodka Askov",
-   "preco": 10.0,
-   "foto": "fotos/copao_askov.jpg"
-  },
-  {
-   "cat": "drinks",
-   "nome": "Bombeirinho",
-   "desc": "Cachaça com groselha e limão",
-   "preco": 12.0,
-   "foto": "fotos/bombeirinho.jpg"
-  },
-  {
-   "cat": "cervejas",
-   "nome": "Itaipava 350ml",
-   "desc": "Lata",
-   "preco": 9.9,
-   "foto": "fotos/itaipava.jpg"
-  },
-  {
-   "cat": "cervejas",
-   "nome": "Skol 350ml",
-   "desc": "Lata",
-   "preco": 9.9,
-   "foto": "fotos/skol.jpg"
-  },
-  {
-   "cat": "cervejas",
-   "nome": "Original 350ml",
-   "desc": "Lata",
-   "preco": 9.9,
-   "foto": "fotos/original.jpg"
-  },
-  {
-   "cat": "cervejas",
-   "nome": "Demais Cervejas 350ml",
-   "desc": "Heineken, Budweiser, Amstel, Stella e outras",
-   "preco": 9.9,
-   "foto": "fotos/cerveja.jpg"
-  },
-  {
-   "cat": "cervejas",
-   "nome": "Stella Artois Long Neck 330ml",
-   "desc": "",
-   "preco": 12.9,
-   "foto": "fotos/stella.jpg"
-  },
-  {
-   "cat": "cervejas",
-   "nome": "Heineken Long Neck 330ml",
-   "desc": "",
-   "preco": 12.9,
-   "foto": "fotos/heineken.jpg"
-  },
-  {
-   "cat": "cervejas",
-   "nome": "Draft 600ml",
-   "desc": "Draft Grape — cocktail alcoólico gaseificado de uva, garrafa 600ml",
-   "preco": 17.9,
-   "foto": "fotos/draft600.jpg"
-  },
-  {
-   "cat": "cervejas",
-   "nome": "Heineken 600ml",
-   "desc": "Garrafa 600ml",
-   "preco": 21.9,
-   "foto": "fotos/heineken.jpg"
-  },
-  {
-   "cat": "cervejas",
-   "nome": "Spaten 600ml",
-   "desc": "Garrafa 600ml",
-   "preco": 21.9,
-   "foto": "fotos/spaten.jpg"
-  },
-  {
-   "cat": "refri",
-   "nome": "Refri 200ml",
-   "desc": "Coca-Cola, Coca Zero ou Guaraná Antarctica",
-   "preco": 3.5,
-   "foto": "fotos/refri_copo.jpg"
-  },
-  {
-   "cat": "refri",
-   "nome": "Refri Lata 350ml",
-   "desc": "Fanta, Coca-Cola, Sprite, Schweppes, Guaraná (comum ou zero) e Itubaína",
-   "preco": 7.9,
-   "foto": "fotos/refri_lata.jpg"
-  },
-  {
-   "cat": "refri",
-   "nome": "Refri 600ml",
-   "desc": "Coca-Cola ou Coca Zero",
-   "preco": 12.9,
-   "foto": "fotos/refri_600.jpg"
-  },
-  {
-   "cat": "refri",
-   "nome": "Refri 1 Litro (pet)",
-   "desc": "Coca-Cola, Coca Zero ou Guaraná",
-   "preco": 16.9,
-   "foto": "fotos/refri_1l.jpg",
-   "ativo": false
-  },
-  {
-   "cat": "refri",
-   "nome": "Suco Del Valle 290ml",
-   "desc": "Uva, Maracujá ou Pêssego",
-   "preco": 8.5,
-   "foto": "fotos/del_valle.jpg"
-  },
-  {
-   "cat": "refri",
-   "nome": "Suco Natural de Laranja 300ml",
-   "desc": "",
-   "preco": 11.9,
-   "foto": "fotos/suco_laranja.jpg"
-  },
-  {
-   "cat": "refri",
-   "nome": "Suco Natural de Laranja 500ml",
-   "desc": "",
-   "preco": 16.9,
-   "foto": "fotos/suco_laranja.jpg"
-  },
-  {
-   "cat": "refri",
-   "nome": "Suco Natural de Laranja 1L (jarra)",
-   "desc": "Ideal para compartilhar",
-   "preco": 26.9,
-   "foto": "fotos/suco_laranja.jpg"
-  },
-  {
-   "cat": "refri",
-   "nome": "Água Crystal 500ml sem gás",
-   "desc": "",
-   "preco": 4.5,
-   "foto": "fotos/agua_sem_gas.jpg"
-  },
-  {
-   "cat": "refri",
-   "nome": "Água Crystal 500ml com gás",
-   "desc": "",
-   "preco": 5.9,
-   "foto": "fotos/agua_com_gas.jpg"
-  },
-  {
-   "cat": "extras",
-   "nome": "Adicional - Misto Quente",
-   "desc": "Adicional do café da manhã",
-   "preco": 8.9,
-   "foto": "fotos/misto_quente.jpg",
-   "ativo": false
-  },
-  {
-   "cat": "extras",
-   "nome": "Adicional - Pão de Queijo (2 un)",
-   "desc": "",
-   "preco": 4.9,
-   "foto": "fotos/pao_queijo.jpg"
-  },
-  {
-   "cat": "extras",
-   "nome": "Adicional - Requeijão Extra",
-   "desc": "",
-   "preco": 6,
-   "foto": "fotos/requeijao.jpg"
-  },
-  {
-   "cat": "extras",
-   "nome": "Opcional Premium - Contrafilé Acebolado",
-   "desc": "Acréscimo no prato",
-   "preco": 15,
-   "foto": "fotos/contrafile.jpg"
-  },
-  {
-   "cat": "extras",
-   "nome": "Opcional Premium - Frango à Parmegiana",
-   "desc": "Acréscimo no prato",
-   "preco": 15,
-   "foto": "fotos/parmegiana.jpg"
-  },
-  {
-   "cat": "extras",
-   "nome": "Arroz Pequeno",
-   "desc": "",
-   "preco": 5.0,
-   "foto": "fotos/arroz.jpg"
-  },
-  {
-   "cat": "extras",
-   "nome": "Feijão",
-   "desc": "",
-   "preco": 5.0,
-   "foto": "fotos/feijao.jpg"
-  },
-  {
-   "cat": "extras",
-   "nome": "Farofa",
-   "desc": "",
-   "preco": 4,
-   "foto": "fotos/farofa.jpg"
-  },
-  {
-   "cat": "extras",
-   "nome": "Salada",
-   "desc": "",
-   "preco": 6,
-   "foto": "fotos/salada.jpg"
-  },
-  {
-   "cat": "extras",
-   "nome": "Batata Frita",
-   "desc": "",
-   "preco": 6.0,
-   "foto": "fotos/batata_frita.jpg"
-  },
-  {
-   "cat": "extras",
-   "nome": "Ovo Frito (unidade)",
-   "desc": "",
-   "preco": 4.0,
-   "foto": "fotos/ovo_frito.jpg"
-  },
-  {
-   "cat": "extras",
-   "nome": "Vinagrete",
-   "desc": "",
-   "preco": 4,
-   "foto": "fotos/vinagrete.jpg"
-  },
-  {
-   "cat": "extras",
-   "nome": "Torresmo",
-   "desc": "",
-   "preco": 14.9,
-   "foto": "fotos/torresmo.jpg"
-  },
-  {
-   "cat": "cafe",
-   "nome": "Café Pequeno",
-   "desc": "Café coado tamanho pequeno.",
-   "preco": 6,
-   "foto": "fotos/cafe_pequeno.jpg",
-   "ativo": false
-  },
-  {
-   "cat": "cafe",
-   "nome": "Café Grande",
-   "desc": "Café coado tamanho grande.",
-   "preco": 12,
-   "foto": "fotos/cafe_grande.jpg",
-   "ativo": false
-  },
-  {
-   "cat": "cafe",
-   "nome": "Chocolate Quente",
-   "desc": "Chocolate quente cremoso.",
-   "preco": 13,
-   "foto": "fotos/chocolate_quente.jpg"
-  },
-  {
-   "cat": "cafe",
-   "nome": "Mini Pão de Queijo (unidade)",
-   "desc": "Mini pão de queijo, por unidade.",
-   "preco": 1,
-   "foto": "fotos/mini_pao_queijo.jpg"
-  },
-  {
-   "cat": "refri",
-   "nome": "Energético Red Bull (lata)",
-   "desc": "Lata de Red Bull.",
-   "preco": 14.9,
-   "foto": "fotos/red_bull.jpg"
-  },
-  {
-   "cat": "refri",
-   "nome": "H2OH! Limoneto",
-   "desc": "H2OH! sabor limoneto.",
-   "preco": 9.9,
-   "foto": "fotos/h2oh.jpg"
-  },
-  {
-   "cat": "refri",
-   "nome": "H2OH! Limão",
-   "desc": "H2OH! sabor limão.",
-   "preco": 9.9,
-   "foto": "fotos/h2oh.jpg"
-  },
-  {
-   "cat": "teste",
-   "nome": "Item Teste",
-   "desc": "Item de teste, não é produto de verdade.",
-   "preco": 0.01
-  }
- ]
+  "restaurante": {
+    "nome": "BODEGA MOOCA BELLO",
+    "slogan": "Comida • Bebida • Amigos",
+    "cor_primaria": "#c8962a",
+    "cor_fundo": "#141210"
+  },
+  "categorias": [
+    {
+      "id": "cafe",
+      "nome": "Café da Manhã",
+      "icone": "☕"
+    },
+    {
+      "id": "semanal",
+      "nome": "Almoço (Semanal)",
+      "icone": "🍛"
+    },
+    {
+      "id": "porcoes",
+      "nome": "Porções",
+      "icone": "🍟"
+    },
+    {
+      "id": "salgados",
+      "nome": "Salgados",
+      "icone": "🥟"
+    },
+    {
+      "id": "drinks",
+      "nome": "Drinks",
+      "icone": "🍹"
+    },
+    {
+      "id": "cervejas",
+      "nome": "Cervejas",
+      "icone": "🍺"
+    },
+    {
+      "id": "refri",
+      "nome": "Refrigerantes/Bebidas",
+      "icone": "🥤"
+    },
+    {
+      "id": "extras",
+      "nome": "Acompanhamentos",
+      "icone": "➕"
+    },
+    {
+      "id": "teste",
+      "nome": "Teste",
+      "icone": "🧪"
+    }
+  ],
+  "produtos": [
+    {
+      "cat": "cafe",
+      "nome": "Buffet Café da Manhã",
+      "desc": "Bebida (café coado ou com leite) + 1 acompanhamento",
+      "preco": 24.9,
+      "foto": "fotos/cafe_completo.jpg"
+    },
+    {
+      "cat": "cafe",
+      "nome": "Pão com Manteiga na Chapa",
+      "desc": "Pão francês na chapa com manteiga",
+      "preco": 7.9,
+      "foto": "fotos/pao_manteiga.jpg"
+    },
+    {
+      "cat": "cafe",
+      "nome": "Pão na Chapa com Requeijão",
+      "desc": "Pão francês na chapa com requeijão cremoso",
+      "preco": 12.9,
+      "foto": "fotos/pao_requeijao.jpg"
+    },
+    {
+      "cat": "cafe",
+      "nome": "Pão com Ovo",
+      "desc": "Pão francês com ovo frito",
+      "preco": 11.9,
+      "foto": "fotos/pao_ovo.jpg"
+    },
+    {
+      "cat": "cafe",
+      "nome": "Pão com Ovo e Muçarela",
+      "desc": "Pão francês com ovo frito e muçarela",
+      "preco": 15.9,
+      "foto": "fotos/pao_ovo_mucarela.jpg"
+    },
+    {
+      "cat": "cafe",
+      "nome": "Misto Quente",
+      "desc": "Pão francês com presunto e muçarela, grelhado",
+      "preco": 14.9,
+      "foto": "fotos/misto_quente.jpg"
+    },
+    {
+      "cat": "cafe",
+      "nome": "Pão de Queijo (2 unidades)",
+      "desc": "Tradicional e quentinho",
+      "preco": 10.9,
+      "foto": "fotos/pao_queijo.jpg"
+    },
+    {
+      "cat": "cafe",
+      "nome": "Café Coado",
+      "desc": "",
+      "preco": 6.9,
+      "foto": "fotos/cafe_coado.jpg"
+    },
+    {
+      "cat": "cafe",
+      "nome": "Café com Leite",
+      "desc": "",
+      "preco": 8.9,
+      "foto": "fotos/cafe_com_leite.jpg"
+    },
+    {
+      "cat": "semanal",
+      "nome": "Segunda - Virada Paulista",
+      "desc": "Tutu de feijão, couve, banana à milanesa, bisteca, linguiça, ovo, torresmo",
+      "preco": 29.9,
+      "foto": "fotos/virada_paulista.jpg"
+    },
+    {
+      "cat": "semanal",
+      "nome": "Terça - Carne de Panela",
+      "desc": "Carne cozida lentamente, batata e cenoura",
+      "preco": 24.9,
+      "foto": "fotos/carne_panela.jpg"
+    },
+    {
+      "cat": "semanal",
+      "nome": "Quarta - Feijoada (Prato Feito)",
+      "desc": "Arroz, couve, farofa, torresmo, laranja, vinagrete",
+      "preco": 29.99,
+      "foto": "fotos/feijoada.jpg"
+    },
+    {
+      "cat": "semanal",
+      "nome": "Quarta - Feijoada (Pequena)",
+      "desc": "Arroz, couve, farofa, torresmo, laranja, vinagrete",
+      "preco": 48.0,
+      "foto": "fotos/feijoada.jpg"
+    },
+    {
+      "cat": "semanal",
+      "nome": "Quarta - Feijoada (Média)",
+      "desc": "Arroz, couve, farofa, torresmo, laranja, vinagrete",
+      "preco": 59.9,
+      "foto": "fotos/feijoada.jpg"
+    },
+    {
+      "cat": "semanal",
+      "nome": "Quarta - Feijoada (Grande)",
+      "desc": "Arroz, couve, farofa, torresmo, laranja, vinagrete",
+      "preco": 68.9,
+      "foto": "fotos/feijoada.jpg"
+    },
+    {
+      "cat": "semanal",
+      "nome": "Quinta - Massas",
+      "desc": "À bolonhesa ou molho branco (presunto e queijo), salada",
+      "preco": 24.9,
+      "foto": "fotos/massas.jpg"
+    },
+    {
+      "cat": "semanal",
+      "nome": "Sexta - Peixe Empanado",
+      "desc": "Arroz, feijão, salada, purê de batata ou batata frita",
+      "preco": 29.9,
+      "foto": "fotos/peixe_empanado.jpg"
+    },
+    {
+      "cat": "semanal",
+      "nome": "Sábado - Feijoada (Prato Feito)",
+      "desc": "Arroz, couve, farofa, torresmo, laranja, vinagrete",
+      "preco": 29.99,
+      "foto": "fotos/feijoada.jpg"
+    },
+    {
+      "cat": "semanal",
+      "nome": "Sábado - Feijoada (Pequena)",
+      "desc": "Arroz, couve, farofa, torresmo, laranja, vinagrete",
+      "preco": 48.0,
+      "foto": "fotos/feijoada.jpg"
+    },
+    {
+      "cat": "semanal",
+      "nome": "Sábado - Feijoada (Média)",
+      "desc": "Arroz, couve, farofa, torresmo, laranja, vinagrete",
+      "preco": 59.9,
+      "foto": "fotos/feijoada.jpg"
+    },
+    {
+      "cat": "semanal",
+      "nome": "Sábado - Feijoada (Grande)",
+      "desc": "Arroz, couve, farofa, torresmo, laranja, vinagrete",
+      "preco": 68.9,
+      "foto": "fotos/feijoada.jpg"
+    },
+    {
+      "cat": "semanal",
+      "nome": "Todo Dia - Filé de Frango",
+      "desc": "Prato feito — opcional disponível todos os dias",
+      "preco": 24.9,
+      "foto": "fotos/pf_frango.jpg"
+    },
+    {
+      "cat": "semanal",
+      "nome": "Todo Dia - Calabresa",
+      "desc": "Prato feito — opcional disponível todos os dias",
+      "preco": 24.9,
+      "foto": "fotos/calabresa.jpg"
+    },
+    {
+      "cat": "semanal",
+      "nome": "Todo Dia - Picadinho",
+      "desc": "Prato feito — opcional disponível todos os dias",
+      "preco": 24.9,
+      "foto": "fotos/pf_picadinho.jpg"
+    },
+    {
+      "cat": "porcoes",
+      "nome": "Frango à Passarinho",
+      "desc": "",
+      "preco": 49.9,
+      "foto": "fotos/frango_passarinho.jpg"
+    },
+    {
+      "cat": "porcoes",
+      "nome": "Isca de Contrafilé",
+      "desc": "",
+      "preco": 69.9,
+      "foto": "fotos/isca_contrafile.jpg"
+    },
+    {
+      "cat": "porcoes",
+      "nome": "Calabresa Acebolada",
+      "desc": "",
+      "preco": 35.9,
+      "foto": "fotos/calabresa.jpg"
+    },
+    {
+      "cat": "porcoes",
+      "nome": "Batata Frita",
+      "desc": "",
+      "preco": 39.9,
+      "foto": "fotos/batata_frita.jpg"
+    },
+    {
+      "cat": "porcoes",
+      "nome": "Fritas com Cheddar, Bacon e Calabresa",
+      "desc": "",
+      "preco": 54.9,
+      "foto": "fotos/fritas_cheddar.jpg"
+    },
+    {
+      "cat": "porcoes",
+      "nome": "Mandioca Frita",
+      "desc": "",
+      "preco": 44.9,
+      "foto": "fotos/mandioca_frita.jpg"
+    },
+    {
+      "cat": "porcoes",
+      "nome": "Porção de Peixe",
+      "desc": "",
+      "preco": 29.9,
+      "foto": "fotos/porcao_peixe.jpg"
+    },
+    {
+      "cat": "porcoes",
+      "nome": "Polenta Frita",
+      "desc": "",
+      "preco": 39.9,
+      "foto": "fotos/polenta_frita.jpg"
+    },
+    {
+      "cat": "porcoes",
+      "nome": "Porçãozinha de Mini Pastéis (6 un)",
+      "desc": "",
+      "preco": 29.9,
+      "foto": "fotos/pasteis.jpg"
+    },
+    {
+      "cat": "porcoes",
+      "nome": "Linguiça Toscana Acebolada",
+      "desc": "",
+      "preco": 39.9,
+      "foto": "fotos/calabresa.jpg"
+    },
+    {
+      "cat": "porcoes",
+      "nome": "Parmegiana",
+      "desc": "Frango à parmegiana",
+      "preco": 34.9,
+      "foto": "fotos/parmegiana.jpg"
+    },
+    {
+      "cat": "salgados",
+      "nome": "Coxinha de Frango",
+      "desc": "",
+      "preco": 9.9,
+      "foto": "fotos/coxinha.jpg"
+    },
+    {
+      "cat": "salgados",
+      "nome": "Coxinha de Frango com Catupiry",
+      "desc": "",
+      "preco": 11.9,
+      "foto": "fotos/coxinha_catupiry.jpg"
+    },
+    {
+      "cat": "salgados",
+      "nome": "Esfiha de Carne",
+      "desc": "",
+      "preco": 12.5,
+      "foto": "fotos/esfiha_carne.jpg"
+    },
+    {
+      "cat": "salgados",
+      "nome": "Esfiha de Calabresa com Catupiry",
+      "desc": "",
+      "preco": 12.5,
+      "foto": "fotos/esfiha_calabresa.jpg"
+    },
+    {
+      "cat": "salgados",
+      "nome": "Esfiha de Frango com Catupiry",
+      "desc": "",
+      "preco": 12.5,
+      "foto": "fotos/esfiha_frango.jpg"
+    },
+    {
+      "cat": "salgados",
+      "nome": "Empada de Palmito",
+      "desc": "",
+      "preco": 12.5,
+      "foto": "fotos/empada_palmito.jpg"
+    },
+    {
+      "cat": "salgados",
+      "nome": "Empada de Frango com Catupiry",
+      "desc": "",
+      "preco": 12.5,
+      "foto": "fotos/empada_frango.jpg"
+    },
+    {
+      "cat": "drinks",
+      "nome": "Caipirinha",
+      "desc": "Cachaça, limão, açúcar e gelo",
+      "preco": 16.9,
+      "foto": "fotos/caipirinha.jpg"
+    },
+    {
+      "cat": "drinks",
+      "nome": "Caipivodka",
+      "desc": "Vodka Smirnoff, limão, açúcar e gelo",
+      "preco": 19.9,
+      "foto": "fotos/caipivodka.jpg"
+    },
+    {
+      "cat": "drinks",
+      "nome": "Whisky (8 anos)",
+      "desc": "",
+      "preco": 18.9,
+      "foto": "fotos/whisky.jpg"
+    },
+    {
+      "cat": "drinks",
+      "nome": "Jack Daniel's",
+      "desc": "Tennessee Whiskey",
+      "preco": 26.9,
+      "foto": "fotos/jack_daniels.jpg",
+      "ativo": false
+    },
+    {
+      "cat": "drinks",
+      "nome": "Cavalo Branco",
+      "desc": "Cachaça Cavalo Branco",
+      "preco": 14.9,
+      "foto": "fotos/whisky.jpg"
+    },
+    {
+      "cat": "drinks",
+      "nome": "Gin Tônica",
+      "desc": "Gin, água tônica e limão",
+      "preco": 22.9,
+      "foto": "fotos/gin_tonica.jpg"
+    },
+    {
+      "cat": "drinks",
+      "nome": "Vodka com Energético",
+      "desc": "Vodka Smirnoff e Red Bull",
+      "preco": 39.9,
+      "foto": "fotos/vodka_energetico.jpg"
+    },
+    {
+      "cat": "drinks",
+      "nome": "Moscow Mule",
+      "desc": "Vodka Smirnoff, ginger beer e limão",
+      "preco": 24.9,
+      "foto": "fotos/moscow_mule.jpg",
+      "ativo": false
+    },
+    {
+      "cat": "drinks",
+      "nome": "Cuba Libre",
+      "desc": "Rum, cola e limão",
+      "preco": 18.9,
+      "foto": "fotos/cuba_libre.jpg",
+      "ativo": false
+    },
+    {
+      "cat": "drinks",
+      "nome": "Sex on the Beach",
+      "desc": "Vodka Smirnoff, pêssego, laranja e grenadine",
+      "preco": 22.9,
+      "foto": "fotos/sex_on_beach.jpg",
+      "ativo": false
+    },
+    {
+      "cat": "drinks",
+      "nome": "Copão de Gin",
+      "desc": "Gin Eternit Sabores",
+      "preco": 16.99,
+      "foto": "fotos/copao_gin.jpg"
+    },
+    {
+      "cat": "drinks",
+      "nome": "Copão de Askov",
+      "desc": "Vodka Askov no copão com gelo",
+      "preco": 11.99,
+      "foto": "fotos/copao_askov.jpg"
+    },
+    {
+      "cat": "drinks",
+      "nome": "Smirnoff Ice Lata",
+      "desc": "",
+      "preco": 10.9,
+      "foto": ""
+    },
+    {
+      "cat": "drinks",
+      "nome": "Smirnoff Ice Long Neck",
+      "desc": "",
+      "preco": 12.9,
+      "foto": "fotos/smirnoff.jpg"
+    },
+    {
+      "cat": "drinks",
+      "nome": "Meia Dose de Pinga",
+      "desc": "51 ou Velho Barreiro",
+      "preco": 5.9,
+      "foto": "fotos/pinga.jpg"
+    },
+    {
+      "cat": "drinks",
+      "nome": "Dose de Pinga",
+      "desc": "51 ou Velho Barreiro",
+      "preco": 7.0,
+      "foto": "fotos/pinga.jpg"
+    },
+    {
+      "cat": "drinks",
+      "nome": "Dose de Askov",
+      "desc": "Vodka Askov",
+      "preco": 10.0,
+      "foto": "fotos/copao_askov.jpg"
+    },
+    {
+      "cat": "drinks",
+      "nome": "Bombeirinho",
+      "desc": "Cachaça com groselha e limão",
+      "preco": 12.0,
+      "foto": "fotos/bombeirinho.jpg"
+    },
+    {
+      "cat": "cervejas",
+      "nome": "Itaipava 350ml",
+      "desc": "Lata",
+      "preco": 9.9,
+      "foto": "fotos/itaipava.jpg"
+    },
+    {
+      "cat": "cervejas",
+      "nome": "Skol 350ml",
+      "desc": "Lata",
+      "preco": 9.9,
+      "foto": "fotos/skol.jpg"
+    },
+    {
+      "cat": "cervejas",
+      "nome": "Original 350ml",
+      "desc": "Lata",
+      "preco": 9.9,
+      "foto": "fotos/original.jpg"
+    },
+    {
+      "cat": "cervejas",
+      "nome": "Demais Cervejas 350ml",
+      "desc": "Heineken, Budweiser, Amstel, Stella e outras",
+      "preco": 9.9,
+      "foto": "fotos/cerveja.jpg"
+    },
+    {
+      "cat": "cervejas",
+      "nome": "Stella Artois Long Neck 330ml",
+      "desc": "",
+      "preco": 12.9,
+      "foto": "fotos/stella.jpg"
+    },
+    {
+      "cat": "cervejas",
+      "nome": "Heineken Long Neck 330ml",
+      "desc": "",
+      "preco": 12.9,
+      "foto": "fotos/heineken.jpg"
+    },
+    {
+      "cat": "cervejas",
+      "nome": "Draft 600ml",
+      "desc": "Draft Grape — cocktail alcoólico gaseificado de uva, garrafa 600ml",
+      "preco": 17.9,
+      "foto": "fotos/draft600.jpg"
+    },
+    {
+      "cat": "cervejas",
+      "nome": "Heineken 600ml",
+      "desc": "Garrafa 600ml",
+      "preco": 21.9,
+      "foto": "fotos/heineken.jpg"
+    },
+    {
+      "cat": "cervejas",
+      "nome": "Spaten 600ml",
+      "desc": "Garrafa 600ml",
+      "preco": 21.9,
+      "foto": "fotos/spaten.jpg"
+    },
+    {
+      "cat": "refri",
+      "nome": "Refri 200ml",
+      "desc": "Coca-Cola, Coca Zero ou Guaraná Antarctica",
+      "preco": 3.5,
+      "foto": "fotos/refri_copo.jpg"
+    },
+    {
+      "cat": "refri",
+      "nome": "Refri Lata 350ml",
+      "desc": "Fanta, Coca-Cola, Sprite, Schweppes, Guaraná (comum ou zero) e Itubaína",
+      "preco": 7.9,
+      "foto": "fotos/refri_lata.jpg"
+    },
+    {
+      "cat": "refri",
+      "nome": "Refri 600ml",
+      "desc": "Coca-Cola ou Coca Zero",
+      "preco": 12.9,
+      "foto": "fotos/refri_600.jpg"
+    },
+    {
+      "cat": "refri",
+      "nome": "Refri 1 Litro (pet)",
+      "desc": "Coca-Cola, Coca Zero ou Guaraná",
+      "preco": 16.9,
+      "foto": "fotos/refri_1l.jpg",
+      "ativo": false
+    },
+    {
+      "cat": "refri",
+      "nome": "Suco Del Valle 290ml",
+      "desc": "Uva, Maracujá ou Pêssego",
+      "preco": 8.5,
+      "foto": "fotos/del_valle.jpg"
+    },
+    {
+      "cat": "refri",
+      "nome": "Suco Natural de Laranja 300ml",
+      "desc": "",
+      "preco": 11.9,
+      "foto": "fotos/suco_laranja.jpg"
+    },
+    {
+      "cat": "refri",
+      "nome": "Suco Natural de Laranja 500ml",
+      "desc": "",
+      "preco": 16.9,
+      "foto": "fotos/suco_laranja.jpg"
+    },
+    {
+      "cat": "refri",
+      "nome": "Suco Natural de Laranja 1L (jarra)",
+      "desc": "Ideal para compartilhar",
+      "preco": 26.9,
+      "foto": "fotos/suco_laranja.jpg"
+    },
+    {
+      "cat": "refri",
+      "nome": "Água Crystal 500ml sem gás",
+      "desc": "",
+      "preco": 4.5,
+      "foto": "fotos/agua_sem_gas.jpg"
+    },
+    {
+      "cat": "refri",
+      "nome": "Água Crystal 500ml com gás",
+      "desc": "",
+      "preco": 5.9,
+      "foto": "fotos/agua_com_gas.jpg"
+    },
+    {
+      "cat": "extras",
+      "nome": "Adicional - Misto Quente",
+      "desc": "Adicional do café da manhã",
+      "preco": 8.9,
+      "foto": "fotos/misto_quente.jpg",
+      "ativo": false
+    },
+    {
+      "cat": "extras",
+      "nome": "Adicional - Pão de Queijo (2 un)",
+      "desc": "",
+      "preco": 4.9,
+      "foto": "fotos/pao_queijo.jpg"
+    },
+    {
+      "cat": "extras",
+      "nome": "Adicional - Requeijão Extra",
+      "desc": "",
+      "preco": 6,
+      "foto": "fotos/requeijao.jpg"
+    },
+    {
+      "cat": "extras",
+      "nome": "Opcional Premium - Contrafilé Acebolado",
+      "desc": "Acréscimo no prato",
+      "preco": 15,
+      "foto": "fotos/contrafile.jpg"
+    },
+    {
+      "cat": "extras",
+      "nome": "Opcional Premium - Frango à Parmegiana",
+      "desc": "Acréscimo no prato",
+      "preco": 15,
+      "foto": "fotos/parmegiana.jpg"
+    },
+    {
+      "cat": "extras",
+      "nome": "Arroz Pequeno",
+      "desc": "",
+      "preco": 5.0,
+      "foto": "fotos/arroz.jpg"
+    },
+    {
+      "cat": "extras",
+      "nome": "Feijão",
+      "desc": "",
+      "preco": 5.0,
+      "foto": "fotos/feijao.jpg"
+    },
+    {
+      "cat": "extras",
+      "nome": "Farofa",
+      "desc": "",
+      "preco": 4,
+      "foto": "fotos/farofa.jpg"
+    },
+    {
+      "cat": "extras",
+      "nome": "Salada",
+      "desc": "",
+      "preco": 6,
+      "foto": "fotos/salada.jpg"
+    },
+    {
+      "cat": "extras",
+      "nome": "Batata Frita",
+      "desc": "",
+      "preco": 6.0,
+      "foto": "fotos/batata_frita.jpg"
+    },
+    {
+      "cat": "extras",
+      "nome": "Ovo Frito (unidade)",
+      "desc": "",
+      "preco": 4.0,
+      "foto": "fotos/ovo_frito.jpg"
+    },
+    {
+      "cat": "extras",
+      "nome": "Vinagrete",
+      "desc": "",
+      "preco": 4,
+      "foto": "fotos/vinagrete.jpg"
+    },
+    {
+      "cat": "extras",
+      "nome": "Torresmo",
+      "desc": "",
+      "preco": 14.9,
+      "foto": "fotos/torresmo.jpg"
+    },
+    {
+      "cat": "cafe",
+      "nome": "Café Pequeno",
+      "desc": "Café coado tamanho pequeno.",
+      "preco": 6,
+      "foto": "fotos/cafe_pequeno.jpg",
+      "ativo": false
+    },
+    {
+      "cat": "cafe",
+      "nome": "Café Grande",
+      "desc": "Café coado tamanho grande.",
+      "preco": 12,
+      "foto": "fotos/cafe_grande.jpg",
+      "ativo": false
+    },
+    {
+      "cat": "cafe",
+      "nome": "Chocolate Quente",
+      "desc": "Chocolate quente cremoso.",
+      "preco": 13,
+      "foto": "fotos/chocolate_quente.jpg"
+    },
+    {
+      "cat": "cafe",
+      "nome": "Mini Pão de Queijo (unidade)",
+      "desc": "Mini pão de queijo, por unidade.",
+      "preco": 1,
+      "foto": "fotos/mini_pao_queijo.jpg"
+    },
+    {
+      "cat": "cafe",
+      "nome": "Pedaço de Bolo",
+      "desc": "",
+      "preco": 5.0,
+      "foto": ""
+    },
+    {
+      "cat": "refri",
+      "nome": "Energético Red Bull (lata)",
+      "desc": "Lata de Red Bull.",
+      "preco": 14.9,
+      "foto": "fotos/red_bull.jpg"
+    },
+    {
+      "cat": "refri",
+      "nome": "H2OH! Limoneto",
+      "desc": "H2OH! sabor limoneto.",
+      "preco": 9.9,
+      "foto": "fotos/h2oh.jpg"
+    },
+    {
+      "cat": "refri",
+      "nome": "H2OH! Limão",
+      "desc": "H2OH! sabor limão.",
+      "preco": 9.9,
+      "foto": "fotos/h2oh.jpg"
+    },
+    {
+      "cat": "teste",
+      "nome": "Item Teste",
+      "desc": "Item de teste, não é produto de verdade.",
+      "preco": 0.01
+    }
+  ]
 }
