@@ -202,6 +202,13 @@
     },
     {
       "cat": "semanal",
+      "nome": "Feijoada sem Arroz",
+      "desc": "",
+      "preco": 25.0,
+      "foto": ""
+    },
+    {
+      "cat": "semanal",
       "nome": "Todo Dia - Filé de Frango",
       "desc": "Prato feito — opcional disponível todos os dias",
       "preco": 24.9,
