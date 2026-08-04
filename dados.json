@@ -229,6 +229,20 @@
       "foto": "fotos/pf_picadinho.jpg"
     },
     {
+      "cat": "semanal",
+      "nome": "Todo Dia - Bife Acebolado",
+      "desc": "",
+      "preco": 24.9,
+      "foto": ""
+    },
+    {
+      "cat": "semanal",
+      "nome": "Todo Dia - Linguiça Toscana",
+      "desc": "",
+      "preco": 24.9,
+      "foto": ""
+    },
+    {
       "cat": "porcoes",
       "nome": "Frango à Passarinho",
       "desc": "",
@@ -507,6 +521,13 @@
     },
     {
       "cat": "cervejas",
+      "nome": "Original Fininha 300ml",
+      "desc": "",
+      "preco": 5.9,
+      "foto": ""
+    },
+    {
+      "cat": "cervejas",
       "nome": "Demais Cervejas 350ml",
       "desc": "Heineken, Budweiser, Amstel, Stella e outras",
       "preco": 9.9,
@@ -679,7 +700,7 @@
       "cat": "extras",
       "nome": "Salada",
       "desc": "",
-      "preco": 6,
+      "preco": 4.0,
       "foto": "fotos/salada.jpg"
     },
     {
@@ -693,7 +714,7 @@
       "cat": "extras",
       "nome": "Ovo Frito (unidade)",
       "desc": "",
-      "preco": 4.0,
+      "preco": 6.0,
       "foto": "fotos/ovo_frito.jpg"
     },
     {
