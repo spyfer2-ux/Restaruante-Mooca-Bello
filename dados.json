@@ -369,6 +369,13 @@
       "foto": "fotos/empada_frango.jpg"
     },
     {
+      "cat": "salgados",
+      "nome": "Salgadinhos",
+      "desc": "",
+      "preco": 6.0,
+      "foto": ""
+    },
+    {
       "cat": "drinks",
       "nome": "Caipirinha",
       "desc": "Cachaça, limão, açúcar e gelo",
@@ -766,6 +773,20 @@
       "nome": "Pedaço de Bolo",
       "desc": "",
       "preco": 5.0,
+      "foto": ""
+    },
+    {
+      "cat": "cafe",
+      "nome": "Bolo de Cenoura",
+      "desc": "",
+      "preco": 7.0,
+      "foto": ""
+    },
+    {
+      "cat": "cafe",
+      "nome": "Bolo de Brigadeiro",
+      "desc": "",
+      "preco": 8.0,
       "foto": ""
     },
     {
