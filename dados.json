@@ -811,6 +811,13 @@
       "foto": "fotos/h2oh.jpg"
     },
     {
+      "cat": "refri",
+      "nome": "Gelo Saborizado",
+      "desc": "",
+      "preco": 4.0,
+      "foto": ""
+    },
+    {
       "cat": "teste",
       "nome": "Item Teste",
       "desc": "Item de teste, não é produto de verdade.",
