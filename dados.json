@@ -818,6 +818,13 @@
       "foto": ""
     },
     {
+      "cat": "refri",
+      "nome": "Gelo Comum",
+      "desc": "",
+      "preco": 10.0,
+      "foto": ""
+    },
+    {
       "cat": "teste",
       "nome": "Item Teste",
       "desc": "Item de teste, não é produto de verdade.",
