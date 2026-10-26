@@ -460,7 +460,7 @@
       "cat": "drinks",
       "nome": "Copão de Askov",
       "desc": "Vodka Askov no copão com gelo",
-      "preco": 11.99,
+      "preco": 10.0,
       "foto": "fotos/copao_askov.jpg"
     },
     {
@@ -504,6 +504,20 @@
       "desc": "Cachaça com groselha e limão",
       "preco": 12.0,
       "foto": "fotos/bombeirinho.jpg"
+    },
+    {
+      "cat": "drinks",
+      "nome": "Narguilé",
+      "desc": "",
+      "preco": 35.0,
+      "foto": ""
+    },
+    {
+      "cat": "drinks",
+      "nome": "Troca de Rosh (Narguilé)",
+      "desc": "",
+      "preco": 25.0,
+      "foto": ""
     },
     {
       "cat": "cervejas",
