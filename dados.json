@@ -520,6 +520,13 @@
       "foto": ""
     },
     {
+      "cat": "drinks",
+      "nome": "Carvão",
+      "desc": "",
+      "preco": 2.0,
+      "foto": ""
+    },
+    {
       "cat": "cervejas",
       "nome": "Itaipava 350ml",
       "desc": "Lata",
